@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/karla": "^0.2.3",
     "expo": "~48.0.15",
     "expo-status-bar": "~1.4.4",
     "native-base": "^3.4.28",
