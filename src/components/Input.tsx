@@ -60,7 +60,7 @@ export function Input({ variant = "default", ...rest }: InputProps) {
       py="3"
       mb="4"
       secureTextEntry={variant === "password" && !showPassword}
-      borderRadius="1.5"
+      rounded="sm"
       borderWidth="0"
       fontFamily={"body"}
       fontSize="md"
