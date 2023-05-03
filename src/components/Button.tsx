@@ -1,3 +1,4 @@
+import { DefaultTFuncReturn } from "i18next";
 import {
   Button as NativeBaseButton,
   IButtonProps,
@@ -9,7 +10,7 @@ type ButtonType = "primary" | "secondary" | "tertiary";
 
 type ButtonProps = IButtonProps & {
   type?: ButtonType;
-  title?: string;
+  title?: DefaultTFuncReturn;
 };
 
 export function Button({ title, type = "primary", ...rest }: ButtonProps) {
