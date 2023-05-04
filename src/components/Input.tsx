@@ -42,12 +42,12 @@ export function Input({ variant = "default", ...rest }: InputProps) {
   function renderSearchVariant() {
     return (
       <Center flexDirection="row" height="full">
-        <MagnifyingGlass size={24} color={colors.gray[500]} />
+        <MagnifyingGlass weight="bold"  size={24} color={colors.gray[500]} />
         <Box py="3">
           <Divider orientation="vertical" mx="3" my="1.5" thickness="2" />
         </Box>
         <Pressable mr="4" onPress={() => {}} _pressed={{ opacity: "0.5" }}>
-          <Sliders size={24} color={colors.gray[500]} />
+          <Sliders weight="bold" size={24} color={colors.gray[500]} />
         </Pressable>
       </Center>
     );
