@@ -22,7 +22,7 @@ export function Button({ title, type = "primary", ...rest }: ButtonProps) {
   
   return (
     <NativeBaseButton
-      h="11.5"
+      h="10.5"
       rounded="sm"
       bg={color[type]}
       _pressed={{ bg: color[type] , opacity: "0.5" }}
