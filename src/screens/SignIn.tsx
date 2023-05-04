@@ -11,8 +11,8 @@ export function SignIn() {
   return (
     // adicionar em uma scroll view para devices menores?
     <VStack flex={1}>
-      <VStack px={10} borderBottomRadius={"12"} bg={"gray.200"}>
-        <Center w="full" mt="24">
+      <VStack px={12} borderBottomRadius={"12"} bg={"gray.200"}>
+        <Center w="full"  >
           <Image source={Logo} alt="Logo" mb="5" />
           <Heading color="gray.700" fontSize="3.5xl" fontFamily="heading">
             marketspace
