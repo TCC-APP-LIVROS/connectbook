@@ -1,11 +1,23 @@
 {
-    "translation": {
-        "login to your account": "Login to your account",
-        "Don't have an account?" : "Don't have an account?",
-        "Your buying and selling space": "Your buying and selling space",
-        "Create account": "Create account",
+    "Common" : {
         "E-mail": "E-mail", 
-        "Password": "Password"
-
+        "Password": "Password",
+        "Confirm-password": "Confirm password",
+        "Mobile-number": "Mobile number",
+        "Name": "Name"
+    },
+    "SignIn": {
+        "login-to-your-account": "Login to your account",
+        "Dont-have-an-account" : "Don't have an account?",
+        "Slogan": "Your buying and selling space",
+        "Create-account": "Create account",
+        "SignIn": "SignIn"
+    },
+    "SignUp": {
+        "Welcome": "Welcome",
+        "Welcome-Message": "Create your account and use the space to buy various items and sell your products",
+        "Already-have-an-account": "Already have an account?",
+        "Go-to-login": "Go to login",
+        "SignUp": "SignUp"
     }
 }

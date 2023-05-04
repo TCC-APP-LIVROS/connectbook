@@ -1,10 +1,23 @@
-{
-    "translation": {
-        "login to your account": "Acesse a sua conta",
-        "Don't have an account?" : "Ainda não tem acesso?",
-        "Your buying and selling space": "Seu espaço de compra e venda",
-        "Create account": "Criar uma conta",
+{   
+    "Common" : {
         "E-mail": "E-mail", 
-        "Password": "Senha"
+        "Password": "Senha",
+        "Confirm-password": "Confirmar senha",
+        "Mobile-number": "Telefone",
+        "Name": "Nome"
+    },
+    "SignIn": {
+        "login-to-your-account": "Acesse a sua conta",
+        "Dont-have-an-account" : "Ainda não tem acesso?",
+        "Slogan": "Seu espaço de compra e venda",
+        "Create-account": "Criar uma conta",
+        "SignIn": "Entrar"
+    },
+    "SignUp": {
+        "Welcome": "Boas vindas",
+        "Welcome-Message": "Crie sua conta e use o espaço para comprar itens variados e vender seus produtos",
+        "Already-have-an-account": "Já tem uma conta?",
+        "Go-to-login": "Ir para login",
+        "SignUp": "Criar e acessar"
     }
 }
