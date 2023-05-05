@@ -3,7 +3,6 @@ import {
   Button as NativeBaseButton,
   IButtonProps,
   Heading,
-  Icon,
 } from "native-base";
 
 type ButtonType = "primary" | "secondary" | "tertiary";
