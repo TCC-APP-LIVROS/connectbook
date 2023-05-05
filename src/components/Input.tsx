@@ -21,9 +21,11 @@ type InputVariant = "default" | "password" | "search" | "cash";
 
 type InputProps = IInputProps & {
   variant?: InputVariant;
+  onFilterPress?: () => void;
+  onSearchPress?: () => void;
 };
 
-export function Input({ variant = "default", ...rest }: InputProps) {
+export function Input({ variant = "default", onFilterPress, onSearchPress, ...rest }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
   const { colors } = useTheme();
 
@@ -42,11 +44,13 @@ export function Input({ variant = "default", ...rest }: InputProps) {
   function renderSearchVariant() {
     return (
       <Center flexDirection="row" height="full">
+        <Pressable onPress={onSearchPress} _pressed={{ opacity: "0.5" }}>
         <MagnifyingGlass weight="bold"  size={24} color={colors.gray[500]} />
+        </Pressable>
         <Box py="3">
           <Divider orientation="vertical" mx="3" my="1.5" thickness="2" />
         </Box>
-        <Pressable mr="4" onPress={() => {}} _pressed={{ opacity: "0.5" }}>
+        <Pressable mr="4" onPress={onFilterPress} _pressed={{ opacity: "0.5" }}>
           <Sliders weight="bold" size={24} color={colors.gray[500]} />
         </Pressable>
       </Center>
