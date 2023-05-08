@@ -1,14 +1,27 @@
 import { Header } from "@components/Header";
 import { Carrousel } from "@components/Carrousel";
-import { Box, HStack, VStack, Text, Heading, useTheme, ScrollView } from "native-base";
-import { Barcode, CreditCard, Money, Pencil, QrCode, Bank, WhatsappLogo } from "phosphor-react-native";
+import {
+  Box,
+  HStack,
+  VStack,
+  Text,
+  Heading,
+  useTheme,
+  ScrollView,
+} from "native-base";
+import {
+  Pencil,
+  WhatsappLogo,
+} from "phosphor-react-native";
 import { Avatar } from "@components/Avatar";
 import { Toggle } from "@components/Toggle";
 import { Tag } from "@components/Tag";
 import { Button } from "@components/Button";
+import { PaymentMethod } from "@components/PaymentMethod";
+import { Platform } from "react-native";
 
 export function ListingDetails() {
-    const { colors } = useTheme();
+  const { colors } = useTheme();
   return (
     <VStack flex={1} safeAreaX safeAreaTop>
       <Box px="6">
@@ -20,7 +33,14 @@ export function ListingDetails() {
       </Box>
       <Carrousel mt={3} />
 
-      <ScrollView px="6" mt={5} flex="1">
+      <ScrollView
+        flex="1"
+        px="6"
+        mt={2}
+        pt={3}
+        pb={10}
+        showsVerticalScrollIndicator={false}
+      >
         <HStack>
           <Avatar size={6} />
           <Text fontSize="sm" color="gray.700" ml="2">
@@ -68,76 +88,41 @@ export function ListingDetails() {
           Meios de pagamento
         </Heading>
 
-        <HStack alignItems="center">
-            <Box opacity="0.8">
-            <Barcode size={18} color={colors.gray[700]} />
-            </Box>
-            <Text ml="2" fontSize="sm" color={"gray.600"}>
-                Boleto
-            </Text>
-            </HStack>
-        <HStack alignItems="center">
-            <Box opacity="0.8">
-            <QrCode size={18} color={colors.gray[700]} />
-            </Box>
-            <Text ml="2" fontSize="sm" color={"gray.600"}>
-                Pix
-            </Text>
-            </HStack>
-        <HStack alignItems="center">
-            <Box opacity="0.8">
-            <Money size={18} color={colors.gray[700]} />
-            </Box>
-            <Text ml="2" fontSize="sm" color={"gray.600"}>
-                Dinheiro
-            </Text>
-            </HStack>
-        <HStack alignItems="center">
-            <Box opacity="0.8">
-            <CreditCard size={18} color={colors.gray[700]} />
-            </Box>
-            <Text ml="2" fontSize="sm" color={"gray.600"}>
-                Cartão
-            </Text>
-            </HStack>
-        <HStack alignItems="center">
-            <Box opacity="0.8">
-            <Bank size={18} color={colors.gray[700]} />
-            </Box>
-            <Text ml="2" fontSize="sm" color={"gray.600"}>
-                Depósito Bancário
-            </Text>
-            </HStack>
-
-      
+        <PaymentMethod payment="Boleto" color={colors.gray[700]} />
+        <PaymentMethod payment="Pix" color={colors.gray[700]} />
+        <PaymentMethod payment="Dinheiro" color={colors.gray[700]} />
+        <PaymentMethod payment="Cartão" color={colors.gray[700]} />
+        <PaymentMethod payment="Depósito Bancário" color={colors.gray[700]} />
+        <Box h="10" />
       </ScrollView>
       <HStack
-      w="full"
-      bg="white"
-      justifyContent="space-between"
-      alignItems={"center"}
-      paddingY={6}
-      paddingX={6}
-      
+        w="full"
+        bg="white"
+        justifyContent="space-between"
+        alignItems={"center"}
+        paddingTop={5}
+        paddingBottom={Platform.OS === "ios" ? 7 : 5}
+        paddingX={6}
       >
-      <Heading
-            fontSize="sm"
-            fontFamily="heading"
-            color="blue.800"
-            lineHeight="xl"
-          >
-            R${" "}
-            <Heading fontSize="xl" fontFamily="heading" color="blue.800">
-              120,00
-            </Heading>
+        <Heading
+          fontSize="sm"
+          fontFamily="heading"
+          color="blue.800"
+          lineHeight="xl"
+        >
+          R${" "}
+          <Heading fontSize="xl" fontFamily="heading" color="blue.800">
+            120,00
           </Heading>
-          <Button
+        </Heading>
+        <Button
           type="secondary"
-          startIcon={<WhatsappLogo size={24} weight="fill" color={colors.white} />}
+          startIcon={
+            <WhatsappLogo size={24} weight="fill" color={colors.white} />
+          }
           title="Entrar em contato"
-          />
+        />
       </HStack>
-
     </VStack>
   );
 }
