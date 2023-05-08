@@ -5,7 +5,6 @@ import {
   Money,
   QrCode,
   Bank,
-  WhatsappLogo,
 } from "phosphor-react-native";
 
 export type payment =
@@ -27,7 +26,6 @@ export function PaymentMethod({ payment, color, ...rest }: paymentMethodProps) {
     Dinheiro: <Money size={18} color={color} />,
     Cartão: <CreditCard size={18} color={color} />,
     "Depósito Bancário": <Bank size={18} color={color} />,
-    Whatsapp: <WhatsappLogo size={18} color={color} />,
   };
   return (
     <HStack alignItems="center" {...rest}>
