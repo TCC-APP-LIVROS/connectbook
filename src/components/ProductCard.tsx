@@ -5,6 +5,7 @@ import { Avatar } from "@components/Avatar";
 
 
 import { ImageSourcePropType } from "react-native";
+import { Tag } from "@components/Tag";
 
 type ProductCardProps = IPressableProps & {
     avatarImage?: ImageSourcePropType;
@@ -29,19 +30,13 @@ export function ProductCard({avatarImage, image, title, price , ...rest}: Produc
           top="1"
           borderColor="gray.100"
         />
-        <Box
+        <Tag
           position="absolute"
           right="1"
           top="1"
-          rounded="full"
           bg={"gray.600"}
-          py="0.5"
-          px="2"
-        >
-          <Text color="white" fontFamily="heading" fontSize="xs">
-            USADO
-          </Text>
-        </Box>
+          title="USADO"
+        />
     <Heading my="1" color="gray.600" fontSize="sm">{title}</Heading>
     <Heading color="gray.700" fontFamily="heading" fontSize="xs">R$ 59,00</Heading>
     </Pressable>
