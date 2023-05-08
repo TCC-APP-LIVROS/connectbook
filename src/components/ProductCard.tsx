@@ -37,7 +37,7 @@ export function ProductCard({avatarImage, image, title, price , ...rest}: Produc
           bg={"gray.600"}
           title="USADO"
         />
-    <Heading my="1" color="gray.600" fontSize="sm">{title}</Heading>
+    <Heading mt="1" color="gray.600" fontSize="sm">{title}</Heading>
     <Heading color="gray.700" fontFamily="heading" fontSize="xs">R$ 59,00</Heading>
     </Pressable>
   );
