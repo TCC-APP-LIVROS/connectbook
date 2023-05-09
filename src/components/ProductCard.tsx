@@ -1,29 +1,40 @@
-import { Box, Image, VStack, Text, Heading, Pressable, IPressableProps, IImageProps } from "native-base";
+import {
+  Box,
+  Image,
+  Text,
+  Heading,
+  Pressable,
+  IPressableProps,
+} from "native-base";
 
 import { Avatar } from "@components/Avatar";
-
-
 
 import { ImageSourcePropType } from "react-native";
 import { Tag } from "@components/Tag";
 
 type ProductCardProps = IPressableProps & {
-    avatarImage?: ImageSourcePropType;
-    image?: ImageSourcePropType;
-    title?: string;
-    price?: string;
-}
+  avatarImage?: ImageSourcePropType;
+  image?: ImageSourcePropType;
+  title?: string;
+  price?: string;
+  isActive?: boolean;
+};
 
-export function ProductCard({avatarImage, image, title, price , ...rest}: ProductCardProps) {
+export function ProductCard({
+  avatarImage,
+  image,
+  title,
+  price,
+  isActive = true,
+  onPress,
+  ...rest
+}: ProductCardProps) {
   return (
-    <Pressable 
-    _pressed={{ opacity: "0.5" }}
-    w="40"
-    {...rest}
-    >
+    <Pressable onPress={isActive? onPress : null} _pressed={{ opacity: isActive? "0.5" : "1" }} w="40" {...rest}>
+      <Box>
         <Image w="40" alt="Alternate Text" rounded="sm" source={image} />
         <Avatar
-        source={avatarImage}
+          source={avatarImage}
           size="6"
           position="absolute"
           left="1"
@@ -37,8 +48,36 @@ export function ProductCard({avatarImage, image, title, price , ...rest}: Produc
           bg={"gray.600"}
           title="USADO"
         />
-    <Heading mt="1" color="gray.600" fontSize="sm">{title}</Heading>
-    <Heading color="gray.700" fontFamily="heading" fontSize="xs">R$ 59,00</Heading>
+        {isActive ? null : (
+          <>
+            <Box
+              position="absolute"
+              w="full"
+              height="full"
+              bg="gray.700"
+              rounded="sm"
+              opacity="0.5"
+            />
+            <Text
+              color="gray.100"
+              fontSize="xs"
+              fontFamily="heading"
+              position="absolute"
+              bottom={2}
+              left={2}
+              textTransform={"uppercase"}
+            >
+              Anúncio desativado
+            </Text>
+          </>
+        )}
+      </Box>
+      <Heading mt="1" color="gray.600" fontSize="sm">
+        {title}
+      </Heading>
+      <Heading color="gray.700" fontFamily="heading" fontSize="xs">
+        R$ 59,00
+      </Heading>
     </Pressable>
   );
 }
