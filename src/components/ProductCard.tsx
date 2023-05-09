@@ -76,7 +76,7 @@ export function ProductCard({
         {title}
       </Heading>
       <Heading color="gray.700" fontFamily="heading" fontSize="xs">
-        R$ 59,00
+        R$ <Heading color="gray.700" fontFamily="heading" fontSize="md">99236,00</Heading>
       </Heading>
     </Pressable>
   );
