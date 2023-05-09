@@ -28,7 +28,7 @@ export function Header({
       )}
       </Box>
 
-      <Center flex={1}>
+      <Center flex={8}>
         <Heading color="gray.700" fontSize="xl" fontFamily="heading">
           {title}
         </Heading>
