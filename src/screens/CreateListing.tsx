@@ -11,16 +11,14 @@ import {
   ScrollView,
   Text,
   VStack,
-  useTheme,
 } from "native-base";
-import { Plus, WhatsappLogo } from "phosphor-react-native";
+import { Plus } from "phosphor-react-native";
 import { useState } from "react";
 import { Button } from "@components/Button";
 import { Platform } from "react-native";
 export function CreateListing() {
   const [value, setValue] = useState("one");
   const [groupValues, setGroupValues] = useState<string[]>();
-  const { colors } = useTheme();
   return (
     <VStack flex={1} safeAreaTop bg="gray.200">
       <Box px="6">
@@ -90,11 +88,11 @@ export function CreateListing() {
           <Input mt="4" variant="cash" placeholder="Valor do produto" />
         </VStack>
 
-        <VStack mt="8">
+        <VStack mt="8" alignItems="flex-start">
           <Heading fontFamily="heading" fontSize="md" color="gray.600">
             Aceita troca?
           </Heading>
-          <Switch mt="3" />
+          <Switch mt="3"  justifyContent="center" alignItems={"center"}/>
         </VStack>
 
         <VStack mt="8">
