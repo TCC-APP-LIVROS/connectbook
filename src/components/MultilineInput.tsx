@@ -13,7 +13,7 @@ export function MultilineInput({ ...rest }: ITextAreaProps) {
       px="4"
       py="3"
       mb="4"
-      borderRadius="1.5"
+      rounded="sm"
       borderWidth="0"
       fontFamily={"body"}
       fontSize="md"
