@@ -52,9 +52,9 @@ export function ListingDetails() {
           <Tag mt={5} title="novo" bgColor={"gray.300"} titleColor="gray.600" />
         </HStack>
 
-        <HStack mt={5} alignItems="flex-end" justifyContent="space-between">
+        <VStack mt={5} mb={2} alignItems="flex-start" justifyContent="space-between">
           <Heading fontSize="xl" fontFamily="heading" color="gray.700">
-            Bicicleta
+            Bicicleta Muito ultra mega blaster ultra
           </Heading>
 
           <Heading
@@ -65,10 +65,10 @@ export function ListingDetails() {
           >
             R${" "}
             <Heading fontSize="xl" fontFamily="heading" color="blue.600">
-              120,00
+              100,00
             </Heading>
           </Heading>
-        </HStack>
+        </VStack>
 
         <Text fontSize="sm" color={"gray.600"}>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
