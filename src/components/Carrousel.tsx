@@ -29,7 +29,7 @@ export function Carrousel({...rest}: IBoxProps) {
   const data = [...new Array(6).keys()];
   let [index, setIndex] = useState(0);
   return (
-    <Box {...rest}>
+    <Box {...rest} paddingBottom={2}>
       <GestureHandlerRootView>
       <RACarrousel
         loop
@@ -41,7 +41,7 @@ export function Carrousel({...rest}: IBoxProps) {
         scrollAnimationDuration={500}
         onSnapToItem={(index) => setIndex(index)}
         renderItem={({ index }) => (
-          <Box flex={1} justifyContent="center" bgColor="gray.600">
+          <Box flex={1} justifyContent="center" bgColor="blue.400">
             <Center flex={1}>
               <Text style={{ textAlign: "center", fontSize: 30 }}>{index}</Text>
             </Center>
