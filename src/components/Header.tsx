@@ -19,6 +19,7 @@ export function Header({
     <HStack
       justifyContent="space-between"
       mt={Platform.OS === "ios" ? "5" : "9"}
+      paddingBottom="4"
     >
       <Box flex={1}>
       {backButton && (
