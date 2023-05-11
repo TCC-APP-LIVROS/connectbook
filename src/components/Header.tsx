@@ -1,3 +1,5 @@
+import { useNavigation } from "@react-navigation/native";
+import { AppNavigationRouteProps } from "@routes/app.routes";
 import { Box, Center, HStack, Heading, Pressable } from "native-base";
 import { ArrowLeft } from "phosphor-react-native";
 import { Platform } from "react-native";
@@ -15,6 +17,7 @@ export function Header({
   rightButtonIcon,
   onPressRightButton,
 }: HeaderProps) {
+  const navigation = useNavigation<AppNavigationRouteProps>();
   return (
     <HStack
       justifyContent="space-between"
@@ -23,7 +26,7 @@ export function Header({
     >
       <Box flex={1}>
       {backButton && (
-        <Pressable onPress={() => {}} _pressed={{ opacity: "0.5" }}>
+        <Pressable onPress={() => {navigation.goBack()}} _pressed={{ opacity: "0.5" }}>
           <ArrowLeft size={24} />
         </Pressable>
       )}
