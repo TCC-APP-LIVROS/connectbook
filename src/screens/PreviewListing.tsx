@@ -34,7 +34,6 @@ export function PreviewListing() {
       <ScrollView
         flex="1"
         px="6"
-        mt={2}
         pt={3}
         pb={10}
         showsVerticalScrollIndicator={false}
