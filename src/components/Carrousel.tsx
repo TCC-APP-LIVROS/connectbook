@@ -2,6 +2,7 @@ import { Box, Center, HStack, VStack,IBoxProps } from "native-base";
 import * as React from "react";
 import { useState } from "react";
 import { Dimensions, Text } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import RACarrousel from "react-native-reanimated-carousel";
 
 const Indicator = ({ count, currentIndex }: { count: number, currentIndex: number}) => {
@@ -29,10 +30,11 @@ export function Carrousel({...rest}: IBoxProps) {
   let [index, setIndex] = useState(0);
   return (
     <Box {...rest}>
+      <GestureHandlerRootView>
       <RACarrousel
         loop
         width={width}
-        height={width / 2}
+        height={width * 0.75}// 4:3 aspect ratio
         data={data}
         defaultIndex={0}
         autoPlay={false}
@@ -46,6 +48,7 @@ export function Carrousel({...rest}: IBoxProps) {
           </Box>
         )}
       />
+      </GestureHandlerRootView>
         <Indicator count={data.length} currentIndex={index} />
     </Box>
   );
