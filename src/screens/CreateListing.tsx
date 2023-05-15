@@ -33,7 +33,7 @@ export function CreateListing() {
       setProductImages(productImages.filter((img) => img.uri !== image.uri));
       return;
     }
-   
+
     // setPhotoIsLoading(true);
     try {
       const photosSelected = await ImagePicker.launchImageLibraryAsync({
@@ -47,7 +47,7 @@ export function CreateListing() {
         return;
       }
 
-      if (photosSelected.assets.length > 6) {
+      if (photosSelected.assets.length > 3) {
         return toast.show({
           title: "Selecione no máximo 6 imagens",
           placement: "top",
@@ -82,7 +82,7 @@ export function CreateListing() {
             uri: photo.uri,
           };
         });
-        setProductImages(photos);
+        setProductImages((prevImages) => prevImages.concat(photos));
         // const photoFile = {
         //   name: `${user.name}.${fileExtension}`.toLowerCase(),
         //   uri: photoSelected.assets[0].uri,
@@ -123,17 +123,15 @@ export function CreateListing() {
             incrível!
           </Text>
           <HStack mt="4" space="2">
-            {productImages.length > 0 ? (
-              productImages.map((image) => (
-                <ImageBox
-                  onPress={() => handlePickPhoto(image)}
-                  image={image}
-                  key={image.uri}
-                />
-              ))
-            ) : (
-              <ImageBox onPress={handlePickPhoto} />
-            )}
+            {/* create a horizontal scroll to manage more images */}
+            {productImages.map((image) => (
+              <ImageBox
+                onPress={() => handlePickPhoto(image)}
+                image={image}
+                key={image.uri}
+              />
+            ))}
+            {productImages.length < 3 && <ImageBox onPress={handlePickPhoto} />}
           </HStack>
         </VStack>
         <VStack mt="8">
