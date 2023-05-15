@@ -29,7 +29,7 @@ export function ImageBox({ image, ...rest }: ImageBoxProps) {
     >
       {image ? (
         <>
-          <Image flex={1} rounded="md" source={image} alt="Imagem do produto" />
+          <Image height="full" width="full" rounded="md" source={image} alt="Imagem do produto" />
           <Circle position="absolute" right={1} top={1} size="4" bg="gray.600">
             <X size={12} color={colors.gray[100]} />
           </Circle>
