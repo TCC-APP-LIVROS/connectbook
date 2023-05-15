@@ -1,7 +1,5 @@
-import { Header } from "@components/Header";
-import { Input } from "@components/Input";
-import { MultilineInput } from "@components/MultilineInput";
-import { Switch } from "@components/Switch";
+import { useState } from "react";
+import { Platform } from "react-native";
 import {
   Box,
   Checkbox,
@@ -11,14 +9,105 @@ import {
   ScrollView,
   Text,
   VStack,
+  useToast,
 } from "native-base";
-import { Plus } from "phosphor-react-native";
-import { useState } from "react";
+
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
+
+import { Header } from "@components/Header";
+import { Input } from "@components/Input";
+import { MultilineInput } from "@components/MultilineInput";
+import { Switch } from "@components/Switch";
 import { Button } from "@components/Button";
-import { Platform } from "react-native";
+import { ImageBox } from "@components/ImageBox";
+
 export function CreateListing() {
   const [value, setValue] = useState("one");
   const [groupValues, setGroupValues] = useState<string[]>();
+  const [productImages, setProductImages] = useState([] as any[]);
+  const toast = useToast();
+
+  async function handlePickPhoto(image: any) {
+    if (!!image.uri) {
+      setProductImages(productImages.filter((img) => img.uri !== image.uri));
+      return;
+    }
+   
+    // setPhotoIsLoading(true);
+    try {
+      const photosSelected = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        orderedSelection: true,
+        allowsMultipleSelection: true,
+      });
+
+      if (photosSelected.canceled) {
+        return;
+      }
+
+      if (photosSelected.assets.length > 6) {
+        return toast.show({
+          title: "Selecione no máximo 6 imagens",
+          placement: "top",
+          bgColor: "error.500",
+        });
+      }
+
+      //map para pegar o uri de cada imagem selecionada
+      if (photosSelected.assets[0].uri) {
+        const photosInfo = await Promise.all(
+          photosSelected.assets.map(async (photo) => {
+            return await FileSystem.getInfoAsync(photo.uri);
+          })
+        );
+
+        if (
+          photosInfo.some(
+            (photo) => photo.exists && photo.size / 1024 / 1024 > 5
+          )
+        ) {
+          return toast.show({
+            title: "Cada imagem deve ter no máximo 5MB",
+            placement: "top",
+            bgColor: "error.500",
+          });
+        }
+
+        // const fileExtension = photosSelected.assets[0].uri.split(".").pop();
+
+        const photos = photosSelected.assets.map((photo) => {
+          return {
+            uri: photo.uri,
+          };
+        });
+        setProductImages(photos);
+        // const photoFile = {
+        //   name: `${user.name}.${fileExtension}`.toLowerCase(),
+        //   uri: photoSelected.assets[0].uri,
+        //   type: `${photoSelected.assets[0].type}/${fileExtension}`,
+        // } as any;
+
+        //const userPhotoUploadForm = new FormData();
+        // userPhotoUploadForm.append("avatar", photoFile);
+
+        // const userUpdated = user;
+        // userUpdated.avatar = avatarUpdatedResponse.data.avatar;
+
+        toast.show({
+          title: "Foto atualizada!",
+          placement: "top",
+          bgColor: "green.500",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // setPhotoIsLoading(false);
+    }
+  }
+
   return (
     <VStack flex={1} safeAreaTop bg="gray.200">
       <Box px="6">
@@ -34,26 +123,17 @@ export function CreateListing() {
             incrível!
           </Text>
           <HStack mt="4" space="2">
-            <Box
-              bg="gray.300"
-              w="24"
-              h="24"
-              borderRadius="md"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Plus size={24} />
-            </Box>
-            <Box
-              bg="gray.300"
-              w="24"
-              h="24"
-              borderRadius="md"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Plus size={24} />
-            </Box>
+            {productImages.length > 0 ? (
+              productImages.map((image) => (
+                <ImageBox
+                  onPress={() => handlePickPhoto(image)}
+                  image={image}
+                  key={image.uri}
+                />
+              ))
+            ) : (
+              <ImageBox onPress={handlePickPhoto} />
+            )}
           </HStack>
         </VStack>
         <VStack mt="8">
@@ -92,7 +172,7 @@ export function CreateListing() {
           <Heading fontFamily="heading" fontSize="md" color="gray.600">
             Aceita troca?
           </Heading>
-          <Switch mt="3"  justifyContent="center" alignItems={"center"}/>
+          <Switch mt="3" justifyContent="center" alignItems={"center"} />
         </VStack>
 
         <VStack mt="8">
