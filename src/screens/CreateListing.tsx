@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 import {
   Box,
   Checkbox,
+  FlatList,
   HStack,
   Heading,
   Radio,
@@ -124,14 +125,27 @@ export function CreateListing() {
           </Text>
           <HStack mt="4" space="2">
             {/* create a horizontal scroll to manage more images */}
-            {productImages.map((image) => (
-              <ImageBox
-                onPress={() => handlePickPhoto(image)}
-                image={image}
-                key={image.uri}
+            <FlatList
+              horizontal
+              data={productImages}
+              renderItem={({ item, index }) => (
+                <ImageBox
+                onPress={() => handlePickPhoto(item)}
+                image={item}
+                key={item.uri}
+                ml={index === 0 ? 0 : 2}
               />
-            ))}
-            {productImages.length < 3 && <ImageBox onPress={handlePickPhoto} />}
+              )}
+              ListFooterComponent={
+                productImages.length > 0  && productImages.length < 6 ? (
+                  <ImageBox onPress={handlePickPhoto}  ml={2}/>
+                ) : null
+              }
+              ListEmptyComponent={() => (
+                <ImageBox onPress={handlePickPhoto} />
+              )}
+              showsHorizontalScrollIndicator={false}
+                />
           </HStack>
         </VStack>
         <VStack mt="8">
