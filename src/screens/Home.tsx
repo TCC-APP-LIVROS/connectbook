@@ -10,7 +10,6 @@ import {
   useDisclose,
   Heading,
   Checkbox,
-  Container,
   Pressable,
 } from "native-base";
 import { Avatar } from "@components/Avatar";
@@ -23,8 +22,11 @@ import DefaultImage from "@assets/Img/Image.png";
 import { Toggle } from "@components/Toggle";
 import { Switch } from "@components/Switch";
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { AppNavigationRouteProps } from "@routes/app.routes";
 
 export function Home() {
+  const navigation = useNavigation<AppNavigationRouteProps>();
   const { colors } = useTheme();
   const { isOpen, onOpen, onClose } = useDisclose();
   const [groupValues, setGroupValues] = useState([
@@ -34,6 +36,18 @@ export function Home() {
     "Cartão de Crédito",
     "Depósito Bancário",
   ]);
+
+  function handleGoToCreateListing() {
+    navigation.navigate("createListing");
+  }
+
+  function handleGoToListingDetails() {
+    navigation.navigate("listingDetails");
+  }
+  function handleGoToMyListing() {
+    navigation.navigate("bottomTabsRoutes", { screen: "myListing" });
+  }
+
   return (
     <VStack flex={1} px={6} bg="gray.200">
       <HStack mt="16">
@@ -45,6 +59,7 @@ export function Home() {
         <Button
           startIcon={<Icon as={<Plus color="#fff" size="16" />} />}
           title={"Criar anúncio"}
+          onPress={handleGoToCreateListing}
         />
       </HStack>
 
@@ -68,12 +83,14 @@ export function Home() {
             </Text>
             <Text color="gray.600">Anúncios ativos</Text>
           </VStack>
-          <HStack alignItems="center">
-            <Text color="blue.800" fontFamily="heading" mr="2">
-              Meus anúncios
-            </Text>
-            <Icon as={<ArrowRight color={colors.blue[800]} size="16" />} />
-          </HStack>
+          <Pressable onPress={handleGoToMyListing} _pressed={{ opacity: 0.4 }}>
+            <HStack alignItems="center">
+              <Text color="blue.800" fontFamily="heading" mr="2">
+                Meus anúncios
+              </Text>
+              <Icon as={<ArrowRight color={colors.blue[800]} size="16" />} />
+            </HStack>
+          </Pressable>
         </HStack>
       </VStack>
 
@@ -99,8 +116,10 @@ export function Home() {
           showsVerticalScrollIndicator={false}
           renderItem={() => (
             <ProductCard
-              mx={2}
+              mx="2"
+              mb="6"
               image={DefaultImage}
+              onPress={handleGoToListingDetails}
               avatarImage={{
                 uri: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?cs=srgb&dl=pexels-pixabay-220453.jpg&fm=jpg",
               }}
@@ -110,9 +129,15 @@ export function Home() {
         />
       </VStack>
       <VStack>
+        {/* eu quero dar um refactor e usar outro ao inves do actionsheet possivelmente */}
         <Actionsheet isOpen={isOpen} onClose={onClose}>
-          <Actionsheet.Content bgColor="gray.200">
-            <HStack w="100%" h={60} px={4} justifyContent="space-between" alignItems="center">
+          <Actionsheet.Content bgColor="gray.200" px="6">
+            <HStack
+              w="100%"
+              h={60}
+              justifyContent="space-between"
+              alignItems="center"
+            >
               <Heading fontSize="xl" color="gray.700" fontFamily="heading">
                 Filtrar anúncios
               </Heading>
@@ -120,7 +145,7 @@ export function Home() {
                 <X size={24} color={colors.gray[400]} />
               </Pressable>
             </HStack>
-            <Box w="100%" px="4" mt="6">
+            <Box w="100%" mt="6">
               <Heading fontSize="sm" color="gray.600" fontFamily="heading">
                 Condição
               </Heading>
@@ -129,13 +154,13 @@ export function Home() {
                 <Toggle title="Usado" value={false} ml="2" />
               </HStack>
             </Box>
-            <Box w="100%" px="4" mt="6">
+            <Box w="100%" mt="6">
               <Heading fontSize="sm" color="gray.600" fontFamily="heading">
                 Aceita troca?
               </Heading>
               <Switch mt="3" />
             </Box>
-            <Box w="100%" px="4" mt="6">
+            <Box w="100%" mt="6">
               <Heading fontSize="sm" color="gray.600" fontFamily="heading">
                 Meios de Pagamento
               </Heading>
@@ -162,8 +187,7 @@ export function Home() {
                 </Checkbox>
               </Checkbox.Group>
             </Box>
-
-            <Box w="100%" px="4" mt="6">
+            <Box w="100%" mt="6">
               <HStack justifyContent="space-between" space="3">
                 <Button flex="1" title={"Resetar filtros"} type="tertiary" />
                 <Button flex="1" title={"Aplicar filtros"} />
