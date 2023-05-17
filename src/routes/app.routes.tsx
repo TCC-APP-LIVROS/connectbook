@@ -18,7 +18,7 @@ import { House, SignOut, Tag } from "phosphor-react-native";
 import { useTheme } from "native-base";
 
 type AppRoutes = {
-  bottomTabsRoutes: undefined;
+  bottomTabsRoutes: { screen: "home" | "myListing" };
   createListing: undefined;
   listingDetails: undefined;
   previewListing: undefined;
@@ -43,7 +43,7 @@ function BottomTabsRoutes() {
       }}
     >
       <Screen
-        name="Home"
+        name="home"
         component={Home}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
@@ -56,7 +56,7 @@ function BottomTabsRoutes() {
         }}
       />
       <Screen
-        name="MyListing"
+        name="myListing"
         component={MyListing}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
@@ -69,7 +69,7 @@ function BottomTabsRoutes() {
         }}
       />
       <Screen
-        name="SignOut"
+        name="signOut"
         component={DummySignOutScreen}
         options={{
           tabBarIcon: ({ size }) => <SignOut color={"#E07878"} size={size} />,
