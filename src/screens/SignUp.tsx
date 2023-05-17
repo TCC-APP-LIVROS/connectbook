@@ -7,16 +7,26 @@ import {
   Container,
   ScrollView,
 } from "native-base";
+
+import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
+
+import { AuthNavigationRouteProps } from "@routes/auth.routes";
+
 import { Input } from "@components/Input";
+import { Button } from "@components/Button";
+import { Avatar } from "@components/Avatar";
 
 import Logo from "@assets/Img/Logo/Logo.png";
-import { Button } from "@components/Button";
 
-import { useTranslation } from "react-i18next";
-import { Avatar } from "@components/Avatar";
 
 export function SignUp() {
   const { t } = useTranslation();
+  const navigation = useNavigation<AuthNavigationRouteProps>();
+
+  function handleGoToSignIn() {
+    navigation.goBack();
+  }
   return (
     <VStack flex={1} px={12 } borderBottomRadius={"12"} bg={"gray.200"}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -50,6 +60,7 @@ export function SignUp() {
             mt="4"
             title={t("SignUp:Go-to-login")}
             mb="12"
+            onPress={handleGoToSignIn}
           />
         </Center>
       </ScrollView>

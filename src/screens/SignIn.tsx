@@ -1,18 +1,30 @@
-import { VStack, Center, Text, Image, Heading, Container } from "native-base";
-import { Input } from "@components/Input";
-
-import Logo from "@assets/Img/Logo/Logo.png";
-import { Button } from "@components/Button";
+import { VStack, Center, Text, Image, Heading } from "native-base";
 
 import { useTranslation } from "react-i18next";
+import { useNavigation } from "@react-navigation/native";
+
+import { Input } from "@components/Input";
+import { Button } from "@components/Button";
+import Logo from "@assets/Img/Logo/Logo.png";
+import { AuthNavigationRouteProps } from "@routes/auth.routes";
 
 export function SignIn() {
   const { t, i18n } = useTranslation();
+  const navigation = useNavigation<AuthNavigationRouteProps>();
+  
+  async function handleSignIn() {
+      //navigation.navigate("");
+  }
+  
+  function handleGoToSignUp() {
+      navigation.navigate("SignUp");
+  }
   return (
     // adicionar em uma scroll view para devices menores?
-    <VStack flex={1}>
-      <VStack px={12} borderBottomRadius={"12"} bg={"gray.200"}>
-        <Center w="full"  >
+
+    <VStack flex={1} safeAreaTop bg={"gray.200"}>
+      <VStack px={12} borderBottomRadius={"12"} >
+        <Center w="full"  mt={"20"}>
           <Image source={Logo} alt="Logo" mb="5" />
           <Heading color="gray.700" fontSize="3.5xl" fontFamily="heading">
             marketspace
@@ -43,6 +55,7 @@ export function SignIn() {
             w="full"
             mt="4"
             mb={10}
+            onPress={handleGoToSignUp}
           />
         </Center>
       </VStack>
