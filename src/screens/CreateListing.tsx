@@ -47,7 +47,7 @@ export function CreateListing() {
         return;
       }
 
-      if (photosSelected.assets.length > 3) {
+      if (photosSelected.assets.length + productImages.length > 6) {
         return toast.show({
           title: "Selecione no máximo 6 imagens",
           placement: "top",
