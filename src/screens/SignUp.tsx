@@ -6,6 +6,8 @@ import {
   Heading,
   Container,
   ScrollView,
+  Pressable,
+  useToast,
 } from "native-base";
 
 import { useNavigation } from "@react-navigation/native";
@@ -13,6 +15,8 @@ import { useTranslation } from "react-i18next";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
 
 import { AuthNavigationRouteProps } from "@routes/auth.routes";
 
@@ -21,6 +25,8 @@ import { Button } from "@components/Button";
 import { Avatar } from "@components/Avatar";
 
 import Logo from "@assets/Img/Logo/Logo.png";
+import { useState } from "react";
+import { api } from "@services/api";
 
 type FormData = {
   name: string;
@@ -30,11 +36,20 @@ type FormData = {
   password_confirmation: string;
 };
 
+type AvatarData = {
+  name: string;
+  uri: string;
+  type: string;
+};
+
 const signUpSchema = yup.object({
   name: yup.string().required("Informe um nome."),
   email: yup.string().required("Informe um e-mail válido."),
   tel: yup.string(),
-  password: yup.string().min(6, "Senha deve possuir no mínimo 6 caracteres").required("Informe a senha."),
+  password: yup
+    .string()
+    .min(6, "Senha deve possuir no mínimo 6 caracteres")
+    .required("Informe a senha."),
   password_confirmation: yup
     .string()
     .oneOf([yup.ref("password"), undefined], "As senhas não coincidem")
@@ -44,6 +59,8 @@ const signUpSchema = yup.object({
 export function SignUp() {
   const { t } = useTranslation();
   const navigation = useNavigation<AuthNavigationRouteProps>();
+  const toast = useToast();
+  const [avatar, setAvatar] = useState<AvatarData>({} as AvatarData);
   const {
     control,
     handleSubmit,
@@ -52,8 +69,70 @@ export function SignUp() {
     resolver: yupResolver(signUpSchema),
   });
 
-  function handleSignUp(form: FormData) {
-    console.log(form);
+  async function handleSelectAvatar() {
+    const selectedPhoto = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (selectedPhoto.canceled) {
+      return;
+    }
+    if (selectedPhoto.assets.length > 0) {
+      const photoInfo = await FileSystem.getInfoAsync(
+        selectedPhoto.assets[0].uri
+      );
+      if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
+        return toast.show({
+          title: "Cada imagem deve ter no máximo 5MB",
+          placement: "top",
+          bgColor: "error.500",
+        });
+      }
+    }
+
+    const fileExtension = selectedPhoto.assets[0].uri
+      .split(".")
+      .pop() as string;
+
+    setAvatar({
+      name: `.${fileExtension}`,
+      uri: selectedPhoto.assets[0].uri,
+      type: `${selectedPhoto.assets[0].type}/${fileExtension}`,
+    });
+  }
+
+  async function handleSignUp(form: FormData) {
+    if(!avatar.uri) {
+      return toast.show({
+        title: "Selecione uma imagem",
+        placement: "top",
+        bgColor: "error.500",
+      });
+    }
+    
+    const formData = new FormData();
+
+    avatar.name = `${form.name}${avatar.name}`.toLocaleLowerCase();
+    formData.append("avatar", avatar as any);
+    formData.append("name", form.name);
+    formData.append("email", form.email);
+    formData.append("tel", form.tel);
+    formData.append("password", form.password);
+
+    console.log(formData);
+    try {
+      const response = await api.post("/users", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+
     //navigation.navigate("");
   }
   function handleGoToSignIn() {
@@ -74,7 +153,9 @@ export function SignUp() {
         </Center>
 
         <Center>
-          <Avatar my="4" badge size="22" />
+          <Pressable onPress={handleSelectAvatar} _pressed={{ opacity: 0.7 }}>
+            <Avatar my="4" badge size="22" />
+          </Pressable>
           <Controller
             control={control}
             name="name"
