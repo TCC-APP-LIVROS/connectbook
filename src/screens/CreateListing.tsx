@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Platform } from "react-native";
 import {
   Box,
-  Checkbox,
   FlatList,
   HStack,
   Heading,
@@ -15,6 +14,9 @@ import {
 
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 import { Header } from "@components/Header";
 import { Input } from "@components/Input";
@@ -22,12 +24,36 @@ import { MultilineInput } from "@components/MultilineInput";
 import { Switch } from "@components/Switch";
 import { Button } from "@components/Button";
 import { ImageBox } from "@components/ImageBox";
+import { Checkbox } from "@components/Checkbox";
+
+const createListingSchema = yup.object({
+  name: yup.string().required("Informe o nome."),
+  description: yup.string(),
+  is_new: yup.string().default("true"),
+  price: yup.number().required("Informe o valor."),
+  accept_trade: yup.boolean().default(false).required(),
+  payment_methods: yup
+    .array(yup.string().defined())
+    .min(1, "Preencha ao menos um método de pagamento")
+    .required(),
+});
+
+type NewListingFormProps = yup.InferType<typeof createListingSchema>;
 
 export function CreateListing() {
-  const [value, setValue] = useState("one");
-  const [groupValues, setGroupValues] = useState<string[]>();
   const [productImages, setProductImages] = useState([] as any[]);
   const toast = useToast();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<NewListingFormProps>({
+    resolver: yupResolver(createListingSchema),
+    defaultValues: {
+      is_new: "true",
+      accept_trade: false,
+    },
+  });
 
   async function handlePickPhoto(image: any) {
     if (!!image.uri) {
@@ -109,6 +135,10 @@ export function CreateListing() {
     }
   }
 
+  async function onSubmit(data: NewListingFormProps) {
+    console.log(data);
+  }
+
   return (
     <VStack flex={1} safeAreaTop bg="gray.200">
       <Box px="6">
@@ -130,89 +160,131 @@ export function CreateListing() {
               data={productImages}
               renderItem={({ item, index }) => (
                 <ImageBox
-                onPress={() => handlePickPhoto(item)}
-                image={item}
-                key={item.uri}
-                ml={index === 0 ? 0 : 2}
-              />
+                  onPress={() => handlePickPhoto(item)}
+                  image={item}
+                  key={item.uri}
+                  ml={index === 0 ? 0 : 2}
+                />
               )}
               ListFooterComponent={
-                productImages.length > 0  && productImages.length < 6 ? (
-                  <ImageBox onPress={handlePickPhoto}  ml={2}/>
+                productImages.length > 0 && productImages.length < 6 ? (
+                  <ImageBox onPress={handlePickPhoto} ml={2} />
                 ) : null
               }
-              ListEmptyComponent={() => (
-                <ImageBox onPress={handlePickPhoto} />
-              )}
+              ListEmptyComponent={() => <ImageBox onPress={handlePickPhoto} />}
               showsHorizontalScrollIndicator={false}
-                />
+            />
           </HStack>
         </VStack>
         <VStack mt="8">
           <Heading fontFamily="heading" fontSize="md" color="gray.600">
             Sobre o produto
           </Heading>
-          <Input mt="4" placeholder="Título do anúncio" />
-          <MultilineInput placeholder="Descrição do produto" />
-          <Radio.Group
-            name="myRadioGroup"
-            accessibilityLabel="favorite number"
-            value={value}
-            onChange={(nextValue) => {
-              setValue(nextValue);
-            }}
-          >
-            <HStack space="5">
-              <Radio colorScheme="blue" value="one" my={1}>
-                Novo
-              </Radio>
-              <Radio colorScheme="blue" value="two" my={1}>
-                Usado
-              </Radio>
-            </HStack>
-          </Radio.Group>
+          <Controller
+            control={control}
+            name="name"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="Título do anúncio"
+                onChangeText={onChange}
+                value={value}
+                mt="4"
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="description"
+            render={({ field: { onChange, value } }) => (
+              <MultilineInput
+                placeholder="Título do anúncio"
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="is_new"
+            render={({ field: { onChange, value } }) => (
+              <Radio.Group
+                name="is_new"
+                accessibilityLabel="favorite number"
+                value={value}
+                onChange={onChange}
+              >
+                <HStack space="5">
+                  <Radio colorScheme="blue" value="true" my={1}>
+                    Novo
+                  </Radio>
+                  <Radio colorScheme="blue" value="false" my={1}>
+                    Usado
+                  </Radio>
+                </HStack>
+              </Radio.Group>
+            )}
+          />
         </VStack>
 
         <VStack mt="8">
           <Heading fontFamily="heading" fontSize="md" color="gray.600">
             Venda
           </Heading>
-          <Input mt="4" variant="cash" placeholder="Valor do produto" />
+          <Controller
+            control={control}
+            name="price"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                variant="cash"
+                placeholder="Valor do produto"
+                onChangeText={onChange}
+                value={value?.toString()}
+                mt="4"
+              />
+            )}
+          />
         </VStack>
 
         <VStack mt="8" alignItems="flex-start">
           <Heading fontFamily="heading" fontSize="md" color="gray.600">
             Aceita troca?
           </Heading>
-          <Switch mt="3" justifyContent="center" alignItems={"center"} />
+          <Controller
+            control={control}
+            name="accept_trade"
+            render={({ field: { onChange, value } }) => (
+              <Switch
+                justifyContent="center"
+                alignItems={"center"}
+                mt="3"
+                onToggle={() => onChange(!value)}
+                value={value}
+              />
+            )}
+          />
         </VStack>
 
         <VStack mt="8">
           <Heading fontFamily="heading" fontSize="md" color="gray.600">
             Meios de pagamento aceitos
           </Heading>
-          <Checkbox.Group
-            onChange={setGroupValues}
-            value={groupValues}
-            accessibilityLabel="choose numbers"
-            mt="3"
-          >
-            <Checkbox value="Boleto" my="1" colorScheme="blue">
-              Boleto
-            </Checkbox>
-            <Checkbox value="Pix" my="1" colorScheme="blue">
-              Pix
-            </Checkbox>
-            <Checkbox value="Dinheiro" my="1" colorScheme="blue">
-              Dinheiro
-            </Checkbox>
-            <Checkbox value="Cartão de Crédito" my="1" colorScheme="blue">
-              Cartão de credito
-            </Checkbox>
-            <Checkbox value="Depósito Bancário" my="1" colorScheme="blue">
-              Depósito Bancário
-            </Checkbox>
-          </Checkbox.Group>
+          <Controller
+            name="payment_methods"
+            control={control}
+            defaultValue={[]}
+            render={({ field: { onChange, value } }) => (
+              <Checkbox
+                options={[
+                  "pix",
+                  "cartão de crédito",
+                  "cartão de débito",
+                  "dinheiro",
+                ]}
+                value={value}
+                onChange={onChange}
+              />
+            )}
+          />
         </VStack>
         <Box h="10" />
       </ScrollView>
@@ -227,7 +299,7 @@ export function CreateListing() {
       >
         <HStack justifyContent="space-between" space="3">
           <Button flex="1" title={"Cancelar"} type="tertiary" />
-          <Button flex="1" title={"Avançar"} />
+          <Button flex="1" title={"Avançar"} onPress={handleSubmit(onSubmit)} />
         </HStack>
       </HStack>
     </VStack>

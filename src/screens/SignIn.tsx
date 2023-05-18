@@ -2,29 +2,48 @@ import { VStack, Center, Text, Image, Heading } from "native-base";
 
 import { useTranslation } from "react-i18next";
 import { useNavigation } from "@react-navigation/native";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 import Logo from "@assets/Img/Logo/Logo.png";
 import { AuthNavigationRouteProps } from "@routes/auth.routes";
 
+type FormData = {
+  email: string;
+  password: string;
+};
+
+const signInSchema = yup.object({
+  email: yup.string().required("Informe o e-mail."),
+  password: yup.string().required("Informe a senha."),
+});
+
 export function SignIn() {
   const { t, i18n } = useTranslation();
   const navigation = useNavigation<AuthNavigationRouteProps>();
-  
-  async function handleSignIn() {
-      //navigation.navigate("");
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: yupResolver(signInSchema),
+  });
+
+  async function handleSignIn(form: FormData) {
+    console.log(form);
+    //navigation.navigate("");
   }
-  
+
   function handleGoToSignUp() {
-      navigation.navigate("SignUp");
+    navigation.navigate("SignUp");
   }
   return (
-    // adicionar em uma scroll view para devices menores?
-
     <VStack flex={1} safeAreaTop bg={"gray.200"}>
-      <VStack px={12} borderBottomRadius={"12"} >
-        <Center w="full"  mt={"20"}>
+      <VStack px={12} borderBottomRadius={"12"}>
+        <Center w="full" mt={"20"}>
           <Image source={Logo} alt="Logo" mb="5" />
           <Heading color="gray.700" fontSize="3.5xl" fontFamily="heading">
             marketspace
@@ -38,9 +57,39 @@ export function SignIn() {
           <Text mb="4" mt="20" fontSize="sm">
             {t("SignIn:login-to-your-account")}
           </Text>
-          <Input placeholder={t("Common:E-mail")} />
-          <Input placeholder={t("Common:Password")} variant="password" />
-          <Button w="full" type="secondary" mt="4" title={t("SignIn:SignIn")} mb="16" />
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                value={value}
+                onChangeText={onChange}
+                placeholder={t("Common:E-mail")}
+                errorMessage={errors.email?.message}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                value={value}
+                onChangeText={onChange}
+                placeholder={t("Common:Password")}
+                variant="password"
+                errorMessage={errors.password?.message}
+              />
+            )}
+          />
+          <Button
+            w="full"
+            type="secondary"
+            mt="4"
+            title={t("SignIn:SignIn")}
+            mb="16"
+            onPress={handleSubmit(handleSignIn)}
+          />
         </Center>
       </VStack>
 
