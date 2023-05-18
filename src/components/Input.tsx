@@ -8,6 +8,7 @@ import {
   Box,
   Divider,
   Center,
+  FormControl,
 } from "native-base";
 
 import {
@@ -23,11 +24,20 @@ type InputProps = IInputProps & {
   variant?: InputVariant;
   onFilterPress?: () => void;
   onSearchPress?: () => void;
+  errorMessage?: string | null;
 };
 
-export function Input({ variant = "default", onFilterPress, onSearchPress, ...rest }: InputProps) {
+export function Input({
+  errorMessage = null,
+  isInvalid,
+  variant = "default",
+  onFilterPress,
+  onSearchPress,
+  ...rest
+}: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
   const { colors } = useTheme();
+  const invalid = !!errorMessage || isInvalid;
 
   function renderPasswordVariant() {
     return (
@@ -45,7 +55,7 @@ export function Input({ variant = "default", onFilterPress, onSearchPress, ...re
     return (
       <Center flexDirection="row" height="full">
         <Pressable onPress={onSearchPress} _pressed={{ opacity: "0.5" }}>
-        <MagnifyingGlass weight="bold"  size={24} color={colors.gray[500]} />
+          <MagnifyingGlass weight="bold" size={24} color={colors.gray[500]} />
         </Pressable>
         <Box py="3">
           <Divider orientation="vertical" mx="3" my="1.5" thickness="2" />
@@ -58,36 +68,39 @@ export function Input({ variant = "default", onFilterPress, onSearchPress, ...re
   }
 
   return (
-    <NativeBaseInput
-      h="12"
-      px="4"
-      py="3"
-      mb="4"
-      secureTextEntry={variant === "password" && !showPassword}
-      rounded="sm"
-      borderWidth="0"
-      fontFamily={"body"}
-      fontSize="md"
-      bgColor="white"
-      placeholderTextColor={"gray.400"}
-      color={"gray.600"}
-      _focus={{
-        borderWidth: "1",
-        borderColor: "gray.500",
-      }}
-      InputLeftElement={
-        variant === "cash" ? (
-          <Text ml="4" mr="-2" color="gray.700">
-            R$
-          </Text>
-        ) : undefined
-      }
-      InputRightElement={
-        (variant === "password" && renderPasswordVariant()) ||
-        (variant === "search" && renderSearchVariant()) ||
-        undefined
-      }
-      {...rest}
-    />
+    <FormControl isInvalid={invalid} mb="4">
+      <NativeBaseInput
+        h="12"
+        px="4"
+        py="3"
+        secureTextEntry={variant === "password" && !showPassword}
+        keyboardType={variant === "cash" ? "numeric" : "default"}
+        rounded="sm"
+        borderWidth="0"
+        fontFamily={"body"}
+        fontSize="md"
+        bgColor="white"
+        placeholderTextColor={"gray.400"}
+        color={"gray.600"}
+        _focus={{
+          borderWidth: "1",
+          borderColor: "gray.500",
+        }}
+        InputLeftElement={
+          variant === "cash" ? (
+            <Text ml="4" mr="-2" color="gray.700">
+              R$
+            </Text>
+          ) : undefined
+        }
+        InputRightElement={
+          (variant === "password" && renderPasswordVariant()) ||
+          (variant === "search" && renderSearchVariant()) ||
+          undefined
+        }
+        {...rest}
+      />
+      <FormControl.ErrorMessage>{errorMessage}</FormControl.ErrorMessage>
+    </FormControl>
   );
 }
