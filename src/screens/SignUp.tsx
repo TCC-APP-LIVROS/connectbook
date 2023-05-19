@@ -27,6 +27,7 @@ import { Avatar } from "@components/Avatar";
 import Logo from "@assets/Img/Logo/Logo.png";
 import { useState } from "react";
 import { api } from "@services/api";
+import { useAuth } from "@hooks/useAuth";
 
 type FormData = {
   name: string;
@@ -45,7 +46,7 @@ type AvatarData = {
 const signUpSchema = yup.object({
   name: yup.string().required("Informe um nome."),
   email: yup.string().required("Informe um e-mail válido."),
-  tel: yup.string(),
+  tel: yup.string().required("Informe um número de telefone."),
   password: yup
     .string()
     .min(6, "Senha deve possuir no mínimo 6 caracteres")
@@ -58,6 +59,7 @@ const signUpSchema = yup.object({
 
 export function SignUp() {
   const { t } = useTranslation();
+  const { SignIn } = useAuth();
   const navigation = useNavigation<AuthNavigationRouteProps>();
   const toast = useToast();
   const [avatar, setAvatar] = useState<AvatarData>({} as AvatarData);
@@ -104,14 +106,14 @@ export function SignUp() {
   }
 
   async function handleSignUp(form: FormData) {
-    if(!avatar.uri) {
+    if (!avatar.uri) {
       return toast.show({
         title: "Selecione uma imagem",
         placement: "top",
         bgColor: "error.500",
       });
     }
-    
+
     const formData = new FormData();
 
     avatar.name = `${form.name}${avatar.name}`.toLocaleLowerCase();
@@ -121,19 +123,27 @@ export function SignUp() {
     formData.append("tel", form.tel);
     formData.append("password", form.password);
 
-    console.log(formData);
     try {
-      const response = await api.post("/users", formData, {
+      await api.post("/users", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
 
-    //navigation.navigate("");
+      await SignIn(form.email, form.password);
+    } catch (error: any) {
+      //for some reason the interceptor is not creating
+      //the appError object, so I'm doing it manually for now
+      const errorMessage = error.response.data.message
+        ? error.response.data.message
+        : "Não foi possível criar a conta.\n Tente novamente mais tarde";
+      
+        toast.show({
+        title: errorMessage,
+        placement: "top",
+        bgColor: "red.500",
+      });
+    }
   }
   function handleGoToSignIn() {
     navigation.goBack();
