@@ -1,14 +1,15 @@
 import { UserDTO } from "@dtos/UserDTO";
 import { api } from "@services/api";
-import { storageAuthTokenSave } from "@storage/storageAuthToken";
-import { storageUserSave } from "@storage/storageUser";
+import { storageAuthTokenSave, storageAuthTokenGet, storageAuthTokenRemove } from "@storage/storageAuthToken";
+import { storageUserGet, storageUserRemove, storageUserSave } from "@storage/storageUser";
 import { AppError } from "@utils/AppError";
-import { ReactNode, createContext, useState } from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 
 export type AuthContextType = {
   user: UserDTO;
   isLoadingUserData: boolean;
   SignIn: (email: string, password: string) => Promise<void>;
+  signOut: () => Promise<void>;
 };
 
 type AuthContextProviderProps = {
@@ -59,8 +60,43 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     }
   }
 
+  async function checkLocalStorageAuth() {
+    try {
+      setIsLoadingUserData(true);
+      const user = await storageUserGet();
+      const token = await storageAuthTokenGet();
+      if (user && token) {
+        await authorizationHeaderUpdate(token);
+        setUser(user);
+      }
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoadingUserData(false);
+    }
+  }
+
+  async function signOut() {
+    try {
+      setIsLoadingUserData(true);
+      await storageUserRemove();
+      await storageAuthTokenRemove();
+      await authorizationHeaderUpdate("");
+      setUser({} as UserDTO);
+      
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoadingUserData(false);
+    }
+  }
+
+  useEffect(() => {
+    checkLocalStorageAuth();
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, isLoadingUserData, SignIn }}>
+    <AuthContext.Provider value={{ user, signOut, isLoadingUserData, SignIn }}>
       {children}
     </AuthContext.Provider>
   );
