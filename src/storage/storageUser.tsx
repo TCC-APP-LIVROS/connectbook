@@ -7,7 +7,9 @@ export async function storageUserSave(user: UserDTO) {
 }
 
 export async function storageUserGet() {
-  await AsyncStorage.getItem(USER_STORAGE);
+  const storage = await AsyncStorage.getItem(USER_STORAGE);
+  const data = storage ? JSON.parse(storage) : null;
+  return data;
 }
 
 export async function storageUserRemove() {
