@@ -42,7 +42,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   async function SignIn(email: string, password: string) {
     try {
-      setIsLoadingUserData(true);
       const { data } = await api.post("/sessions", { email, password });
       if (data.user && data.token && data.refresh_token) {
         await localUserAndAuthTokenSave(
@@ -57,8 +56,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       }
     } catch (error) {
       throw error;
-    } finally {
-      setIsLoadingUserData(false);
     }
   }
 
