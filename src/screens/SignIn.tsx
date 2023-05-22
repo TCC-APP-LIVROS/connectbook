@@ -1,4 +1,4 @@
-import { VStack, Center, Text, Image, Heading } from "native-base";
+import { VStack, Center, Text, Image, Heading, useToast } from "native-base";
 
 import { useTranslation } from "react-i18next";
 import { useNavigation } from "@react-navigation/native";
@@ -10,6 +10,9 @@ import { Input } from "@components/Input";
 import { Button } from "@components/Button";
 import Logo from "@assets/Img/Logo/Logo.png";
 import { AuthNavigationRouteProps } from "@routes/auth.routes";
+import { useAuth } from "@hooks/useAuth";
+import { useState } from "react";
+import { AppError } from "@utils/AppError";
 
 type FormData = {
   email: string;
@@ -24,6 +27,9 @@ const signInSchema = yup.object({
 export function SignIn() {
   const { t, i18n } = useTranslation();
   const navigation = useNavigation<AuthNavigationRouteProps>();
+  const toast = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { SignIn } = useAuth();
   const {
     control,
     handleSubmit,
@@ -32,9 +38,28 @@ export function SignIn() {
     resolver: yupResolver(signInSchema),
   });
 
-  async function handleSignIn(form: FormData) {
-    console.log(form);
-    //navigation.navigate("");
+  async function handleSignIn({ email, password }: FormData) {
+    try {
+      setIsSubmitting(true);
+      
+      await SignIn(email, password);
+    
+    } catch (error) {
+    
+      const isAppError = error instanceof AppError;
+      const ErrorMessage = isAppError
+        ? error.message
+        : "Não foi possível fazer o login.\nTente novamente.";
+    
+        toast.show({
+        title: ErrorMessage,
+        bgColor: "error.500",
+        placement: "top",
+    
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   function handleGoToSignUp() {
@@ -89,6 +114,7 @@ export function SignIn() {
             title={t("SignIn:SignIn")}
             mb="16"
             onPress={handleSubmit(handleSignIn)}
+            isLoading={isSubmitting}
           />
         </Center>
       </VStack>
