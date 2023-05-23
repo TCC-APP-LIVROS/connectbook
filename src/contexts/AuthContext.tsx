@@ -1,7 +1,15 @@
 import { UserDTO } from "@dtos/UserDTO";
 import { api } from "@services/api";
-import { storageAuthTokenSave, storageAuthTokenGet, storageAuthTokenRemove } from "@storage/storageAuthToken";
-import { storageUserGet, storageUserRemove, storageUserSave } from "@storage/storageUser";
+import {
+  storageAuthTokenSave,
+  storageAuthTokenGet,
+  storageAuthTokenRemove,
+} from "@storage/storageAuthToken";
+import {
+  storageUserGet,
+  storageUserRemove,
+  storageUserSave,
+} from "@storage/storageUser";
 import { AppError } from "@utils/AppError";
 import { ReactNode, createContext, useEffect, useState } from "react";
 
@@ -53,7 +61,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
         await authorizationHeaderUpdate(data.token);
 
         setUser(data.user);
-        
       }
     } catch (error) {
       throw error;
@@ -83,7 +90,6 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
       await storageAuthTokenRemove();
       await authorizationHeaderUpdate("");
       setUser({} as UserDTO);
-      
     } catch (error) {
       throw error;
     } finally {
@@ -94,6 +100,14 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   useEffect(() => {
     checkLocalStorageAuth();
   }, []);
+
+  useEffect(() => {
+    const subscribe = api.registerInterceptTokenManager(signOut);
+
+    return () => {
+      subscribe();
+    };
+  }, [signOut]);
 
   return (
     <AuthContext.Provider value={{ user, signOut, isLoadingUserData, SignIn }}>
