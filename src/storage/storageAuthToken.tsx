@@ -8,7 +8,7 @@ export async function storageAuthTokenSave(token: string, refresh_token: string)
 
 export async function storageAuthTokenGet() {
     const storage = await AsyncStorage.getItem(AUTH_TOKEN_STORAGE);
-    const data = storage ? JSON.parse(storage) : null;
+    const data = storage ? JSON.parse(storage) : {};
     return data;
 }
 
