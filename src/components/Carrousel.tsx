@@ -1,9 +1,13 @@
-import { Box, Center, HStack, VStack,IBoxProps } from "native-base";
+import { Box, Center, HStack, VStack,IBoxProps, Image } from "native-base";
 import * as React from "react";
 import { useState } from "react";
-import { Dimensions, Text } from "react-native";
+import { Dimensions, ImageSourcePropType, Text } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import RACarrousel from "react-native-reanimated-carousel";
+
+type CarrouselProps = IBoxProps & {
+  images: ImageSourcePropType[];
+}
 
 const Indicator = ({ count, currentIndex }: { count: number, currentIndex: number}) => {
   return (
@@ -24,7 +28,7 @@ const Indicator = ({ count, currentIndex }: { count: number, currentIndex: numbe
 };
 
 
-export function Carrousel({...rest}: IBoxProps) {
+export function Carrousel({images,...rest}: CarrouselProps) {
   const width = Dimensions.get("window").width;
   const data = [...new Array(6).keys()];
   let [index, setIndex] = useState(0);
@@ -35,21 +39,19 @@ export function Carrousel({...rest}: IBoxProps) {
         loop
         width={width}
         height={width * 0.75}// 4:3 aspect ratio
-        data={data}
+        data={images}
         defaultIndex={0}
         autoPlay={false}
         scrollAnimationDuration={500}
         onSnapToItem={(index) => setIndex(index)}
-        renderItem={({ index }) => (
-          <Box flex={1} justifyContent="center" bgColor="blue.400">
-            <Center flex={1}>
-              <Text style={{ textAlign: "center", fontSize: 30 }}>{index}</Text>
-            </Center>
+        renderItem={({ index, item }) => (
+          <Box flex={1} justifyContent="center" bgColor="gray.400">
+            <Image alt="" flex={1} source={item} resizeMode="contain"/>
           </Box>
         )}
       />
       </GestureHandlerRootView>
-        <Indicator count={data.length} currentIndex={index} />
+        <Indicator count={images.length} currentIndex={index} />
     </Box>
   );
 }
