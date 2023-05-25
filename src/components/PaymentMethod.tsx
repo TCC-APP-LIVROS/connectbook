@@ -7,30 +7,25 @@ import {
   Bank,
 } from "phosphor-react-native";
 
-export type payment =
-  | "Boleto"
-  | "Pix"
-  | "Dinheiro"
-  | "Cartão"
-  | "Depósito Bancário";
+import { PaymentMethod as payMethod } from "@dtos/ListingDTO"
 
 type paymentMethodProps = IStackProps & {
-  payment: payment;
+  payment: payMethod;
   color: string;
 };
 
 export function PaymentMethod({ payment, color, ...rest }: paymentMethodProps) {
   const Icon = {
-    Boleto: <Barcode size={18} color={color} />,
-    Pix: <QrCode size={18} color={color} />,
-    Dinheiro: <Money size={18} color={color} />,
-    Cartão: <CreditCard size={18} color={color} />,
-    "Depósito Bancário": <Bank size={18} color={color} />,
+    boleto: <Barcode size={18} color={color} />,
+    pix: <QrCode size={18} color={color} />,
+    cash: <Money size={18} color={color} />,
+    card: <CreditCard size={18} color={color} />,
+    deposit: <Bank size={18} color={color} />,
   };
   return (
-    <HStack alignItems="center" {...rest}>
+    <HStack alignItems="center" mt="1" {...rest}>
       <Box opacity="0.8">{Icon[payment]}</Box>
-      <Text ml="2" fontSize="sm" color={"gray.600"}>
+      <Text ml="2" fontSize="sm" textTransform="capitalize" color={"gray.600"}>
         {payment}
       </Text>
     </HStack>
