@@ -1,24 +1,29 @@
 import { HStack, Pressable, Text, VStack } from "native-base";
 import { Feather } from "@expo/vector-icons";
 
+type Option = {
+  title: string;
+  value: string;
+}
+
 type CheckboxProps = {
-  options: string[];
+  options: Option[];
   value: string[];
   onChange: (value: string[]) => void;
 };
 
 export function Checkbox({ options, value, onChange }: CheckboxProps) {
-  function handlePress(item: string) {
-    if (value?.includes(item)) {
-      onChange(value.filter((i) => i !== item));
+  function handlePress(item: Option) {
+    if (value?.includes(item.value)) {
+      onChange(value.filter((i) => i !== item.value));
     } else {
-      onChange(value.concat(item));
+      onChange(value.concat(item.value));
     }
   }
   return (
     <VStack>
       {options.map((item) => (
-        <HStack key={item} alignItems={"center"}>
+        <HStack key={item.title} alignItems={"center"}>
           <Pressable
             w="5"
             h="5"
@@ -26,13 +31,13 @@ export function Checkbox({ options, value, onChange }: CheckboxProps) {
             mb={2}
             justifyContent={"center"}
             alignItems={"center"}
-            borderColor={value.includes(item) ? "blue.600" : "gray.400"}
-            bg={value.includes(item) ? "blue.600" : "rgba(0,0,0,0)"}
+            borderColor={value.includes(item.value) ? "blue.600" : "gray.400"}
+            bg={value.includes(item.value) ? "blue.600" : "rgba(0,0,0,0)"}
             borderWidth={2}
             rounded={"xs"}
             onPress={() => handlePress(item)}
           >
-            {value.includes(item) && (
+            {value.includes(item.value) && (
               <Feather name="check" size={14} color="white" />
             )}
           </Pressable>
@@ -42,7 +47,7 @@ export function Checkbox({ options, value, onChange }: CheckboxProps) {
             color="gray.600"
             textTransform={"capitalize"}
           >
-            {item}
+            {item.title}
           </Text>
         </HStack>
       ))}
