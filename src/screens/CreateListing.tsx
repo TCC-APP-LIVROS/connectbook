@@ -18,6 +18,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
+import { ListingDTO, paymentMethods } from "@dtos/ListingDTO";
 import { Header } from "@components/Header";
 import { Input } from "@components/Input";
 import { MultilineInput } from "@components/MultilineInput";
@@ -25,15 +26,19 @@ import { Switch } from "@components/Switch";
 import { Button } from "@components/Button";
 import { ImageBox } from "@components/ImageBox";
 import { Checkbox } from "@components/Checkbox";
+import { useNavigation } from "@react-navigation/native";
+import { AppNavigationRouteProps } from "@routes/app.routes";
+import { useAuth } from "@hooks/useAuth";
+import { AppError } from "@utils/AppError";
 
 const createListingSchema = yup.object({
   name: yup.string().required("Informe o nome."),
-  description: yup.string(),
-  is_new: yup.string().default("true"),
+  description: yup.string().required(),
+  is_new: yup.boolean().required(),
   price: yup.number().required("Informe o valor."),
-  accept_trade: yup.boolean().default(false).required(),
+  accept_trade: yup.boolean().required(),
   payment_methods: yup
-    .array(yup.string().defined())
+    .array(yup.string().oneOf(paymentMethods))
     .min(1, "Preencha ao menos um método de pagamento")
     .required(),
 });
@@ -43,6 +48,8 @@ type NewListingFormProps = yup.InferType<typeof createListingSchema>;
 export function CreateListing() {
   const [productImages, setProductImages] = useState([] as any[]);
   const toast = useToast();
+  const navigation = useNavigation<AppNavigationRouteProps>();
+  const { user } = useAuth();
   const {
     control,
     handleSubmit,
@@ -50,8 +57,9 @@ export function CreateListing() {
   } = useForm<NewListingFormProps>({
     resolver: yupResolver(createListingSchema),
     defaultValues: {
-      is_new: "true",
+      is_new: true,
       accept_trade: false,
+      payment_methods: paymentMethods,
     },
   });
 
@@ -102,8 +110,6 @@ export function CreateListing() {
           });
         }
 
-        // const fileExtension = photosSelected.assets[0].uri.split(".").pop();
-
         const photos = photosSelected.assets.map((photo) => {
           const fileExtension = photo.uri.split(".").pop();
           return {
@@ -113,34 +119,41 @@ export function CreateListing() {
           };
         });
         setProductImages((prevImages) => prevImages.concat(photos));
-        // const photoFile = {
-        //   name: `${user.name}.${fileExtension}`.toLowerCase(),
-        //   uri: photoSelected.assets[0].uri,
-        //   type: `${photoSelected.assets[0].type}/${fileExtension}`,
-        // } as any;
-
-        //const userPhotoUploadForm = new FormData();
-        // userPhotoUploadForm.append("avatar", photoFile);
-
-        // const userUpdated = user;
-        // userUpdated.avatar = avatarUpdatedResponse.data.avatar;
-
-        toast.show({
-          title: "Foto atualizada!",
-          placement: "top",
-          bgColor: "green.500",
-        });
       }
     } catch (error) {
-      console.log(error);
+      const isAppError = error instanceof AppError;
+      const ErrorMessage = isAppError
+        ? error.message
+        : "Não foi possível fazer o anúncio.\nTente novamente.";
+    
+        toast.show({
+        title: ErrorMessage,
+        bgColor: "error.500",
+        placement: "top",
+    
+      });
     } finally {
       // setPhotoIsLoading(false);
     }
   }
 
-  async function onSubmit(data: NewListingFormProps) {
-    console.log(data);
+  function handleCancel() {
+    navigation.goBack();
   }
+
+  async function onSubmit(form: NewListingFormProps) {
+    //console.log(data);
+    navigation.navigate("previewListing", {
+      seller: user,
+      product: form as ListingDTO,
+      productImages: productImages,
+    });
+  }
+  // future use the i18n to translate the payment methods title
+  // ex { title: t(`paymentMethod:${payment}`), value: payment }
+  const PaymentOptions = paymentMethods.map((payment) => {
+    return { title: payment, value: payment };
+  });
 
   return (
     <VStack flex={1} safeAreaTop bg="gray.200">
@@ -157,7 +170,6 @@ export function CreateListing() {
             incrível!
           </Text>
           <HStack mt="4" space="2">
-            {/* create a horizontal scroll to manage more images */}
             <FlatList
               horizontal
               data={productImages}
@@ -192,6 +204,7 @@ export function CreateListing() {
                 onChangeText={onChange}
                 value={value}
                 mt="4"
+                errorMessage={errors.name?.message}
               />
             )}
           />
@@ -213,7 +226,7 @@ export function CreateListing() {
               <Radio.Group
                 name="is_new"
                 accessibilityLabel="favorite number"
-                value={value}
+                value={value.toString()}
                 onChange={onChange}
               >
                 <HStack space="5">
@@ -243,6 +256,7 @@ export function CreateListing() {
                 onChangeText={onChange}
                 value={value?.toString()}
                 mt="4"
+                errorMessage={errors.price?.message}
               />
             )}
           />
@@ -268,7 +282,7 @@ export function CreateListing() {
         </VStack>
 
         <VStack mt="8">
-          <Heading fontFamily="heading" fontSize="md" color="gray.600">
+          <Heading fontFamily="heading" fontSize="md" color="gray.600" mb="3">
             Meios de pagamento aceitos
           </Heading>
           <Controller
@@ -277,17 +291,17 @@ export function CreateListing() {
             defaultValue={[]}
             render={({ field: { onChange, value } }) => (
               <Checkbox
-                options={[
-                  "pix",
-                  "cartão de crédito",
-                  "cartão de débito",
-                  "dinheiro",
-                ]}
-                value={value}
+                options={PaymentOptions}
+                value={value as typeof paymentMethods}
                 onChange={onChange}
               />
             )}
           />
+          {errors.payment_methods && (
+            <Text color="#dc2626" fontSize="12">
+              {errors.payment_methods.message}
+            </Text>
+          )}
         </VStack>
         <Box h="10" />
       </ScrollView>
@@ -301,7 +315,12 @@ export function CreateListing() {
         paddingX={6}
       >
         <HStack justifyContent="space-between" space="3">
-          <Button flex="1" title={"Cancelar"} type="tertiary" />
+          <Button
+            flex="1"
+            title={"Cancelar"}
+            type="tertiary"
+            onPress={handleCancel}
+          />
           <Button flex="1" title={"Avançar"} onPress={handleSubmit(onSubmit)} />
         </HStack>
       </HStack>
