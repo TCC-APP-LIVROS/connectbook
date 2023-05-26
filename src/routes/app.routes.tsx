@@ -21,11 +21,15 @@ import { ListingDTO } from "@dtos/ListingDTO";
 import { ImageSourcePropType } from "react-native";
 import { UserDTO } from "@dtos/UserDTO";
 
-type AppRoutes = {
+export type AppRoutes = {
   bottomTabsRoutes: { screen: "home" | "myListing" };
   createListing: undefined;
   listingDetails: undefined;
-  previewListing: undefined;
+  previewListing: {
+    seller : UserDTO;
+    product: ListingDTO;
+    productImages: ImageSourcePropType[];
+  };
 };
 
 export type AppNavigationRouteProps = NativeStackNavigationProp<AppRoutes>;
