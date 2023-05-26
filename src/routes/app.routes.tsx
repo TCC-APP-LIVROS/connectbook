@@ -16,6 +16,10 @@ import { PreviewListing } from "@screens/PreviewListing";
 
 import { House, SignOut, Tag } from "phosphor-react-native";
 import { useTheme } from "native-base";
+import { useAuth } from "@hooks/useAuth";
+import { ListingDTO } from "@dtos/ListingDTO";
+import { ImageSourcePropType } from "react-native";
+import { UserDTO } from "@dtos/UserDTO";
 
 type AppRoutes = {
   bottomTabsRoutes: { screen: "home" | "myListing" };
@@ -33,6 +37,7 @@ function DummySignOutScreen() {
 function BottomTabsRoutes() {
   const { Navigator, Screen } = createBottomTabNavigator();
   const { colors } = useTheme();
+  const { signOut } = useAuth();
   return (
     <Navigator
       screenOptions={{
@@ -78,7 +83,7 @@ function BottomTabsRoutes() {
           tabPress: (e) => {
             // Prevent default action
             e.preventDefault();
-            console.log("SignOut");
+            signOut();
           },
         }}
       />
