@@ -105,8 +105,11 @@ export function CreateListing() {
         // const fileExtension = photosSelected.assets[0].uri.split(".").pop();
 
         const photos = photosSelected.assets.map((photo) => {
+          const fileExtension = photo.uri.split(".").pop();
           return {
+            name: `${user.name}.${fileExtension}`.toLowerCase(),
             uri: photo.uri,
+            type: `${photo.type}/${fileExtension}`,
           };
         });
         setProductImages((prevImages) => prevImages.concat(photos));
