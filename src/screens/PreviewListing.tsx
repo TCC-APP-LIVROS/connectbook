@@ -1,4 +1,4 @@
-import "react-native-gesture-handler"
+import "react-native-gesture-handler";
 import { Avatar } from "@components/Avatar";
 import { Button } from "@components/Button";
 import { Carrousel } from "@components/Carrousel";
@@ -13,11 +13,75 @@ import {
   HStack,
   Box,
   useTheme,
+  FlatList,
+  useToast,
 } from "native-base";
-import { ArrowLeft, Tag as PriceTag, TagSimple, WhatsappLogo } from "phosphor-react-native";
+import { ArrowLeft, Tag as PriceTag } from "phosphor-react-native";
 import { Platform } from "react-native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { AppNavigationRouteProps, AppRoutes } from "@routes/app.routes";
+import { api } from "@services/api";
+import { AppError } from "@utils/AppError";
+
+type initialRouteProps = RouteProp<AppRoutes, "previewListing">;
+
 export function PreviewListing() {
   const { colors } = useTheme();
+  const navigation = useNavigation<AppNavigationRouteProps>();
+  const route = useRoute<initialRouteProps>();
+  const toast = useToast();
+  const { product, productImages, seller } = route.params;
+
+  async function handlePublish() {
+    try {
+      const response = await api.post("/products", {
+        ...product,
+        price: product.price * 100,
+      });
+      
+      
+      const productImagesUploadForm = new FormData();
+      
+      productImagesUploadForm.append("product_id", response.data.id);
+      productImages.forEach((image, index) => {
+        productImagesUploadForm.append('images', image as any);
+      });
+
+      await api.post(
+        `/products/images`,
+        productImagesUploadForm,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      navigation.navigate("bottomTabsRoutes", {screen: "myListing"});
+      return toast.show({
+        title: "Anúncio publicado com sucesso!",
+        bgColor: "success.500",
+        placement: "top",
+      });
+
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const ErrorMessage = isAppError
+        ? error.message
+        : "Não foi possível Publicar o anúncio.\nTente novamente.";
+    
+        toast.show({
+        title: ErrorMessage,
+        bgColor: "error.500",
+        placement: "top",
+    
+      });
+    }
+  }
+
+  function handleGoBack() {
+    navigation.goBack();
+  }
   return (
     <VStack flex={1} bg="gray.200">
       <Center pt="16" pb="3" px="6" bg="blue.600">
@@ -29,7 +93,7 @@ export function PreviewListing() {
         </Text>
       </Center>
 
-      <Carrousel />
+      <Carrousel images={productImages} />
 
       <ScrollView
         flex="1"
@@ -39,9 +103,12 @@ export function PreviewListing() {
         showsVerticalScrollIndicator={false}
       >
         <HStack>
-          <Avatar size={6} />
+          <Avatar
+            source={{ uri: `${api.defaults.baseURL}/images/${seller.avatar}` }}
+            size={6}
+          />
           <Text fontSize="sm" color="gray.700" ml="2">
-            Dealer Name
+            {seller.name}
           </Text>
         </HStack>
 
@@ -49,9 +116,14 @@ export function PreviewListing() {
           <Tag mt={5} title="novo" bgColor={"gray.300"} titleColor="gray.600" />
         </HStack>
 
-        <VStack mt={5} mb={2} alignItems="flex-start" justifyContent="space-between">
+        <VStack
+          mt={5}
+          mb={2}
+          alignItems="flex-start"
+          justifyContent="space-between"
+        >
           <Heading fontSize="xl" fontFamily="heading" color="gray.700">
-            Bicicleta Muito foda ultra mega blaster ultra
+            {product.name}
           </Heading>
 
           <Heading
@@ -62,34 +134,32 @@ export function PreviewListing() {
           >
             R${" "}
             <Heading fontSize="xl" fontFamily="heading" color="blue.600">
-              100,00
+              {product.price}
             </Heading>
           </Heading>
         </VStack>
 
         <Text fontSize="sm" color={"gray.600"}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
-          iusto obcaecati velit consequatur minima recusandae atque facilis
-          itaque autem quo cum modi esse ullam, soluta corrupti. Asperiores
-          inventore distinctio dolore.
+          {product.description}
         </Text>
 
         <Heading mt={6} fontFamily="heading" fontSize="sm" color={"gray.600"}>
           Aceita troca?{"  "}
           <Text fontFamily="body" color={"gray.600"}>
-            Sim
+            {product.accept_trade ? "Sim" : "Não"}
           </Text>
         </Heading>
 
         <Heading mt={6} fontFamily="heading" fontSize="sm" color={"gray.600"}>
           Meios de pagamento
         </Heading>
-
-        <PaymentMethod payment="Boleto" color={colors.gray[700]} />
-        <PaymentMethod payment="Pix" color={colors.gray[700]} />
-        <PaymentMethod payment="Dinheiro" color={colors.gray[700]} />
-        <PaymentMethod payment="Cartão" color={colors.gray[700]} />
-        <PaymentMethod payment="Depósito Bancário" color={colors.gray[700]} />
+        {product.payment_methods.map((payment) => (
+          <PaymentMethod
+            key={payment}
+            payment={payment}
+            color={colors.gray[700]}
+          />
+        ))}
         <Box h="10" />
       </ScrollView>
       <HStack
@@ -102,8 +172,20 @@ export function PreviewListing() {
         paddingX={6}
       >
         <HStack justifyContent="space-between" space="3">
-          <Button flex="1" title={"Voltar e editar"} type="tertiary" startIcon={<ArrowLeft size={16} color={colors.gray[600]}/>} />
-          <Button flex="1" title={"Publicar"} type="secondary" startIcon={<PriceTag size={16} color={colors.gray[200]}/>}/>
+          <Button
+            flex="1"
+            title={"Voltar e editar"}
+            type="tertiary"
+            startIcon={<ArrowLeft size={16} color={colors.gray[600]} />}
+            onPress={handleGoBack}
+          />
+          <Button
+            flex="1"
+            title={"Publicar"}
+            type="secondary"
+            startIcon={<PriceTag size={16} color={colors.gray[200]} />}
+            onPress={handlePublish}
+          />
         </HStack>
       </HStack>
     </VStack>
