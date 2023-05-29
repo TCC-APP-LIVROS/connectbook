@@ -72,9 +72,9 @@ export function ProductCard({
           </>
         )}
       </Box>
-      <Heading mt="1" color="gray.600" fontSize="sm">
+      <Text mt="1" h={9} lineHeight={18} numberOfLines={2} ellipsizeMode={"tail"} color="gray.600" fontSize="sm">
         {title}
-      </Heading>
+      </Text>
       <Heading color="gray.700" fontFamily="heading" fontSize="xs">
         R$ <Heading color="gray.700" fontFamily="heading" fontSize="md">236,00</Heading>
       </Heading>
