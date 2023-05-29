@@ -32,7 +32,7 @@ export function ProductCard({
   return (
     <Pressable onPress={isActive? onPress : null} _pressed={{ opacity: isActive? "0.5" : "1" }} w="40" {...rest}>
       <Box>
-        <Image w="40" alt="Alternate Text" rounded="sm" source={image} />
+        <Image w="40" h="22" alt="Alternate Text" rounded="sm" source={image} />
         <Avatar
           source={avatarImage}
           size="6"
@@ -76,7 +76,7 @@ export function ProductCard({
         {title}
       </Heading>
       <Heading color="gray.700" fontFamily="heading" fontSize="xs">
-        R$ <Heading color="gray.700" fontFamily="heading" fontSize="md">99236,00</Heading>
+        R$ <Heading color="gray.700" fontFamily="heading" fontSize="md">236,00</Heading>
       </Heading>
     </Pressable>
   );
