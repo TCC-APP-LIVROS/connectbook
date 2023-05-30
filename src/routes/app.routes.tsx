@@ -26,9 +26,13 @@ export type AppRoutes = {
   createListing: undefined;
   listingDetails: undefined;
   previewListing: {
-    seller : UserDTO;
+    seller: UserDTO;
     product: ListingDTO;
-    productImages: ImageSourcePropType[];
+    productImages: {
+      name: string;
+      uri: string;
+      type: string;
+    }[];
   };
 };
 
