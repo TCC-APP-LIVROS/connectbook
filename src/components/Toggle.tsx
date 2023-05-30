@@ -16,7 +16,7 @@ export function Toggle({ value, title, ...rest }: SwitchProps) {
       paddingY="1.5"
       paddingLeft="4"
       paddingRight={value ? "2" : "4"}
-      bgColor={value? "blue.600" : "gray.200"}
+      bgColor={value? "blue.600" : "gray.300"}
       {...rest}
     >
       <Heading
