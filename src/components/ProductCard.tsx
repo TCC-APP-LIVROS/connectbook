@@ -32,7 +32,7 @@ export function ProductCard({
   ...rest
 }: ProductCardProps) {
   return (
-    <Pressable onPress={isActive? onPress : null} _pressed={{ opacity: isActive? "0.5" : "1" }} w="40" {...rest}>
+    <Pressable onPress={onPress} _pressed={{ opacity: isActive? "0.5" : "1" }} w="40" {...rest}>
       <Box>
         <Image w="40" h="22" alt="Alternate Text" rounded="sm" source={image} />
         <Avatar
