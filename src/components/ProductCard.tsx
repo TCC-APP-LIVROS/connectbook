@@ -14,10 +14,11 @@ import { Tag } from "@components/Tag";
 
 type ProductCardProps = IPressableProps & {
   avatarImage?: ImageSourcePropType;
-  image?: ImageSourcePropType;
-  title?: string;
-  price?: string;
+  image: ImageSourcePropType;
+  title: string;
+  price: number;
   isActive?: boolean;
+  isNew: boolean;
 };
 
 export function ProductCard({
@@ -25,6 +26,7 @@ export function ProductCard({
   image,
   title,
   price,
+  isNew,
   isActive = true,
   onPress,
   ...rest
@@ -45,8 +47,8 @@ export function ProductCard({
           position="absolute"
           right="1"
           top="1"
-          bg={"gray.600"}
-          title="USADO"
+          bgColor={isNew ? "blue.600" : "gray.600"}
+          title={isNew ? "Novo" : "Usado"}
         />
         {isActive ? null : (
           <>
@@ -76,7 +78,7 @@ export function ProductCard({
         {title}
       </Text>
       <Heading color="gray.700" fontFamily="heading" fontSize="xs">
-        R$ <Heading color="gray.700" fontFamily="heading" fontSize="md">236,00</Heading>
+        R$ <Heading color="gray.700" fontFamily="heading" fontSize="md">{Intl.NumberFormat('pt-BR',{ minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(price/100)}</Heading>
       </Heading>
     </Pressable>
   );
