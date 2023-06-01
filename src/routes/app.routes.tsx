@@ -24,7 +24,9 @@ import { UserDTO } from "@dtos/UserDTO";
 export type AppRoutes = {
   bottomTabsRoutes: { screen: "home" | "myListing" };
   createListing: undefined;
-  listingDetails: undefined;
+  listingDetails: {
+    listingId: string;
+  };
   previewListing: {
     seller: UserDTO;
     product: ListingDTO;
