@@ -1,7 +1,7 @@
 import { Avatar as NativeBaseAvatar, IAvatarProps, Center } from "native-base";
 
 import DefaultAvatar from "@assets/Img/DefaultAvatar/Avatar.png";
-import { PencilLine, PencilSimpleLine } from "phosphor-react-native";
+import { PencilSimpleLine } from "phosphor-react-native";
 
 type AvatarProps = IAvatarProps & {
   badge?: boolean;
