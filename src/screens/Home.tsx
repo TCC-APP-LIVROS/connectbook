@@ -74,8 +74,8 @@ export function Home() {
     navigation.navigate("createListing");
   }
 
-  function handleGoToListingDetails() {
-    navigation.navigate("listingDetails");
+  function handleGoToListingDetails(id: string) {
+    navigation.navigate("listingDetails", { listingId: id });
   }
   function handleGoToMyListing() {
     navigation.navigate("bottomTabsRoutes", { screen: "myListing" });
@@ -262,7 +262,7 @@ export function Home() {
                 image={{
                   uri: `${api.defaults.baseURL}/images/${item.product_images[0].path}`,
                 }}
-                onPress={handleGoToListingDetails}
+                onPress={() => handleGoToListingDetails(item.id)}
                 avatarImage={{
                   uri: `${api.defaults.baseURL}/images/${item.user.avatar}`,
                 }}
