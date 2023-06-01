@@ -23,11 +23,16 @@ import { UserDTO } from "@dtos/UserDTO";
 
 export type AppRoutes = {
   bottomTabsRoutes: { screen: "home" | "myListing" };
-  createListing: undefined;
+  createListing: {
+    mode: "create" | "edit";
+    listingId?: string;
+  };
   listingDetails: {
     listingId: string;
   };
   previewListing: {
+    mode: "create" | "edit";
+    listingId?: string;
     seller: UserDTO;
     product: ListingDTO;
     productImages: {

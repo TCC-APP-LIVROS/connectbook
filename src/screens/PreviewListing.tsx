@@ -30,9 +30,9 @@ export function PreviewListing() {
   const navigation = useNavigation<AppNavigationRouteProps>();
   const route = useRoute<initialRouteProps>();
   const toast = useToast();
-  const { product, productImages, seller } = route.params;
+  const { mode, listingId, product, productImages, seller } = route.params;
 
-  async function handlePublish() {
+  async function handleCreate() {
     try {
       const response = await api.post("/products", {
         ...product,
@@ -78,7 +78,67 @@ export function PreviewListing() {
       });
     }
   }
+  
+  async function handleUpdate() {
+    try {
+      const response = await api.put(`/products/${listingId}`, {
+        ...product,
+        price: product.price * 100,
+      });
+      
+      
+      const productImagesUploadForm = new FormData();
+      
+      productImagesUploadForm.append("product_id", listingId as string);
+      productImages.forEach((image, index) => {
+        productImagesUploadForm.append('images', image as any);
+      });
+      await api.post(
+        `/products/images`,
+        productImagesUploadForm,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
+      navigation.navigate("bottomTabsRoutes", {screen: "myListing"});
+      return toast.show({
+        title: "Anúncio publicado com sucesso!",
+        bgColor: "success.500",
+        placement: "top",
+      });
+
+    } catch (error) {
+      console.log(error);
+      const isAppError = error instanceof AppError;
+      const ErrorMessage = isAppError
+        ? error.message
+        : "Não foi possível Publicar o anúncio.\nTente novamente.";
+    
+        toast.show({
+        title: ErrorMessage,
+        bgColor: "error.500",
+        placement: "top",
+    
+      });
+    }
+  }
+
+  async function handlePublish() {
+    if(mode === "create")  {
+      handleCreate()
+    } else if(mode === "edit") {
+      handleUpdate()
+    } else {
+      return toast.show({
+        title: "Não foi possível Publicar o anúncio.\nTente novamente.",
+        bgColor: "error.500",
+        placement: "top",
+      });
+    }
+  }
   function handleGoBack() {
     navigation.goBack();
   }
@@ -134,7 +194,7 @@ export function PreviewListing() {
           >
             R${" "}
             <Heading fontSize="xl" fontFamily="heading" color="blue.600">
-              {product.price}
+            {Intl.NumberFormat('pt-BR',{ minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(product.price)}
             </Heading>
           </Heading>
         </VStack>

@@ -16,7 +16,7 @@ import {
   TrashSimple,
   WhatsappLogo,
 } from "phosphor-react-native";
-import * as WebBrowser from 'expo-web-browser';
+import * as WebBrowser from "expo-web-browser";
 import { Avatar } from "@components/Avatar";
 import { Toggle } from "@components/Toggle";
 import { Tag } from "@components/Tag";
@@ -82,7 +82,7 @@ export function ListingDetails() {
   async function handleChangeProductStatus() {
     try {
       setIsFetching(true);
-       await api.patch(`/products/${listingId}`, {
+      await api.patch(`/products/${listingId}`, {
         is_active: !listing.is_active,
       });
       setListing((oldState: any) => ({
@@ -100,7 +100,7 @@ export function ListingDetails() {
         placement: "top",
         bgColor: "error.500",
       });
-    } finally{
+    } finally {
       setIsFetching(false);
     }
   }
@@ -126,16 +126,16 @@ export function ListingDetails() {
         placement: "top",
         bgColor: "error.500",
       });
-    } finally{
+    } finally {
       setIsFetching(false);
     }
   }
 
-  function handleGoToCreateListing(){
-    navigation.navigate("createListing");
+  function handleGoToCreateListing() {
+    navigation.navigate("createListing", { mode: "edit", listingId });
   }
-  
-  async function goToWhatsapp(){
+
+  async function goToWhatsapp() {
     await WebBrowser.openBrowserAsync(`https://wa.me/557592545461`);
   }
   useFocusEffect(
@@ -318,7 +318,7 @@ export function ListingDetails() {
               >
                 R${" "}
                 <Heading fontSize="xl" fontFamily="heading" color="blue.800">
-                {Intl.NumberFormat("pt-BR", {
+                  {Intl.NumberFormat("pt-BR", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   }).format(listing.price / 100)}

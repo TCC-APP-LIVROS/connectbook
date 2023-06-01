@@ -71,7 +71,7 @@ export function Home() {
   }
 
   function handleGoToCreateListing() {
-    navigation.navigate("createListing");
+    navigation.navigate("createListing", { mode: "create" });
   }
 
   function handleGoToListingDetails(id: string) {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Platform } from "react-native";
 import {
   Box,
@@ -26,10 +26,12 @@ import { Switch } from "@components/Switch";
 import { Button } from "@components/Button";
 import { ImageBox } from "@components/ImageBox";
 import { Checkbox } from "@components/Checkbox";
-import { useNavigation } from "@react-navigation/native";
-import { AppNavigationRouteProps } from "@routes/app.routes";
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
+import { AppNavigationRouteProps, AppRoutes } from "@routes/app.routes";
 import { useAuth } from "@hooks/useAuth";
 import { AppError } from "@utils/AppError";
+import { api } from "@services/api";
+import { Loading } from "@components/Loading";
 
 const createListingSchema = yup.object({
   name: yup.string().required("Informe o nome."),
@@ -45,15 +47,20 @@ const createListingSchema = yup.object({
 
 type NewListingFormProps = yup.InferType<typeof createListingSchema>;
 
+type initialRouteProps = RouteProp<AppRoutes, "createListing">;
+
 export function CreateListing() {
   const [productImages, setProductImages] = useState([] as any[]);
   const toast = useToast();
   const navigation = useNavigation<AppNavigationRouteProps>();
+  const router = useRoute<initialRouteProps>();
   const { user } = useAuth();
+  const [isLoadingListing, setIsLoadingListing] = useState(false);
   const {
     control,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<NewListingFormProps>({
     resolver: yupResolver(createListingSchema),
     defaultValues: {
@@ -62,6 +69,39 @@ export function CreateListing() {
       payment_methods: paymentMethods,
     },
   });
+
+  async function fetchListingDataById() {
+    const { listingId, mode } = router.params;
+
+    if (mode == "create") {
+      return;
+    }
+
+    try {
+      setIsLoadingListing(true);
+      const { data } = await api.get(`/products/${listingId}`);
+      const images = data.product_images.map((image: any) => {
+        return {
+          name: image.path,
+          uri: `${api.defaults.baseURL}/images/${image.path}`,
+          type: `image/${image.path.split(".")[1]}`,
+        };
+      });
+      setProductImages(images);
+
+      reset({
+        name: data.name,
+        description: data.description,
+        is_new: data.is_new,
+        price: data.price/100,
+        accept_trade: data.accept_trade,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoadingListing(false);
+    }
+  }
 
   async function handlePickPhoto(image: any) {
     if (!!image.uri) {
@@ -125,12 +165,11 @@ export function CreateListing() {
       const ErrorMessage = isAppError
         ? error.message
         : "Não foi possível fazer o anúncio.\nTente novamente.";
-    
-        toast.show({
+
+      toast.show({
         title: ErrorMessage,
         bgColor: "error.500",
         placement: "top",
-    
       });
     } finally {
       // setPhotoIsLoading(false);
@@ -144,6 +183,8 @@ export function CreateListing() {
   async function onSubmit(form: NewListingFormProps) {
     //console.log(data);
     navigation.navigate("previewListing", {
+      mode: router.params.mode,
+      listingId: router.params.listingId,
       seller: user,
       product: form as ListingDTO,
       productImages: productImages,
@@ -154,6 +195,14 @@ export function CreateListing() {
   const PaymentOptions = paymentMethods.map((payment) => {
     return { title: payment, value: payment };
   });
+
+  useEffect(() => {
+    fetchListingDataById();
+  }, []);
+
+  if (isLoadingListing) {
+    return <Loading />;
+  }
 
   return (
     <VStack flex={1} safeAreaTop bg="gray.200">
