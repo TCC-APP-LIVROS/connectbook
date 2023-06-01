@@ -13,8 +13,8 @@ import { useAuth } from "@hooks/useAuth";
 import { Loading } from "@components/Loading";
 
 export function MyListing() {
-  const countries = ["Todos", "Ativos", "Inativos"];
-  const [selectedFilter, setSelectedFilter] = useState(countries[0]);
+  const filterOptions = ["Todos", "Ativos", "Inativos"];
+  const [selectedFilter, setSelectedFilter] = useState(filterOptions[0]);
   const [isFetching, setIsFetching] = useState(false);
   const [listings, setListings] = useState<any[]>([]);
   const { user } = useAuth();
@@ -70,9 +70,9 @@ export function MyListing() {
       <Header title="My Listing" rightButtonIcon={<Plus size={24} />} />
 
       <HStack justifyContent={"space-between"} alignItems="center" mt="20">
-        <Text color="gray.600">9 Anúncios</Text>
+        <Text color="gray.600">{filteredProducts.length} Anúncios</Text>
         <Select
-          data={countries}
+          data={filterOptions}
           defaultValueByIndex={0}
           onSelect={(selectedItem) => {
             setSelectedFilter(selectedItem);
