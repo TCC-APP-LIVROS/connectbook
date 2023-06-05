@@ -1,7 +1,4 @@
-export type PaymentMethod = "pix" | "card" | "deposit" | "cash" | "boleto";
-
-export const paymentMethods: PaymentMethod[] = ["pix", "card", "deposit", "cash", "boleto"];
-
+import { PaymentMethod } from "@dtos/PaymentMethodsDTO"; 
 export type ListingDTO = {
     id? : string;
     user_id?: string;

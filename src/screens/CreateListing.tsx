@@ -18,7 +18,8 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-import { ListingDTO, paymentMethods } from "@dtos/ListingDTO";
+import { ListingDTO } from "@dtos/ListingDTO";
+import { allPaymentMethods, PaymentMethod } from "@dtos/PaymentMethodsDTO";
 import { Header } from "@components/Header";
 import { Input } from "@components/Input";
 import { MultilineInput } from "@components/MultilineInput";
@@ -40,7 +41,7 @@ const createListingSchema = yup.object({
   price: yup.number().required("Informe o valor."),
   accept_trade: yup.boolean().required(),
   payment_methods: yup
-    .array(yup.string().oneOf(paymentMethods))
+    .array(yup.string().oneOf(allPaymentMethods))
     .min(1, "Preencha ao menos um método de pagamento")
     .required(),
 });
@@ -66,7 +67,7 @@ export function CreateListing() {
     defaultValues: {
       is_new: true,
       accept_trade: false,
-      payment_methods: paymentMethods,
+      payment_methods: allPaymentMethods,
     },
   });
 
@@ -199,7 +200,7 @@ export function CreateListing() {
   }
   // future use the i18n to translate the payment methods title
   // ex { title: t(`paymentMethod:${payment}`), value: payment }
-  const PaymentOptions = paymentMethods.map((payment) => {
+  const PaymentOptions = allPaymentMethods.map((payment) => {
     return { title: payment, value: payment };
   });
 
@@ -348,7 +349,7 @@ export function CreateListing() {
             render={({ field: { onChange, value } }) => (
               <Checkbox
                 options={PaymentOptions}
-                value={value as typeof paymentMethods}
+                value={value as PaymentMethod[]}
                 onChange={onChange}
               />
             )}

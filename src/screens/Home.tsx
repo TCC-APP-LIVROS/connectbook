@@ -17,7 +17,7 @@ import { ArrowRight, Plus, Tag, X } from "phosphor-react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import { AppNavigationRouteProps } from "@routes/app.routes";
-import { paymentMethods } from "@dtos/ListingDTO";
+import { allPaymentMethods } from "@dtos/PaymentMethodsDTO";
 import { useAuth } from "@hooks/useAuth";
 import { api } from "@services/api";
 import { AppError } from "@utils/AppError";
@@ -55,7 +55,7 @@ export function Home() {
     query: undefined,
   });
 
-  const PaymentOptions = paymentMethods.map((payment) => {
+  const PaymentOptions = allPaymentMethods.map((payment) => {
     return { title: payment, value: payment };
   });
 

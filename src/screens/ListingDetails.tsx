@@ -18,7 +18,6 @@ import {
 } from "phosphor-react-native";
 import * as WebBrowser from "expo-web-browser";
 import { Avatar } from "@components/Avatar";
-import { Toggle } from "@components/Toggle";
 import { Tag } from "@components/Tag";
 import { Button } from "@components/Button";
 import { PaymentMethod } from "@components/PaymentMethod";
