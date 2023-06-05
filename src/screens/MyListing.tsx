@@ -33,10 +33,10 @@ export function MyListing() {
   });
 
   function handleGoToListingDetails(id: string) {
-    navigation.navigate("listingDetails",{listingId: id});
+    navigation.navigate("listingDetails", { listingId: id });
   }
-  function handleGoToCreateListing(){
-    navigation.navigate("createListing");
+  function handleGoToCreateListing() {
+    navigation.navigate("createListing", { mode: "create" });
   }
 
   async function fetchProducts() {
@@ -70,7 +70,11 @@ export function MyListing() {
 
   return (
     <VStack flex={1} safeArea px="6" bg="gray.200">
-      <Header title="My Listing" rightButtonIcon={<Plus size={24} />} onPressRightButton={handleGoToCreateListing} />
+      <Header
+        title="My Listing"
+        rightButtonIcon={<Plus size={24} />}
+        onPressRightButton={handleGoToCreateListing}
+      />
 
       <HStack justifyContent={"space-between"} alignItems="center" mt="20">
         <Text color="gray.600">{filteredProducts.length} Anúncios</Text>
