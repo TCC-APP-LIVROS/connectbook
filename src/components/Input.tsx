@@ -17,6 +17,7 @@ import {
   MagnifyingGlass,
   Sliders,
 } from "phosphor-react-native";
+import { applyPriceMask } from "@utils/masks";
 
 type InputVariant = "default" | "password" | "search" | "cash";
 
@@ -31,6 +32,7 @@ export function Input({
   errorMessage = null,
   isInvalid,
   variant = "default",
+  onChangeText,
   onFilterPress,
   onSearchPress,
   ...rest
@@ -67,6 +69,14 @@ export function Input({
     );
   }
 
+  function handleOnChangeText(text : string, onChange : any){
+    if(variant === "cash"){
+      const cleanedText = applyPriceMask(text);
+      onChange(cleanedText);
+    }else{
+      onChange(text);
+    }
+  }
   return (
     <FormControl isInvalid={invalid} mb="4">
       <NativeBaseInput
@@ -98,6 +108,7 @@ export function Input({
           (variant === "search" && renderSearchVariant()) ||
           undefined
         }
+        onChangeText={(text) => handleOnChangeText(text, onChangeText)}
         {...rest}
       />
       <FormControl.ErrorMessage>{errorMessage}</FormControl.ErrorMessage>
