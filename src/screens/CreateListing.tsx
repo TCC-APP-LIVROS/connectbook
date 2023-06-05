@@ -88,14 +88,19 @@ export function CreateListing() {
           type: `image/${image.path.split(".")[1]}`,
         };
       });
+      const payment_methods = data.payment_methods.map(
+        (payment: any) => payment.key
+      );
+      console.log(payment_methods)
       setProductImages(images);
 
       reset({
         name: data.name,
         description: data.description,
         is_new: data.is_new,
-        price: data.price/100,
+        price: data.price / 100,
         accept_trade: data.accept_trade,
+        payment_methods,
       });
     } catch (error) {
       console.log(error);
@@ -182,8 +187,7 @@ export function CreateListing() {
   }
 
   async function onSubmit(form: NewListingFormProps) {
-
-    if(productImages.length === 0) {
+    if (productImages.length === 0) {
       return toast.show({
         title: "Selecione ao menos uma imagem",
         placement: "top",
@@ -217,7 +221,7 @@ export function CreateListing() {
       <Box px="6">
         <Header title="Criar anúncio" backButton />
       </Box>
-      <ScrollView showsVerticalScrollIndicator={false} px="6">
+      <ScrollView showsVerticalScrollIndicator={false} px="6" keyboardDismissMode="on-drag">
         <VStack mt="6">
           <Heading fontFamily="heading" fontSize="md" color="gray.600">
             Criar anúncio
