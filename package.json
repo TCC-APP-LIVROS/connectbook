@@ -11,6 +11,7 @@
   "dependencies": {
     "@expo-google-fonts/karla": "^0.2.3",
     "@hookform/resolvers": "^3.1.0",
+    "@react-native-async-storage/async-storage": "1.17.11",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
@@ -19,9 +20,11 @@
     "expo-file-system": "~15.2.2",
     "expo-image-picker": "~14.1.1",
     "expo-status-bar": "~1.4.4",
+    "expo-web-browser": "~12.1.1",
     "i18next": "^22.4.15",
     "native-base": "^3.4.28",
     "phosphor-react-native": "^1.1.2",
+    "query-string": "^8.1.0",
     "react": "18.2.0",
     "react-hook-form": "^7.43.9",
     "react-i18next": "^12.2.2",
@@ -33,9 +36,7 @@
     "react-native-screens": "~3.20.0",
     "react-native-select-dropdown": "^3.3.3",
     "react-native-svg": "13.4.0",
-    "yup": "^1.1.1",
-    "@react-native-async-storage/async-storage": "1.17.11",
-    "expo-web-browser": "~12.1.1"
+    "yup": "^1.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
