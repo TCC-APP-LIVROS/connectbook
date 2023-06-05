@@ -181,7 +181,14 @@ export function CreateListing() {
   }
 
   async function onSubmit(form: NewListingFormProps) {
-    //console.log(data);
+
+    if(productImages.length === 0) {
+      return toast.show({
+        title: "Selecione ao menos uma imagem",
+        placement: "top",
+        bgColor: "error.500",
+      });
+    }
     navigation.navigate("previewListing", {
       mode: router.params.mode,
       listingId: router.params.listingId,
