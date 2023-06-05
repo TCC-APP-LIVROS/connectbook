@@ -15,6 +15,7 @@ import {
 } from "native-base";
 import { ArrowRight, Plus, Tag, X } from "phosphor-react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import queryString from "query-string";
 
 import { AppNavigationRouteProps } from "@routes/app.routes";
 import { allPaymentMethods } from "@dtos/PaymentMethodsDTO";
@@ -81,34 +82,6 @@ export function Home() {
     navigation.navigate("bottomTabsRoutes", { screen: "myListing" });
   }
 
-  function createQueryString(obj: any) {
-    const queryString = [];
-
-    for (const key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        const value = obj[key];
-
-        if (value !== undefined) {
-          if (Array.isArray(value)) {
-            if (value.length > 0) {
-              value.forEach((item) =>
-                queryString.push(
-                  `${encodeURIComponent(key)}=${encodeURIComponent(item)}`
-                )
-              );
-            }
-          } else {
-            queryString.push(
-              `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-            );
-          }
-        }
-      }
-    }
-
-    return `?${queryString.join("&")}`;
-  }
-
   async function fetchUserProducts() {
     try {
       const { data } = await api.get(`/users/products`);
@@ -142,8 +115,8 @@ export function Home() {
   async function fetchFilteredProducts(filters: FilterOptions) {
     try {
       setIsFetching(true);
-      const qs = createQueryString(filters);
-      const { data } = await api.get(`/products${qs}`);
+      const stringifiedFilters = queryString.stringify(filters);
+      const { data } = await api.get(`/products?${stringifiedFilters}`);
       setListings(data);
     } catch (error) {
       console.log(error);
