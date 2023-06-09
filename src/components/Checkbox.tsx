@@ -1,10 +1,10 @@
-import { HStack, Pressable, Text, VStack } from "native-base";
+import { HStack, Pressable, Text, VStack, Box } from "native-base";
 import { Feather } from "@expo/vector-icons";
 
 type Option = {
   title: string;
   value: string;
-}
+};
 
 type CheckboxProps = {
   options: Option[];
@@ -24,23 +24,33 @@ export function Checkbox({ options, value, onChange }: CheckboxProps) {
     <VStack>
       {options.map((item) => (
         <HStack key={item.title} alignItems={"center"}>
-          <Pressable
+          <Box
             w="5"
             h="5"
             mr={3}
             mb={2}
-            justifyContent={"center"}
-            alignItems={"center"}
-            borderColor={value.includes(item.value) ? "blue.600" : "gray.400"}
-            bg={value.includes(item.value) ? "blue.600" : "rgba(0,0,0,0)"}
-            borderWidth={2}
             rounded={"xs"}
-            onPress={() => handlePress(item)}
+            bg={value.includes(item.value) ? "blue.600" : "rgba(0,0,0,0)"}
           >
-            {value.includes(item.value) && (
-              <Feather name="check" size={14} color="white" />
-            )}
-          </Pressable>
+            <Pressable
+              w="5"
+              h="5"
+              justifyContent={"center"}
+              alignItems={"center"}
+              borderColor={value.includes(item.value) ? "blue.600" : "gray.400"}
+              borderWidth={"2"}
+              rounded={"xs"}
+              onPress={() => handlePress(item)}
+              style={{
+                overflow: "hidden",
+              }}
+            >
+              {value.includes(item.value) && (
+                <Feather name="check" size={14} color="white" />
+              )}
+            </Pressable>
+          </Box>
+
           <Text
             mb={2}
             fontSize={"md"}
