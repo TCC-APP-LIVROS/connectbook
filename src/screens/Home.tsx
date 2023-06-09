@@ -224,8 +224,10 @@ export function Home() {
             keyExtractor={(item) => item.id}
             numColumns={2}
             _contentContainerStyle={{
-              justifyContent: "space-between",
               paddingBottom: 100,
+            }}
+            columnWrapperStyle={{
+              justifyContent: "space-between",
             }}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (

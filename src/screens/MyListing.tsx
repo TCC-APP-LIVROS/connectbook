@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { HStack, VStack, Text, FlatList, useToast } from "native-base";
+import { HStack, VStack, Text, FlatList, Box, useToast } from "native-base";
 import { Plus } from "phosphor-react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
@@ -96,13 +96,12 @@ export function MyListing() {
             keyExtractor={(item) => String(item)}
             numColumns={2}
             _contentContainerStyle={{
-              justifyContent: "space-between",
               paddingBottom: 100,
             }}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
               <ProductCard
-                mx={2}
+                // mx={2}
                 mb={3}
                 image={{
                   uri: `${api.defaults.baseURL}/images/${item.product_images[0].path}`,
@@ -117,6 +116,9 @@ export function MyListing() {
                 isActive={item.is_active}
               />
             )}
+            columnWrapperStyle={{
+              justifyContent: "space-between",
+            }}
             ListEmptyComponent={() => (
               <VStack flex={1} justifyContent="center" alignItems="center">
                 <Text color="gray.500">
