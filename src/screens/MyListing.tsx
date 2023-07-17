@@ -112,7 +112,7 @@ export function MyListing() {
                   uri: `${api.defaults.baseURL}/images/${user.avatar}`,
                 }}
                 title={item.name}
-                price={item.price}
+                price={item.price/100}
                 isNew={item.is_new}
                 isActive={item.is_active}
               />

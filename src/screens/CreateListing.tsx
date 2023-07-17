@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Platform } from "react-native";
 import {
   Box,
@@ -36,7 +36,7 @@ import { Loading } from "@components/Loading";
 
 const createListingSchema = yup.object({
   name: yup.string().required("Informe o nome."),
-  description: yup.string().required(),
+  description: yup.string().required("Informe uma descrição"),
   is_new: yup.boolean().required(),
   price: yup.number().required("Informe o valor."),
   accept_trade: yup.boolean().required(),
@@ -71,6 +71,12 @@ export function CreateListing() {
     },
   });
 
+  // future use the i18n to translate the payment methods title
+  // ex { title: t(`paymentMethod:${payment}`), value: payment }
+  const PaymentOptions = allPaymentMethods.map((payment) => {
+    return { title: payment, value: payment };
+  });
+
   async function fetchListingDataById() {
     const { listingId, mode } = router.params;
 
@@ -91,7 +97,7 @@ export function CreateListing() {
       const payment_methods = data.payment_methods.map(
         (payment: any) => payment.key
       );
-      console.log(payment_methods)
+
       setProductImages(images);
 
       reset({
@@ -103,7 +109,11 @@ export function CreateListing() {
         payment_methods,
       });
     } catch (error) {
-      console.log(error);
+      toast.show({
+        title: "Error ao receber dados do anúncio",
+        placement: "top",
+        bgColor: "error.500",
+      });
     } finally {
       setIsLoadingListing(false);
     }
@@ -202,11 +212,6 @@ export function CreateListing() {
       productImages: productImages,
     });
   }
-  // future use the i18n to translate the payment methods title
-  // ex { title: t(`paymentMethod:${payment}`), value: payment }
-  const PaymentOptions = allPaymentMethods.map((payment) => {
-    return { title: payment, value: payment };
-  });
 
   useEffect(() => {
     fetchListingDataById();
@@ -221,7 +226,11 @@ export function CreateListing() {
       <Box px="6">
         <Header title="Criar anúncio" backButton />
       </Box>
-      <ScrollView showsVerticalScrollIndicator={false} px="6" keyboardDismissMode="on-drag">
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        px="6"
+        keyboardDismissMode="on-drag"
+      >
         <VStack mt="6">
           <Heading fontFamily="heading" fontSize="md" color="gray.600">
             Criar anúncio
@@ -277,6 +286,7 @@ export function CreateListing() {
                 placeholder="Título do anúncio"
                 onChangeText={onChange}
                 value={value}
+                errorMessage={errors.description?.message}
               />
             )}
           />

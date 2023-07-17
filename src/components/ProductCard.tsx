@@ -78,7 +78,7 @@ export function ProductCard({
         {title}
       </Text>
       <Heading color="gray.700" fontFamily="heading" fontSize="xs">
-        R$ <Heading color="gray.700" fontFamily="heading" fontSize="md">{Intl.NumberFormat('pt-BR',{ minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(price/100)}</Heading>
+        R$ <Heading color="gray.700" fontFamily="heading" fontSize="md">{Intl.NumberFormat('pt-BR',{ minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(price)}</Heading>
       </Heading>
     </Pressable>
   );

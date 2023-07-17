@@ -240,7 +240,7 @@ export function Home() {
                   uri: `${api.defaults.baseURL}/images/${item.user.avatar}`,
                 }}
                 title={item.name}
-                price={item.price}
+                price={item.price/100}
                 isNew={item.is_new}
               />
             )}
