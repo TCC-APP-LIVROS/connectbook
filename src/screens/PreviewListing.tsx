@@ -78,7 +78,7 @@ export function PreviewListing() {
       });
     }
   }
-  
+  console.log(productImages)
   async function handleUpdate() {
     try {
       const response = await api.put(`/products/${listingId}`, {
@@ -93,7 +93,7 @@ export function PreviewListing() {
       productImages.forEach((image, index) => {
         productImagesUploadForm.append('images', image as any);
       });
-      await api.post(
+      await api.put(
         `/products/images`,
         productImagesUploadForm,
         {
