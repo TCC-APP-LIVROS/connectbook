@@ -36,7 +36,7 @@ import { Loading } from "@components/Loading";
 
 const createListingSchema = yup.object({
   name: yup.string().required("Informe o nome."),
-  description: yup.string().required("Informe uma descrição"),
+  description: yup.string().required("Informe a descrição do produto"),
   is_new: yup.boolean().required(),
   price: yup.number().required("Informe o valor."),
   accept_trade: yup.boolean().required(),
