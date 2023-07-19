@@ -57,6 +57,7 @@ export function CreateListing() {
   const router = useRoute<initialRouteProps>();
   const { user } = useAuth();
   const [isLoadingListing, setIsLoadingListing] = useState(false);
+  const [photoIsLoading, setPhotoIsLoading] = useState(false);
   const {
     control,
     handleSubmit,
@@ -125,7 +126,6 @@ export function CreateListing() {
       return;
     }
 
-    // setPhotoIsLoading(true);
     try {
       const photosSelected = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -187,8 +187,6 @@ export function CreateListing() {
         bgColor: "error.500",
         placement: "top",
       });
-    } finally {
-      // setPhotoIsLoading(false);
     }
   }
 

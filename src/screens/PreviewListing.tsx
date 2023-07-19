@@ -78,7 +78,7 @@ export function PreviewListing() {
       });
     }
   }
-  console.log(productImages)
+  
   async function handleUpdate() {
     try {
       const response = await api.put(`/products/${listingId}`, {
@@ -111,7 +111,6 @@ export function PreviewListing() {
       });
 
     } catch (error) {
-      console.log(error);
       const isAppError = error instanceof AppError;
       const ErrorMessage = isAppError
         ? error.message

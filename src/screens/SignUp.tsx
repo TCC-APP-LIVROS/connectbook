@@ -27,6 +27,7 @@ import Logo from "@assets/Img/Logo/Logo.png";
 import { useState } from "react";
 import { api } from "@services/api";
 import { useAuth } from "@hooks/useAuth";
+import { AppError } from "@utils/AppError";
 
 type FormData = {
   name: string;
@@ -131,14 +132,13 @@ export function SignUp() {
 
       await SignIn(form.email, form.password);
     } catch (error: any) {
-      //for some reason the interceptor is not creating
-      //the appError object, so I'm doing it manually for now
-      const errorMessage = error.response.data.message
-        ? error.response.data.message
+      const isAppError = error instanceof AppError;
+      const ErrorMessage = isAppError
+        ? error.message
         : "Não foi possível criar a conta.\n Tente novamente mais tarde";
       
         toast.show({
-        title: errorMessage,
+        title: ErrorMessage,
         placement: "top",
         bgColor: "red.500",
       });

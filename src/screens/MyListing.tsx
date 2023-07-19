@@ -45,7 +45,6 @@ export function MyListing() {
       const { data } = await api.get(`/users/products`);
       setListings(data);
     } catch (error) {
-      console.log(error);
       const isAppError = error instanceof AppError;
       const title = isAppError
         ? error.message
@@ -101,7 +100,6 @@ export function MyListing() {
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
               <ProductCard
-                // mx={2}
                 mb={3}
                 image={{
                   uri: `${api.defaults.baseURL}/images/${item.product_images[0].path}`,

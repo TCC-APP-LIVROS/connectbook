@@ -86,7 +86,20 @@ export function Home() {
     try {
       const { data } = await api.get(`/users/products`);
       setUserListings(data.length);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não foi possível encontrar os produtos do usuário, tente novamente mais tarde";
+
+      toast.show({
+        title,
+        placement: "top",
+        bgColor: "error.500",
+      });
+      setUserListings(0);
+    }
   }
 
   async function fetchProducts() {
@@ -95,7 +108,6 @@ export function Home() {
       const { data } = await api.get(`/products`);
       setListings(data);
     } catch (error) {
-      console.log(error);
       const isAppError = error instanceof AppError;
       const title = isAppError
         ? error.message
@@ -119,7 +131,6 @@ export function Home() {
       const { data } = await api.get(`/products?${stringifiedFilters}`);
       setListings(data);
     } catch (error) {
-      console.log(error);
       const isAppError = error instanceof AppError;
       const title = isAppError
         ? error.message
