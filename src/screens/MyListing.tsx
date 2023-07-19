@@ -93,7 +93,7 @@ export function MyListing() {
         ) : (
           <FlatList
             data={filteredProducts}
-            keyExtractor={(item) => String(item)}
+            keyExtractor={(item) => item.id}
             numColumns={2}
             _contentContainerStyle={{
               paddingBottom: 100,
