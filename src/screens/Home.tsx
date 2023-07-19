@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   HStack,
   VStack,
@@ -148,6 +148,7 @@ export function Home() {
       payment_methods: [],
       query: undefined,
     });
+    setSearch("");
     await fetchProducts();
   }
   useFocusEffect(
@@ -156,6 +157,11 @@ export function Home() {
       fetchProducts();
     }, [])
   );
+
+  useEffect(() => {
+    fetchFilteredProducts(filter);
+  }, [filter]);
+  
   return (
     <VStack flex={1} px={6} bg="gray.200">
       <HStack mt="16">
@@ -213,6 +219,7 @@ export function Home() {
           placeholder="Pesquisar"
           variant="search"
           onFilterPress={onOpen}
+          value={search}
           onChangeText={setSearch}
           onSearchPress={handleSearch}
         />
