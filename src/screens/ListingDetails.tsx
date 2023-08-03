@@ -197,12 +197,12 @@ export function ListingDetails() {
             <HStack>
               <Avatar
                 source={{
-                  uri: `${api.defaults.baseURL}/images/${listing.user.avatar}`,
+                  uri: `${api.defaults.baseURL}/images/${listing?.user?.avatar}`,
                 }}
                 size={6}
               />
               <Text fontSize="sm" color="gray.700" ml="2">
-                {listing.user.name}
+                {listing?.user?.name}
               </Text>
             </HStack>
 

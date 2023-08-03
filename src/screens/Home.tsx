@@ -88,7 +88,6 @@ export function Home() {
       const { data } = await api.get(`/users/products`);
       setUserListings(data.length);
     } catch (error) {
-      console.log(error);
       const isAppError = error instanceof AppError;
       const title = isAppError
         ? error.message
