@@ -31,6 +31,7 @@ import { Input } from "@components/Input";
 import { ProductCard } from "@components/ProductCard";
 import { Checkbox } from "@components/Checkbox";
 import { Loading } from "@components/Loading";
+import { ListingDTO } from "@dtos/ListingDTO";
 
 type FilterOptions = {
   is_new?: boolean;
@@ -75,8 +76,8 @@ export function Home() {
     navigation.navigate("createListing", { mode: "create" });
   }
 
-  function handleGoToListingDetails(id: string) {
-    navigation.navigate("listingDetails", { listingId: id });
+  function handleGoToListingDetails(item: ListingDTO) {
+    navigation.navigate("listingDetails", item);
   }
   function handleGoToMyListing() {
     navigation.navigate("bottomTabsRoutes", { screen: "myListing" });
@@ -255,7 +256,7 @@ export function Home() {
                 image={{
                   uri: `${api.defaults.baseURL}/images/${item.product_images[0].path}`,
                 }}
-                onPress={() => handleGoToListingDetails(item.id)}
+                onPress={() => handleGoToListingDetails(item)}
                 avatarImage={{
                   uri: `${api.defaults.baseURL}/images/${item.user.avatar}`,
                 }}

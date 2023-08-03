@@ -45,7 +45,7 @@ export function ListingDetails() {
   const [isFetching, setIsFetching] = useState(true);
   const [listing, setListing] = useState<any>({});
   const route = useRoute<initialRouteProps>();
-  const { listingId } = route.params;
+  const params = route.params;
 
   const isDealer = listing?.user_id === user?.id;
 
@@ -59,7 +59,7 @@ export function ListingDetails() {
   async function fetchProduct() {
     setIsFetching(true);
     try {
-      const { data } = await api.get(`/products/${listingId}`);
+      const { data } = await api.get(`/products/${params.id}`);
       setListing(data);
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -72,7 +72,7 @@ export function ListingDetails() {
         placement: "top",
         bgColor: "error.500",
       });
-      setListing({});
+      setListing(params);
     } finally {
       setIsFetching(false);
     }
@@ -81,7 +81,7 @@ export function ListingDetails() {
   async function handleChangeProductStatus() {
     try {
       setIsFetching(true);
-      await api.patch(`/products/${listingId}`, {
+      await api.patch(`/products/${params.id}`, {
         is_active: !listing.is_active,
       });
       setListing((oldState: any) => ({
@@ -107,7 +107,7 @@ export function ListingDetails() {
   async function handleDeleteProduct() {
     try {
       setIsFetching(true);
-      await api.delete(`/products/${listingId}`);
+      await api.delete(`/products/${params.id}`);
       toast.show({
         title: "Anuncio excluido com sucesso",
         placement: "top",
@@ -131,11 +131,14 @@ export function ListingDetails() {
   }
 
   function handleGoToCreateListing() {
-    navigation.navigate("createListing", { mode: "edit", listingId });
+    navigation.navigate("createListing", {
+      mode: "edit",
+      listingId: params.id,
+    });
   }
 
-  async function goToWhatsapp() {
-    await WebBrowser.openBrowserAsync(`https://wa.me/557592545461`);
+  async function goToWhatsapp(tel: string) {
+    await WebBrowser.openBrowserAsync(`https://wa.me/${tel}`);
   }
   useFocusEffect(
     useCallback(() => {
@@ -177,7 +180,7 @@ export function ListingDetails() {
                     textTransform={"uppercase"}
                     top={"50%"}
                   >
-                    Anúncio desativado
+                    {listing?.user?.tel ? 'Anúncio desativado' : ''}
                   </Heading>
                 </Box>
               </>
@@ -329,7 +332,9 @@ export function ListingDetails() {
                   <WhatsappLogo size={24} weight="fill" color={colors.white} />
                 }
                 title="Entrar em contato"
-                onPress={goToWhatsapp}
+                onPress={() =>
+                  listing.user.tel ? goToWhatsapp(listing.user.tel) : {}
+                }
               />
             </HStack>
           )}

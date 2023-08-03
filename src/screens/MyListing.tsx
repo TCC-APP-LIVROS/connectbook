@@ -11,6 +11,7 @@ import { Select } from "@components/Select";
 import { ProductCard } from "@components/ProductCard";
 import { useAuth } from "@hooks/useAuth";
 import { Loading } from "@components/Loading";
+import { ListingDTO } from "@dtos/ListingDTO";
 
 export function MyListing() {
   const filterOptions = ["Todos", "Ativos", "Inativos"];
@@ -32,8 +33,8 @@ export function MyListing() {
     return false; // Filtro inválido, não retorna nenhum produto
   });
 
-  function handleGoToListingDetails(id: string) {
-    navigation.navigate("listingDetails", { listingId: id });
+  function handleGoToListingDetails(item: ListingDTO) {
+    navigation.navigate("listingDetails", item);
   }
   function handleGoToCreateListing() {
     navigation.navigate("createListing", { mode: "create" });
@@ -104,7 +105,7 @@ export function MyListing() {
                 image={{
                   uri: `${api.defaults.baseURL}/images/${item.product_images[0].path}`,
                 }}
-                onPress={() => handleGoToListingDetails(item.id)}
+                onPress={() => handleGoToListingDetails(item)}
                 avatarImage={{
                   uri: `${api.defaults.baseURL}/images/${user.avatar}`,
                 }}

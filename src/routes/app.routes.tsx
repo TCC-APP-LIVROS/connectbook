@@ -27,9 +27,7 @@ export type AppRoutes = {
     mode: "create" | "edit";
     listingId?: string;
   };
-  listingDetails: {
-    listingId: string;
-  };
+  listingDetails: ListingDTO;
   previewListing: {
     mode: "create" | "edit";
     listingId?: string;
