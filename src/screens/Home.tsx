@@ -32,6 +32,7 @@ import { ProductCard } from "@components/ProductCard";
 import { Checkbox } from "@components/Checkbox";
 import { Loading } from "@components/Loading";
 import { ListingDTO } from "@dtos/ListingDTO";
+import { TouchableOpacity } from "react-native";
 
 type FilterOptions = {
   is_new?: boolean;
@@ -56,6 +57,8 @@ export function Home() {
     payment_methods: [],
     query: undefined,
   });
+  const [isFetchingFilteredProducts, setIsFetchingFilteredProducts] =
+    useState(false);
 
   const PaymentOptions = allPaymentMethods.map((payment) => {
     return { title: payment, value: payment };
@@ -70,6 +73,10 @@ export function Home() {
 
   function handleSearch() {
     handleOnChangeFilter({ query: search });
+  }
+
+  function handleGoToSettings() {
+    navigation.navigate("settings");
   }
 
   function handleGoToCreateListing() {
@@ -127,6 +134,7 @@ export function Home() {
   async function fetchFilteredProducts(filters: FilterOptions) {
     try {
       setIsFetching(true);
+      setIsFetchingFilteredProducts(true);
       const stringifiedFilters = queryString.stringify(filters);
       const { data } = await api.get(`/products?${stringifiedFilters}`);
       setListings(data);
@@ -144,6 +152,7 @@ export function Home() {
       setListings([]);
     } finally {
       setIsFetching(false);
+      setIsFetchingFilteredProducts(false);
     }
   }
 
@@ -172,14 +181,16 @@ export function Home() {
   useEffect(() => {
     fetchFilteredProducts(filter);
   }, [filter]);
-  
+
   return (
     <VStack flex={1} px={6} bg="gray.200">
       <HStack mt="16">
-        <Avatar
-          source={{ uri: `${api.defaults.baseURL}/images/${user.avatar}` }}
-          size="11.25"
-        />
+        <TouchableOpacity onPress={handleGoToSettings}>
+          <Avatar
+            source={{ uri: `${api.defaults.baseURL}/images/${user.avatar}` }}
+            size="11.25"
+          />
+        </TouchableOpacity>
         <VStack flex={1} ml="2.5">
           <Text>Boas vindas,</Text>
           <Text fontFamily="heading">{user.name}</Text>
@@ -260,7 +271,7 @@ export function Home() {
                   uri: `${api.defaults.baseURL}/images/${item.user.avatar}`,
                 }}
                 title={item.name}
-                price={item.price/100}
+                price={item.price / 100}
                 isNew={item.is_new}
               />
             )}
@@ -349,11 +360,13 @@ export function Home() {
                   title={"Resetar filtros"}
                   type="tertiary"
                   onPress={handleClearFilter}
+                  isLoading={isFetchingFilteredProducts}
                 />
                 <Button
                   flex="1"
                   title={"Aplicar filtros"}
                   onPress={handleFilterProducts}
+                  isLoading={isFetchingFilteredProducts}
                 />
               </HStack>
             </Box>

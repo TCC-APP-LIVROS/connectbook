@@ -13,7 +13,6 @@ import {
   HStack,
   Box,
   useTheme,
-  FlatList,
   useToast,
 } from "native-base";
 import { ArrowLeft, Tag as PriceTag } from "phosphor-react-native";
@@ -22,6 +21,7 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { AppNavigationRouteProps, AppRoutes } from "@routes/app.routes";
 import { api } from "@services/api";
 import { AppError } from "@utils/AppError";
+import { useState } from "react";
 
 type initialRouteProps = RouteProp<AppRoutes, "previewListing">;
 
@@ -30,6 +30,7 @@ export function PreviewListing() {
   const navigation = useNavigation<AppNavigationRouteProps>();
   const route = useRoute<initialRouteProps>();
   const toast = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { mode, listingId, product, productImages, seller } = route.params;
 
   async function handleCreate() {
@@ -81,7 +82,8 @@ export function PreviewListing() {
   
   async function handleUpdate() {
     try {
-      const response = await api.put(`/products/${listingId}`, {
+      setIsSubmitting(true);
+       await api.put(`/products/${listingId}`, {
         ...product,
         price: product.price * 100,
       });
@@ -122,6 +124,8 @@ export function PreviewListing() {
         placement: "top",
     
       });
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -244,6 +248,7 @@ export function PreviewListing() {
             type="secondary"
             startIcon={<PriceTag size={16} color={colors.gray[200]} />}
             onPress={handlePublish}
+            isLoading={isSubmitting}
           />
         </HStack>
       </HStack>

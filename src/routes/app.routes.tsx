@@ -1,6 +1,5 @@
 import {
   createBottomTabNavigator,
-  BottomTabNavigationProp,
 } from "@react-navigation/bottom-tabs";
 
 import {
@@ -18,8 +17,8 @@ import { House, SignOut, Tag } from "phosphor-react-native";
 import { useTheme } from "native-base";
 import { useAuth } from "@hooks/useAuth";
 import { ListingDTO } from "@dtos/ListingDTO";
-import { ImageSourcePropType } from "react-native";
 import { UserDTO } from "@dtos/UserDTO";
+import { Settings } from "@screens/Settings";
 
 export type AppRoutes = {
   bottomTabsRoutes: { screen: "home" | "myListing" };
@@ -38,7 +37,8 @@ export type AppRoutes = {
       uri: string;
       type: string;
     }[];
-  };
+  },
+  settings: undefined;
 };
 
 export type AppNavigationRouteProps = NativeStackNavigationProp<AppRoutes>;
@@ -112,6 +112,7 @@ export function AppRoutes() {
       <Screen name="createListing" component={CreateListing} />
       <Screen name="listingDetails" component={ListingDetails} />
       <Screen name="previewListing" component={PreviewListing} />
+      <Screen name="settings" component={Settings} />
     </Navigator>
   );
 }
