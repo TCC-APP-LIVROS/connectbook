@@ -43,7 +43,7 @@ A React Native App created to help you sell and find products with ease 💪🏻
 -   [ ] yup
 -   [ ] i18n
 
-## Executando o projeto
+## Running the project
 
 Clone the [Back-End of the project](https://github.com/rocketseat-education/ignite-rn-2022-challenge-marketspace-api)
 Use the **npm install** to install the project dependencies on both..
