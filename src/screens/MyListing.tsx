@@ -12,6 +12,7 @@ import { ProductCard } from "@components/ProductCard";
 import { useAuth } from "@hooks/useAuth";
 import { Loading } from "@components/Loading";
 import { ListingDTO } from "@dtos/ListingDTO";
+import { userProductsMock } from "../mocks/products";
 
 export function MyListing() {
   const filterOptions = ["Todos", "Ativos", "Inativos"];
@@ -43,7 +44,8 @@ export function MyListing() {
   async function fetchProducts() {
     try {
       setIsFetching(true);
-      const { data } = await api.get(`/users/products`);
+      // const { data } = await api.get(`/users/products`);
+      const data = userProductsMock
       setListings(data);
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -103,11 +105,11 @@ export function MyListing() {
               <ProductCard
                 mb={3}
                 image={{
-                  uri: `${api.defaults.baseURL}/images/${item.product_images[0].path}`,
+                  uri: `https://i.zst.com.br/thumbs/12/3d/11/-1202542340.jpg`,
                 }}
                 onPress={() => handleGoToListingDetails(item)}
                 avatarImage={{
-                  uri: `${api.defaults.baseURL}/images/${user.avatar}`,
+                  uri: `https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg`,
                 }}
                 title={item.name}
                 price={item.price/100}

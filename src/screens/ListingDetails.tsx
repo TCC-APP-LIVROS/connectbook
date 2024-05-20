@@ -34,6 +34,7 @@ import { AppError } from "@utils/AppError";
 import { AppNavigationRouteProps, AppRoutes } from "@routes/app.routes";
 import { useAuth } from "@hooks/useAuth";
 import { Loading } from "@components/Loading";
+import { OtherUserProductsMock } from "../mocks/products";
 
 type initialRouteProps = RouteProp<AppRoutes, "listingDetails">;
 
@@ -52,14 +53,16 @@ export function ListingDetails() {
   const carrouselImages =
     listing.product_images?.map((image: any) => {
       return {
-        uri: `${api.defaults.baseURL}/images/${image.path}`,
+        uri: `https://cdn.mos.cms.futurecdn.net/U6NH3kQNCBP3eXcjyyMHHi.jpg`,
       };
     }) || [];
 
   async function fetchProduct() {
     setIsFetching(true);
     try {
-      const { data } = await api.get(`/products/${params.id}`);
+      // const { data } = await api.get(`/products/${params.id}`);
+      const data = OtherUserProductsMock[0]
+      
       setListing(data);
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -81,9 +84,9 @@ export function ListingDetails() {
   async function handleChangeProductStatus() {
     try {
       setIsFetching(true);
-      await api.patch(`/products/${params.id}`, {
-        is_active: !listing.is_active,
-      });
+      // await api.patch(`/products/${params.id}`, {
+      //   is_active: !listing.is_active,
+      // });
       setListing((oldState: any) => ({
         ...oldState,
         is_active: !oldState.is_active,
@@ -107,7 +110,7 @@ export function ListingDetails() {
   async function handleDeleteProduct() {
     try {
       setIsFetching(true);
-      await api.delete(`/products/${params.id}`);
+      // await api.delete(`/products/${params.id}`);
       toast.show({
         title: "Anuncio excluido com sucesso",
         placement: "top",
@@ -197,7 +200,7 @@ export function ListingDetails() {
             <HStack>
               <Avatar
                 source={{
-                  uri: `${api.defaults.baseURL}/images/${listing?.user?.avatar}`,
+                  uri: `https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg`,
                 }}
                 size={6}
               />

@@ -12,7 +12,7 @@ import {
 } from "@storage/storageUser";
 import { AppError } from "@utils/AppError";
 import { ReactNode, createContext, useEffect, useState } from "react";
-
+import { userMock } from "../mocks/user";
 export type AuthContextType = {
   user: UserDTO;
   isLoadingUserData: boolean;
@@ -29,7 +29,7 @@ export const AuthContext = createContext<AuthContextType>(
 );
 
 export function AuthContextProvider({ children }: AuthContextProviderProps) {
-  const [user, setUser] = useState<UserDTO>({} as UserDTO);
+  const [user, setUser] = useState<UserDTO>(userMock as any);
   const [isLoadingUserData, setIsLoadingUserData] = useState(false);
 
   async function localUserAndAuthTokenSave(
@@ -52,7 +52,9 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
 
   async function SignIn(email: string, password: string) {
     try {
-      const { data } = await api.post("/sessions", { email, password });
+      // const { data } = await api.post("/sessions", { email, password });
+      const data = userMock
+      console.log(data)
       if (data.user && data.token && data.refresh_token) {
         await localUserAndAuthTokenSave(
           data.user,

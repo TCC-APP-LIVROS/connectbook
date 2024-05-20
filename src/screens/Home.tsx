@@ -33,6 +33,7 @@ import { Checkbox } from "@components/Checkbox";
 import { Loading } from "@components/Loading";
 import { ListingDTO } from "@dtos/ListingDTO";
 import { TouchableOpacity } from "react-native";
+import { userProductsMock, OtherUserProductsMock } from "../mocks/products";
 
 type FilterOptions = {
   is_new?: boolean;
@@ -76,7 +77,7 @@ export function Home() {
   }
 
   function handleGoToSettings() {
-    navigation.navigate("settings");
+    // navigation.navigate("settings");
   }
 
   function handleGoToCreateListing() {
@@ -92,7 +93,9 @@ export function Home() {
 
   async function fetchUserProducts() {
     try {
-      const { data } = await api.get(`/users/products`);
+      // const { data } = await api.get(`/users/products`);
+      const data = userProductsMock
+    
       setUserListings(data.length);
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -112,7 +115,8 @@ export function Home() {
   async function fetchProducts() {
     try {
       setIsFetching(true);
-      const { data } = await api.get(`/products`);
+      // const { data } = await api.get(`/products`);
+      const data = OtherUserProductsMock
       setListings(data);
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -136,7 +140,8 @@ export function Home() {
       setIsFetching(true);
       setIsFetchingFilteredProducts(true);
       const stringifiedFilters = queryString.stringify(filters);
-      const { data } = await api.get(`/products?${stringifiedFilters}`);
+      // const { data } = await api.get(`/products?${stringifiedFilters}`);
+      const data = OtherUserProductsMock
       setListings(data);
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -187,9 +192,13 @@ export function Home() {
       <HStack mt="16">
         <TouchableOpacity onPress={handleGoToSettings}>
           <Avatar
-            source={{ uri: `${api.defaults.baseURL}/images/${user.avatar}` }}
+            source={{ uri: `https://img.freepik.com/vetores-premium/ilustracao-de-avatar-de-estudante-icone-de-perfil-de-usuario-avatar-de-jovem_118339-4402.jpg` }}
             size="11.25"
           />
+          {/* <Avatar
+            source={{ uri: `${api.defaults.baseURL}/images/${user.avatar}` }}
+            size="11.25"
+          /> */}
         </TouchableOpacity>
         <VStack flex={1} ml="2.5">
           <Text>Boas vindas,</Text>
@@ -264,11 +273,11 @@ export function Home() {
                 mx="2"
                 mb="6"
                 image={{
-                  uri: `${api.defaults.baseURL}/images/${item.product_images[0].path}`,
+                  uri: `https://cdn.mos.cms.futurecdn.net/U6NH3kQNCBP3eXcjyyMHHi.jpg`,
                 }}
                 onPress={() => handleGoToListingDetails(item)}
                 avatarImage={{
-                  uri: `${api.defaults.baseURL}/images/${item.user.avatar}`,
+                  uri: `https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg`,
                 }}
                 title={item.name}
                 price={item.price / 100}
