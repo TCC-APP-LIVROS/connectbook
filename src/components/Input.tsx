@@ -35,6 +35,7 @@ export function Input({
   onChangeText,
   onFilterPress,
   onSearchPress,
+  width = "100%",
   ...rest
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -78,7 +79,7 @@ export function Input({
     }
   }
   return (
-    <FormControl isInvalid={invalid} mb="4">
+    <FormControl isInvalid={invalid} mb="4" width={width}>
       <NativeBaseInput
         h="12"
         px="4"

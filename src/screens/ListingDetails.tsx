@@ -35,6 +35,7 @@ import { AppNavigationRouteProps, AppRoutes } from "@routes/app.routes";
 import { useAuth } from "@hooks/useAuth";
 import { Loading } from "@components/Loading";
 import { OtherUserProductsMock } from "../mocks/products";
+import { Qna } from "@components/QnA";
 
 type initialRouteProps = RouteProp<AppRoutes, "listingDetails">;
 
@@ -61,8 +62,8 @@ export function ListingDetails() {
     setIsFetching(true);
     try {
       // const { data } = await api.get(`/products/${params.id}`);
-      const data = OtherUserProductsMock[0]
-      
+      const data = OtherUserProductsMock[0];
+
       setListing(data);
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -183,7 +184,7 @@ export function ListingDetails() {
                     textTransform={"uppercase"}
                     top={"50%"}
                   >
-                    {listing?.user?.tel ? 'Anúncio desativado' : ''}
+                    {listing?.user?.tel ? "Anúncio desativado" : ""}
                   </Heading>
                 </Box>
               </>
@@ -275,6 +276,16 @@ export function ListingDetails() {
                 color={colors.gray[700]}
               />
             ))}
+
+            <Heading
+              mt={6}
+              fontFamily="heading"
+              fontSize="sm"
+              color={"gray.600"}
+            >
+              Perguntas e respostas:
+            </Heading>
+            <Qna question="Marca" answer={listing.brand} />
 
             {isDealer && (
               <>
