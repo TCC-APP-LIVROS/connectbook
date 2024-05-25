@@ -34,6 +34,8 @@ import { AppError } from "@utils/AppError";
 import { AppNavigationRouteProps, AppRoutes } from "@routes/app.routes";
 import { useAuth } from "@hooks/useAuth";
 import { Loading } from "@components/Loading";
+import { OtherUserProductsMock } from "../mocks/products";
+import { Qna } from "@components/QnA";
 
 type initialRouteProps = RouteProp<AppRoutes, "listingDetails">;
 
@@ -52,14 +54,16 @@ export function ListingDetails() {
   const carrouselImages =
     listing.product_images?.map((image: any) => {
       return {
-        uri: `${api.defaults.baseURL}/images/${image.path}`,
+        uri: `https://cdn.mos.cms.futurecdn.net/U6NH3kQNCBP3eXcjyyMHHi.jpg`,
       };
     }) || [];
 
   async function fetchProduct() {
     setIsFetching(true);
     try {
-      const { data } = await api.get(`/products/${params.id}`);
+      // const { data } = await api.get(`/products/${params.id}`);
+      const data = OtherUserProductsMock[0];
+
       setListing(data);
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -81,9 +85,9 @@ export function ListingDetails() {
   async function handleChangeProductStatus() {
     try {
       setIsFetching(true);
-      await api.patch(`/products/${params.id}`, {
-        is_active: !listing.is_active,
-      });
+      // await api.patch(`/products/${params.id}`, {
+      //   is_active: !listing.is_active,
+      // });
       setListing((oldState: any) => ({
         ...oldState,
         is_active: !oldState.is_active,
@@ -107,7 +111,7 @@ export function ListingDetails() {
   async function handleDeleteProduct() {
     try {
       setIsFetching(true);
-      await api.delete(`/products/${params.id}`);
+      // await api.delete(`/products/${params.id}`);
       toast.show({
         title: "Anuncio excluido com sucesso",
         placement: "top",
@@ -180,7 +184,7 @@ export function ListingDetails() {
                     textTransform={"uppercase"}
                     top={"50%"}
                   >
-                    {listing?.user?.tel ? 'Anúncio desativado' : ''}
+                    {listing?.user?.tel ? "Anúncio desativado" : ""}
                   </Heading>
                 </Box>
               </>
@@ -197,7 +201,7 @@ export function ListingDetails() {
             <HStack>
               <Avatar
                 source={{
-                  uri: `${api.defaults.baseURL}/images/${listing?.user?.avatar}`,
+                  uri: `https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg`,
                 }}
                 size={6}
               />
@@ -272,6 +276,16 @@ export function ListingDetails() {
                 color={colors.gray[700]}
               />
             ))}
+
+            <Heading
+              mt={6}
+              fontFamily="heading"
+              fontSize="sm"
+              color={"gray.600"}
+            >
+              Perguntas e respostas:
+            </Heading>
+            <Qna question="Marca" answer={listing.brand} />
 
             {isDealer && (
               <>
