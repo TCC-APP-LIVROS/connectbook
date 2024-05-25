@@ -35,28 +35,28 @@ export function PreviewListing() {
 
   async function handleCreate() {
     try {
-      const response = await api.post("/products", {
-        ...product,
-        price: product.price * 100,
-      });
+      // const response = await api.post("/products", {
+      //   ...product,
+      //   price: product.price * 100,
+      // });
       
       
-      const productImagesUploadForm = new FormData();
+      // const productImagesUploadForm = new FormData();
       
-      productImagesUploadForm.append("product_id", response.data.id);
-      productImages.forEach((image, index) => {
-        productImagesUploadForm.append('images', image as any);
-      });
+      // productImagesUploadForm.append("product_id", response.data.id);
+      // productImages.forEach((image, index) => {
+      //   productImagesUploadForm.append('images', image as any);
+      // });
 
-      await api.post(
-        `/products/images`,
-        productImagesUploadForm,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      // await api.post(
+      //   `/products/images`,
+      //   productImagesUploadForm,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   }
+      // );
 
       navigation.navigate("bottomTabsRoutes", {screen: "myListing"});
       return toast.show({
@@ -82,28 +82,28 @@ export function PreviewListing() {
   
   async function handleUpdate() {
     try {
-      setIsSubmitting(true);
-       await api.put(`/products/${listingId}`, {
-        ...product,
-        price: product.price * 100,
-      });
+      // setIsSubmitting(true);
+      //  await api.put(`/products/${listingId}`, {
+      //   ...product,
+      //   price: product.price * 100,
+      // });
       
       
-      const productImagesUploadForm = new FormData();
+      // const productImagesUploadForm = new FormData();
       
-      productImagesUploadForm.append("product_id", listingId as string);
-      productImages.forEach((image, index) => {
-        productImagesUploadForm.append('images', image as any);
-      });
-      await api.put(
-        `/products/images`,
-        productImagesUploadForm,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      // productImagesUploadForm.append("product_id", listingId as string);
+      // productImages.forEach((image, index) => {
+      //   productImagesUploadForm.append('images', image as any);
+      // });
+      // await api.put(
+      //   `/products/images`,
+      //   productImagesUploadForm,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   }
+      // );
 
       navigation.navigate("bottomTabsRoutes", {screen: "myListing"});
       return toast.show({
@@ -167,7 +167,7 @@ export function PreviewListing() {
       >
         <HStack>
           <Avatar
-            source={{ uri: `${api.defaults.baseURL}/images/${seller.avatar}` }}
+            source={{ uri: `https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg` }}
             size={6}
           />
           <Text fontSize="sm" color="gray.700" ml="2">
