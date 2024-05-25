@@ -9,6 +9,7 @@ type HeaderProps = {
   title?: string;
   rightButtonIcon?: JSX.Element;
   onPressRightButton?: () => void;
+  children?: any;
 };
 
 export function Header({
@@ -16,6 +17,7 @@ export function Header({
   title,
   rightButtonIcon,
   onPressRightButton,
+  children
 }: HeaderProps) {
   const navigation = useNavigation<AppNavigationRouteProps>();
   return (
@@ -24,18 +26,18 @@ export function Header({
       mt={Platform.OS === "ios" ? "5" : "9"}
       paddingBottom="4"
     >
-      <Box flex={1}>
+      <Center flex={1}>
       {backButton && (
         <Pressable onPress={() => {navigation.goBack()}} _pressed={{ opacity: "0.5" }}>
           <ArrowLeft size={24} />
         </Pressable>
       )}
-      </Box>
+      </Center>
 
       <Center flex={8}>
-        <Heading color="gray.700" fontSize="xl" fontFamily="heading">
+        { title ? <Heading color="gray.700" fontSize="xl" fontFamily="heading">
           {title}
-        </Heading>
+        </Heading> : children}
       </Center>
       <Pressable flex={1} alignItems="flex-end" justifyContent="center" onPress={onPressRightButton} _pressed={{ opacity: "0.5" }}>
         {rightButtonIcon}

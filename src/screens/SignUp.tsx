@@ -45,7 +45,10 @@ type AvatarData = {
 
 const signUpSchema = yup.object({
   name: yup.string().required("Informe um nome."),
-  email: yup.string().email("Informe um e-mail válido.").required("Informe um e-mail válido."),
+  email: yup
+    .string()
+    .email("Informe um e-mail válido.")
+    .required("Informe um e-mail válido."),
   tel: yup.string().required("Informe um número de telefone."),
   password: yup
     .string()
@@ -136,8 +139,8 @@ export function SignUp() {
       const ErrorMessage = isAppError
         ? error.message
         : "Não foi possível criar a conta.\n Tente novamente mais tarde";
-      
-        toast.show({
+
+      toast.show({
         title: ErrorMessage,
         placement: "top",
         bgColor: "red.500",
@@ -163,13 +166,19 @@ export function SignUp() {
 
         <Center>
           <Pressable onPress={handleSelectAvatar} _pressed={{ opacity: 0.7 }}>
-            <Avatar source={avatar.uri ? avatar : undefined} my="4" badge size="22" />
+            <Avatar
+              source={avatar.uri ? avatar : undefined}
+              my="4"
+              badge
+              size="22"
+            />
           </Pressable>
           <Controller
             control={control}
             name="name"
             render={({ field: { onChange, value } }) => (
               <Input
+                mb="4"
                 placeholder={t("Common:Name")}
                 value={value}
                 onChangeText={onChange}
@@ -182,6 +191,7 @@ export function SignUp() {
             name="email"
             render={({ field: { onChange, value } }) => (
               <Input
+                mb="4"
                 placeholder={t("Common:E-mail")}
                 value={value}
                 onChangeText={onChange}
@@ -194,6 +204,7 @@ export function SignUp() {
             name="tel"
             render={({ field: { onChange, value } }) => (
               <Input
+                mb="4"
                 placeholder={t("Common:Mobile-number")}
                 value={value}
                 onChangeText={onChange}
@@ -206,6 +217,7 @@ export function SignUp() {
             name="password"
             render={({ field: { onChange, value } }) => (
               <Input
+                mb="4"
                 placeholder={t("Common:Password")}
                 secureTextEntry
                 value={value}
@@ -219,6 +231,7 @@ export function SignUp() {
             name="password_confirmation"
             render={({ field: { onChange, value } }) => (
               <Input
+                mb="4"
                 placeholder={t("Common:Confirm-password")}
                 secureTextEntry
                 value={value}

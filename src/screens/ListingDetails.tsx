@@ -13,6 +13,7 @@ import {
 import {
   Pencil,
   Power,
+  ShoppingCart,
   TrashSimple,
   WhatsappLogo,
 } from "phosphor-react-native";
@@ -36,6 +37,7 @@ import { useAuth } from "@hooks/useAuth";
 import { Loading } from "@components/Loading";
 import { OtherUserProductsMock } from "../mocks/products";
 import { Qna } from "@components/QnA";
+import { Input } from "@components/Input";
 
 type initialRouteProps = RouteProp<AppRoutes, "listingDetails">;
 
@@ -155,13 +157,27 @@ export function ListingDetails() {
         <Loading />
       ) : (
         <>
-          <Box px="6">
+          <Box px="6" py={4}>
             <Header
               backButton
               rightButtonIcon={isDealer ? <Pencil size={24} /> : undefined}
               onPressRightButton={handleGoToCreateListing}
-            />
+            >
+              <Input
+                placeholder="Pesquisar"
+                variant="search"
+                // onFilterPress={onOpen}
+                // value={search}
+                // onChangeText={setSearch}
+                // onSearchPress={handleSearch}
+              />
+            </Header>
+
+            <Heading fontSize="xl" fontFamily="heading" color="gray.700">
+              {listing.name}
+            </Heading>
           </Box>
+
           <VStack>
             <Carrousel images={carrouselImages} />
             {listing.is_active ? null : (
@@ -206,43 +222,63 @@ export function ListingDetails() {
                 size={6}
               />
               <Text fontSize="sm" color="gray.700" ml="2">
-                {listing?.user?.name}
+                {/* {listing?.user?.name} */}
+                {"username"}
               </Text>
             </HStack>
 
             <HStack>
               <Tag
-                mt={5}
+                mt={4}
                 title={listing.is_new ? "Novo" : "Usado"}
                 bgColor={listing.is_new ? "blue.600" : "gray.600"}
               />
             </HStack>
 
             <VStack
-              mt={5}
+              mt={4}
               mb={2}
               alignItems="flex-start"
               justifyContent="space-between"
             >
-              <Heading fontSize="xl" fontFamily="heading" color="gray.700">
-                {listing.name}
-              </Heading>
-
               <Heading
-                mt={4}
-                fontSize="sm"
+                fontSize="2xl"
                 fontFamily="heading"
                 color="blue.600"
                 lineHeight="xl"
               >
                 R${" "}
-                <Heading fontSize="xl" fontFamily="heading" color="blue.600">
+                <Heading fontSize="3xl" fontFamily="heading" color="blue.600">
                   {Intl.NumberFormat("pt-BR", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   }).format(listing.price / 100)}
                 </Heading>
               </Heading>
+              <Text fontFamily="heading" color={"gray.600"}>
+                {"99+ em estoque"}
+              </Text>
+            </VStack>
+
+            <VStack>
+              <Button
+                type="primary"
+                title="Comprar agora"
+                onPress={() =>
+                  listing.user.tel ? goToWhatsapp(listing.user.tel) : {}
+                }
+              />
+              <Button
+                type="secondary"
+                startIcon={
+                  <ShoppingCart size={24} weight="fill" color={colors.white} />
+                }
+                mt={2}
+                title="Adicionar ao carrinho"
+                onPress={() =>
+                  listing.user.tel ? goToWhatsapp(listing.user.tel) : {}
+                }
+              />
             </VStack>
 
             <Text fontSize="sm" color={"gray.600"}>
@@ -316,42 +352,6 @@ export function ListingDetails() {
             )}
             <Box h="10" />
           </ScrollView>
-          {!isDealer && (
-            <HStack
-              w="full"
-              bg="white"
-              justifyContent="space-between"
-              alignItems={"center"}
-              paddingTop={5}
-              paddingBottom={Platform.OS === "ios" ? 7 : 5}
-              paddingX={6}
-            >
-              <Heading
-                fontSize="sm"
-                fontFamily="heading"
-                color="blue.800"
-                lineHeight="xl"
-              >
-                R${" "}
-                <Heading fontSize="xl" fontFamily="heading" color="blue.800">
-                  {Intl.NumberFormat("pt-BR", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }).format(listing.price / 100)}
-                </Heading>
-              </Heading>
-              <Button
-                type="secondary"
-                startIcon={
-                  <WhatsappLogo size={24} weight="fill" color={colors.white} />
-                }
-                title="Entrar em contato"
-                onPress={() =>
-                  listing.user.tel ? goToWhatsapp(listing.user.tel) : {}
-                }
-              />
-            </HStack>
-          )}
         </>
       )}
     </VStack>
