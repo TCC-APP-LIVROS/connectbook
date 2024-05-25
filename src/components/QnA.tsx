@@ -1,17 +1,11 @@
-import { Box, HStack, Text, IStackProps, VStack } from "native-base";
-import {
-  Barcode,
-  CreditCard,
-  Money,
-  QrCode,
-  Bank,
-  ArrowBendDownRight,
-} from "phosphor-react-native";
+import { HStack, Text, IStackProps, VStack } from "native-base";
+import { ArrowBendDownRight } from "phosphor-react-native";
 import { Input } from "./Input";
 import { Button } from "./Button";
 
 import { QnaMocks } from "../mocks/Qna";
 import { useState } from "react";
+import { Paginator } from "./paginator";
 
 type paymentMethodProps = IStackProps & {
   //   payment: payMethod;
@@ -29,7 +23,7 @@ export function Qna({ color, ...rest }: any) {
   );
 
   function sendQuestion() {
-    QnaMocks.push({
+    QnaMocks.unshift({
       Question: question,
       Answer: "Em análise",
       Date: new Date().toLocaleDateString(),
@@ -58,21 +52,14 @@ export function Qna({ color, ...rest }: any) {
       ))}
 
       <HStack mb={2} mt={2}>
-        <Button
-          title={"Voltar"}
-          w={"50%"}
-          onPress={() => setPagination(pagination - 1)}
-        />
-        <Button
-          title={"Avançar"}
-          w={"50%"}
-          onPress={() => setPagination(pagination + 1)}
-        />
+        <Paginator />
       </HStack>
 
       <HStack space={1} mt="1">
         <Input
-          placeholder="Digite sua resposta"
+          placeholder={
+            true ? "Digite sua a sua pergunta" : "Digite sua resposta"
+          }
           width={"75%"}
           onChangeText={setQuestion}
           value={question}
