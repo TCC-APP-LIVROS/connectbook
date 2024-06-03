@@ -21,6 +21,50 @@ export const userProductsMock = [
       { key: "card", name: "Cartão de Crédito" },
     ],
   },
+  {
+    id: "70f126c3-6e04-4efb-9f47-93be450275ee",
+    name: "Meu anuncio teste",
+    description: "Descrição do anuncio",
+    is_new: true,
+    price: 29000,
+    accept_trade: false,
+    user_id: "d2a325c5-79fe-43c2-9e60-e7e64de58d55",
+    is_active: true,
+    created_at: "2024-05-18T18:37:41.891Z",
+    updated_at: "2024-05-18T18:37:41.891Z",
+    product_images: [
+      {
+        path: "f041225e7a7deb6dca52-teste dev.png",
+        id: "e4e33f3e-341e-44c6-8617-64eab14bb2b5",
+      },
+    ],
+    payment_methods: [
+      { key: "pix", name: "Pix" },
+      { key: "card", name: "Cartão de Crédito" },
+    ],
+  },
+  {
+    id: "70f126c3-6e04-4efb-9f47-93be450275ee",
+    name: "Meu anuncio teste",
+    description: "Descrição do anuncio",
+    is_new: true,
+    price: 29000,
+    accept_trade: false,
+    user_id: "d2a325c5-79fe-43c2-9e60-e7e64de58d55",
+    is_active: true,
+    created_at: "2024-05-18T18:37:41.891Z",
+    updated_at: "2024-05-18T18:37:41.891Z",
+    product_images: [
+      {
+        path: "f041225e7a7deb6dca52-teste dev.png",
+        id: "e4e33f3e-341e-44c6-8617-64eab14bb2b5",
+      },
+    ],
+    payment_methods: [
+      { key: "pix", name: "Pix" },
+      { key: "card", name: "Cartão de Crédito" },
+    ],
+  },
 ];
 
 export const OtherUserProductsMock = [

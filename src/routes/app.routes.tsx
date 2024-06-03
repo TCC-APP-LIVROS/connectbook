@@ -1,6 +1,4 @@
-import {
-  createBottomTabNavigator,
-} from "@react-navigation/bottom-tabs";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import {
   NativeStackNavigationProp,
@@ -13,12 +11,13 @@ import { ListingDetails } from "@screens/ListingDetails";
 import { CreateListing } from "@screens/CreateListing";
 import { PreviewListing } from "@screens/PreviewListing";
 
-import { House, SignOut, Tag } from "phosphor-react-native";
+import { Bell, House, SignOut, Tag } from "phosphor-react-native";
 import { useTheme } from "native-base";
 import { useAuth } from "@hooks/useAuth";
 import { ListingDTO } from "@dtos/ListingDTO";
 import { UserDTO } from "@dtos/UserDTO";
 import { Settings } from "@screens/Settings";
+import { Notifications } from "@screens/Notifications";
 
 export type AppRoutes = {
   bottomTabsRoutes: { screen: "home" | "myListing" };
@@ -37,7 +36,7 @@ export type AppRoutes = {
       uri: string;
       type: string;
     }[];
-  },
+  };
   settings: undefined;
 };
 
@@ -79,6 +78,19 @@ function BottomTabsRoutes() {
         options={{
           tabBarIcon: ({ color, size, focused }) => (
             <Tag
+              color={color}
+              size={size}
+              weight={focused ? "bold" : "regular"}
+            />
+          ),
+        }}
+      />
+      <Screen
+        name="notifications"
+        component={Notifications}
+        options={{
+          tabBarIcon: ({ color, size, focused }) => (
+            <Bell
               color={color}
               size={size}
               weight={focused ? "bold" : "regular"}
