@@ -253,6 +253,7 @@ export function Home() {
           value={search}
           onChangeText={setSearch}
           onSearchPress={handleSearch}
+          mb="4"
         />
         {isFetching ? (
           <Loading />

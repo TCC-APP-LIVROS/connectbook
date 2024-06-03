@@ -272,6 +272,7 @@ export function CreateListing() {
                 onChangeText={onChange}
                 value={value}
                 mt="4"
+                mb="4"
                 errorMessage={errors.name?.message}
               />
             )}
@@ -325,6 +326,7 @@ export function CreateListing() {
                 onChangeText={onChange}
                 value={value?.toString()}
                 mt="4"
+                mb="4"
                 errorMessage={errors.price?.message}
               />
             )}

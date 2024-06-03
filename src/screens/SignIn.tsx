@@ -91,6 +91,7 @@ export function SignIn() {
                 onChangeText={onChange}
                 placeholder={t("Common:E-mail")}
                 errorMessage={errors.email?.message}
+                mb="4"
               />
             )}
           />
@@ -104,6 +105,7 @@ export function SignIn() {
                 placeholder={t("Common:Password")}
                 variant="password"
                 errorMessage={errors.password?.message}
+                mb="4"
               />
             )}
           />

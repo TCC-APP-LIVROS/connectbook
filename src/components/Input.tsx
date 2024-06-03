@@ -79,7 +79,7 @@ export function Input({
     }
   }
   return (
-    <FormControl isInvalid={invalid} mb="4" width={width}>
+    <FormControl isInvalid={invalid} width={width}>
       <NativeBaseInput
         h="12"
         px="4"
