@@ -5,10 +5,12 @@ import { useState } from "react";
 import { userProductsMock } from "../mocks/products";
 import { NotificationRow } from "@components/NotificationRow";
 import { Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export function Notifications() {
   const [listings, setListings] = useState(userProductsMock);
   const [isFetching, setIsFetching] = useState(false);
+  const navigation = useNavigation();
 
   return (
     <VStack flex={1} mt={10} px={6} bg="gray.200">
@@ -32,7 +34,8 @@ export function Notifications() {
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <Pressable
-          onPress={() => { console.log("Pressed")}}
+          //@ts-ignore
+          onPress={() => { navigation.navigate("reply")}}
           >
             <NotificationRow />
           </Pressable>

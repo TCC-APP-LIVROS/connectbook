@@ -18,6 +18,7 @@ import { ListingDTO } from "@dtos/ListingDTO";
 import { UserDTO } from "@dtos/UserDTO";
 import { Settings } from "@screens/Settings";
 import { Notifications } from "@screens/Notifications";
+import { Reply } from "@screens/Reply";
 
 export type AppRoutes = {
   bottomTabsRoutes: { screen: "home" | "myListing" };
@@ -125,6 +126,7 @@ export function AppRoutes() {
       <Screen name="listingDetails" component={ListingDetails} />
       <Screen name="previewListing" component={PreviewListing} />
       <Screen name="settings" component={Settings} />
+      <Screen name="reply" component={Reply} />
     </Navigator>
   );
 }
