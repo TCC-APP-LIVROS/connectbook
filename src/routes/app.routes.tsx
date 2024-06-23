@@ -39,6 +39,8 @@ export type AppRoutes = {
     }[];
   };
   settings: undefined;
+  reply: undefined;
+  notifications: undefined;
 };
 
 export type AppNavigationRouteProps = NativeStackNavigationProp<AppRoutes>;
