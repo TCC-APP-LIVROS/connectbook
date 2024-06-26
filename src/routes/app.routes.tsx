@@ -12,13 +12,16 @@ import { MyListing } from "@screens/MyListing";
 import { ListingDetails } from "@screens/ListingDetails";
 import { CreateListing } from "@screens/CreateListing";
 import { PreviewListing } from "@screens/PreviewListing";
+import { Settings } from "@screens/Settings";
+import { Profile } from "@screens/Profile";
 
 import { House, SignOut, Tag } from "phosphor-react-native";
 import { useTheme } from "native-base";
 import { useAuth } from "@hooks/useAuth";
 import { ListingDTO } from "@dtos/ListingDTO";
 import { UserDTO } from "@dtos/UserDTO";
-import { Settings } from "@screens/Settings";
+import { Address } from "@screens/Address";
+import { EditAddress } from "@screens/EditAddress";
 
 export type AppRoutes = {
   bottomTabsRoutes: { screen: "home" | "myListing" };
@@ -39,6 +42,12 @@ export type AppRoutes = {
     }[];
   },
   settings: undefined;
+  profile: undefined;
+  address: {
+    address?: string;
+    helper?: string;
+  };
+  editAddress: undefined;
 };
 
 export type AppNavigationRouteProps = NativeStackNavigationProp<AppRoutes>;
@@ -113,6 +122,9 @@ export function AppRoutes() {
       <Screen name="listingDetails" component={ListingDetails} />
       <Screen name="previewListing" component={PreviewListing} />
       <Screen name="settings" component={Settings} />
+      <Screen name="profile" component={Profile} />
+      <Screen name="address" component={Address} />
+      <Screen name="editAddress" component={EditAddress} />
     </Navigator>
   );
 }

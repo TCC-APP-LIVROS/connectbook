@@ -76,8 +76,8 @@ export function Home() {
     handleOnChangeFilter({ query: search });
   }
 
-  function handleGoToSettings() {
-    // navigation.navigate("settings");
+  function handleGoToProfile() {
+    navigation.navigate("profile");
   }
 
   function handleGoToCreateListing() {
@@ -190,7 +190,7 @@ export function Home() {
   return (
     <VStack flex={1} px={6} bg="gray.200">
       <HStack mt="16">
-        <TouchableOpacity onPress={handleGoToSettings}>
+        <TouchableOpacity onPress={handleGoToProfile}>
           <Avatar
             source={{ uri: `https://img.freepik.com/vetores-premium/ilustracao-de-avatar-de-estudante-icone-de-perfil-de-usuario-avatar-de-jovem_118339-4402.jpg` }}
             size="11.25"
