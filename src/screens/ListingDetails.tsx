@@ -38,6 +38,7 @@ import { Loading } from "@components/Loading";
 import { OtherUserProductsMock } from "../mocks/products";
 import { Qna } from "@components/QnA";
 import { Input } from "@components/Input";
+import { QuantityPicker } from "@components/QuantityPicker";
 
 type initialRouteProps = RouteProp<AppRoutes, "listingDetails">;
 
@@ -50,6 +51,7 @@ export function ListingDetails() {
   const [listing, setListing] = useState<any>({});
   const route = useRoute<initialRouteProps>();
   const params = route.params;
+  const [quantity, setQuantity] = useState(1);
 
   const isDealer = listing?.user_id === user?.id;
 
@@ -258,6 +260,10 @@ export function ListingDetails() {
               <Text fontFamily="heading" color={"gray.600"}>
                 {"99+ em estoque"}
               </Text>
+              <QuantityPicker 
+              quantity={quantity}
+              onChange={setQuantity}
+              />
             </VStack>
 
             <VStack>
