@@ -95,7 +95,7 @@ export function EditAddress() {
   return (
     <VStack flex={1} safeAreaTop bg="gray.200">
       <Box px="6">
-        <Header title="Criar anúncio" backButton />
+        <Header title="Editar endereço" backButton />
       </Box>
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -112,6 +112,20 @@ export function EditAddress() {
             render={({ field: { onChange, value } }) => (
               <Input
                 placeholder="Nome completo"
+                onChangeText={onChange}
+                value={value}
+                mt="4"
+                mb="4"
+                errorMessage={errors.name?.message}
+              />
+            )}
+          />
+           <Controller
+            control={control}
+            name="name"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="CEP"
                 onChangeText={onChange}
                 value={value}
                 mt="4"
@@ -140,20 +154,6 @@ export function EditAddress() {
             render={({ field: { onChange, value } }) => (
               <Input
                 placeholder="Bairro"
-                onChangeText={onChange}
-                value={value}
-                mt="4"
-                mb="4"
-                errorMessage={errors.name?.message}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="name"
-            render={({ field: { onChange, value } }) => (
-              <Input
-                placeholder="CEP"
                 onChangeText={onChange}
                 value={value}
                 mt="4"

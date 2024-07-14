@@ -12,8 +12,9 @@ import {
   Heading,
   Pressable,
   useToast,
+  Badge,
 } from "native-base";
-import { ArrowRight, Plus, Tag, X } from "phosphor-react-native";
+import { ArrowRight, Plus, ShoppingCart, Tag, X } from "phosphor-react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import queryString from "query-string";
 
@@ -204,14 +205,15 @@ export function Home() {
           <Text>Boas vindas,</Text>
           <Text fontFamily="heading">{user.name}</Text>
         </VStack>
-        <Button
-          startIcon={<Icon as={<Plus color="#fff" size="16" />} />}
-          title={"Criar anúncio"}
+        {/* <Button
+          startIcon={<Icon as={<ShoppingCart color="#fff" size="16" />} />}
+            rounded={"full"}
           onPress={handleGoToCreateListing}
-        />
+        /> */}
+        <Icon as={<ShoppingCart color="#000" size="30" />} />
       </HStack>
 
-      <VStack mt="8">
+      {/* <VStack mt="8">
         <Text color="gray.500">Seus produtos anunciados para venda </Text>
         <HStack
           alignItems="center"
@@ -240,7 +242,7 @@ export function Home() {
             </HStack>
           </Pressable>
         </HStack>
-      </VStack>
+      </VStack> */}
 
       <VStack mt="4" flex={1}>
         <Text mb="4" color="gray.500">

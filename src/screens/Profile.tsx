@@ -2,25 +2,40 @@ import { Header } from "@components/Header";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigationRouteProps } from "@routes/app.routes";
 import { VStack, Text, Box, Avatar, Center, FlatList, Pressable, Divider } from "native-base";
-import { MapPin, Wallet } from "phosphor-react-native";
+import { Bag, Bell, MapPin, SignOut, Wallet } from "phosphor-react-native";
 
 const ProfileOptions = [
   {
-    title: "Endereço",
+    title: "Meus endereços",
     icon: <MapPin />,
     screen: "address",
   },
   {
-    title: "Métodos de Pagamento",
+    title: "Meus cartões",
     icon: <Wallet />,
-    screen: "reply",
+    screen: "paymentMethods",
+  },
+  {
+    title: "Meus pedidos",
+    icon: <Bag />,
+    screen: "paymentMethods",
+  },
+  {
+    title: "Notificações",
+    icon: <Bell />,
+    screen: "paymentMethods",
+  },
+  {
+    title: "Sair",
+    icon: <SignOut color="#f00" />,
+    screen: "paymentMethods",
   },
 ];
 
 export function Profile() {
     const navigation = useNavigation<AppNavigationRouteProps>();
   return (
-    <VStack space={4} alignItems="center" paddingX={4} safeAreaTop>
+    <VStack space={4} paddingX={4} safeAreaTop>
       <Header title="Perfil" backButton/>
       <Center>
         <Avatar
@@ -35,22 +50,24 @@ export function Profile() {
       </Center>
       <FlatList
         data={ProfileOptions}
-        contentContainerStyle={{ paddingVertical: 16, gap: 8 }}
+        contentContainerStyle={{ paddingVertical: 16, gap: 24}}
         renderItem={({ item }) => (
-          <Box>
+          <Box width={"100%"}>
             <Pressable
             px={4}
             py={2}
             flexDirection={"row"}
             alignItems={"center"}
-            justifyContent={"space-between"}
+            justifyContent={"flex-start"}
             borderRadius={12}
-            width={"80%"}
+            //@ts-ignore
+            gap={4}
+            width={"100%"}
             //@ts-ignore
             onPress={() => navigation.navigate(item.screen)}
           >
-            <Text fontSize={"lg"}>{item.title}</Text>
             {item.icon}
+            <Text fontSize={"lg"}>{item.title}</Text>
           </Pressable>
             <Divider />
           </Box>

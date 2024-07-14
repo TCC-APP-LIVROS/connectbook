@@ -15,13 +15,14 @@ import { PreviewListing } from "@screens/PreviewListing";
 import { Settings } from "@screens/Settings";
 import { Profile } from "@screens/Profile";
 
-import { House, SignOut, Tag } from "phosphor-react-native";
+import { House, ShoppingCart, SignOut, Tag } from "phosphor-react-native";
 import { useTheme } from "native-base";
 import { useAuth } from "@hooks/useAuth";
 import { ListingDTO } from "@dtos/ListingDTO";
 import { UserDTO } from "@dtos/UserDTO";
 import { Address } from "@screens/Address";
 import { EditAddress } from "@screens/EditAddress";
+import { PaymentMethods } from "@screens/PaymentMethods";
 
 export type AppRoutes = {
   bottomTabsRoutes: { screen: "home" | "myListing" };
@@ -48,6 +49,7 @@ export type AppRoutes = {
     helper?: string;
   };
   editAddress: undefined;
+  paymentMethods: undefined;
 };
 
 export type AppNavigationRouteProps = NativeStackNavigationProp<AppRoutes>;
@@ -78,6 +80,19 @@ function BottomTabsRoutes() {
               color={color}
               weight={focused ? "bold" : "regular"}
               size={size}
+            />
+          ),
+        }}
+      />
+      <Screen
+        name="cart"
+        component={MyListing}
+        options={{
+          tabBarIcon: ({ color, size, focused }) => (
+            <ShoppingCart
+              color={color}
+              size={size}
+              weight={focused ? "bold" : "regular"}
             />
           ),
         }}
@@ -125,6 +140,7 @@ export function AppRoutes() {
       <Screen name="profile" component={Profile} />
       <Screen name="address" component={Address} />
       <Screen name="editAddress" component={EditAddress} />
+      <Screen name="paymentMethods" component={PaymentMethods} />
     </Navigator>
   );
 }
