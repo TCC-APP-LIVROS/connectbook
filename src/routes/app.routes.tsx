@@ -23,6 +23,9 @@ import { UserDTO } from "@dtos/UserDTO";
 import { Address } from "@screens/Address";
 import { EditAddress } from "@screens/EditAddress";
 import { PaymentMethods } from "@screens/PaymentMethods";
+import { Orders } from "@screens/Orders";
+import { OrderDetails } from "@screens/OrderDetails";
+import { EditPayment } from "@screens/EditPayment";
 
 export type AppRoutes = {
   bottomTabsRoutes: { screen: "home" | "myListing" };
@@ -50,6 +53,9 @@ export type AppRoutes = {
   };
   editAddress: undefined;
   paymentMethods: undefined;
+  Orders: undefined;
+  OrderDetails: undefined;
+  EditPayment: undefined;
 };
 
 export type AppNavigationRouteProps = NativeStackNavigationProp<AppRoutes>;
@@ -141,6 +147,9 @@ export function AppRoutes() {
       <Screen name="address" component={Address} />
       <Screen name="editAddress" component={EditAddress} />
       <Screen name="paymentMethods" component={PaymentMethods} />
+      <Screen name="Orders" component={Orders} />
+      <Screen name="OrderDetails" component={OrderDetails} />
+      <Screen name="EditPayment" component={EditPayment} />
     </Navigator>
   );
 }

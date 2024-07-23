@@ -1,26 +1,53 @@
-import { Text, Divider, Pressable, Box, IPressableProps } from "native-base";
-import { PressableProps } from "react-native";
+import {
+  Text,
+  Pressable,
+  Box,
+  HStack,
+  Image,
+  IBoxProps,
+} from "native-base";
 
-interface AddressCardProps extends IPressableProps{
-  address: string;
-  shipping?: boolean;
-  helper?: string;
+import MasterCard from "@assets/Img/Card/Mastercard.png";
+import { Pen, Trash } from "phosphor-react-native";
+
+interface AddressCardProps extends IBoxProps {
+  onPressDelete: () => void;
+  onPressEdit: () => void;
+  card: any;
 }
 
-export function PaymentOptionCard({ helper, address, shipping, ...rest }: AddressCardProps) {
-  const hasAddress = !!address;
-  shipping = shipping ?? true;
-  helper = helper ?? "Editar ou escolher outro endereço";
-  address = hasAddress ? address : "Combinar com o vendendor";
-  const title = shipping ? "Enviar no meu endereço" : "Retirar com o vendendor";
+export function PaymentOptionCard({
+  card,
+  onPressDelete,
+  onPressEdit,
+  ...rest
+}: AddressCardProps) {
 
-  return ( 
-    <Pressable backgroundColor={"white"} padding={4} borderRadius={12} {...rest}>
-      <Text fontFamily={"heading"} fontSize={"xl"}>
-        INTER ********* 1234
-      </Text>
-      
-      
-    </Pressable>
+  return (
+    <Box
+      backgroundColor={"#fff"}
+      padding={4}
+      borderRadius={12}
+      {...rest}
+    >
+      <HStack justifyContent={"space-between"} alignItems={"center"}>
+        <Image
+          source={MasterCard}
+          alt="Cartão de crédito"
+          style={{ width: 40, height: 20 }}
+        />
+        <Text fontFamily={"heading"} textAlign={"center"} fontSize={"lg"} marginLeft={2} flex={1}>
+          INTER ***** 1234
+        </Text>
+        <HStack flex={1} justifyContent={"flex-end"}>
+          <Pressable onPress={onPressDelete}>
+            <Trash size={24} color={"red"} />
+          </Pressable>
+          <Pressable marginLeft={8} onPress={onPressEdit}>
+            <Pen size={24} color={"black"} />
+          </Pressable>
+        </HStack>
+      </HStack>
+    </Box>
   );
 }

@@ -18,7 +18,7 @@ const ProfileOptions = [
   {
     title: "Meus pedidos",
     icon: <Bag />,
-    screen: "paymentMethods",
+    screen: "Orders",
   },
   {
     title: "Notificações",
