@@ -1,6 +1,4 @@
-import {
-  createBottomTabNavigator,
-} from "@react-navigation/bottom-tabs";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import {
   NativeStackNavigationProp,
@@ -15,17 +13,22 @@ import { PreviewListing } from "@screens/PreviewListing";
 import { Settings } from "@screens/Settings";
 import { Profile } from "@screens/Profile";
 
-import { House, ShoppingCart, SignOut, Tag } from "phosphor-react-native";
+import { Bell, House, SignOut, ShoppingCart, Tag } from "phosphor-react-native";
 import { useTheme } from "native-base";
 import { useAuth } from "@hooks/useAuth";
 import { ListingDTO } from "@dtos/ListingDTO";
 import { UserDTO } from "@dtos/UserDTO";
+
+import { Settings } from "@screens/Settings";
+import { Notifications } from "@screens/Notifications";
+import { Reply } from "@screens/Reply";
 import { Address } from "@screens/Address";
 import { EditAddress } from "@screens/EditAddress";
 import { PaymentMethods } from "@screens/PaymentMethods";
 import { Orders } from "@screens/Orders";
 import { OrderDetails } from "@screens/OrderDetails";
 import { EditPayment } from "@screens/EditPayment";
+
 
 export type AppRoutes = {
   bottomTabsRoutes: { screen: "home" | "myListing" };
@@ -44,8 +47,10 @@ export type AppRoutes = {
       uri: string;
       type: string;
     }[];
-  },
+  };
   settings: undefined;
+  reply: undefined;
+  notifications: undefined;
   profile: undefined;
   address: {
     address?: string;
@@ -117,6 +122,19 @@ function BottomTabsRoutes() {
         }}
       />
       <Screen
+        name="notifications"
+        component={Notifications}
+        options={{
+          tabBarIcon: ({ color, size, focused }) => (
+            <Bell
+              color={color}
+              size={size}
+              weight={focused ? "bold" : "regular"}
+            />
+          ),
+        }}
+      />
+      <Screen
         name="signOut"
         component={DummySignOutScreen}
         options={{
@@ -143,6 +161,7 @@ export function AppRoutes() {
       <Screen name="listingDetails" component={ListingDetails} />
       <Screen name="previewListing" component={PreviewListing} />
       <Screen name="settings" component={Settings} />
+      <Screen name="reply" component={Reply} />
       <Screen name="profile" component={Profile} />
       <Screen name="address" component={Address} />
       <Screen name="editAddress" component={EditAddress} />
