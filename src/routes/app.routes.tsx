@@ -12,14 +12,6 @@ import { CreateListing } from "@screens/CreateListing";
 import { PreviewListing } from "@screens/PreviewListing";
 import { Settings } from "@screens/Settings";
 import { Profile } from "@screens/Profile";
-
-import { Bell, House, SignOut, ShoppingCart, Tag } from "phosphor-react-native";
-import { useTheme } from "native-base";
-import { useAuth } from "@hooks/useAuth";
-import { ListingDTO } from "@dtos/ListingDTO";
-import { UserDTO } from "@dtos/UserDTO";
-
-import { Settings } from "@screens/Settings";
 import { Notifications } from "@screens/Notifications";
 import { Reply } from "@screens/Reply";
 import { Address } from "@screens/Address";
@@ -29,6 +21,11 @@ import { Orders } from "@screens/Orders";
 import { OrderDetails } from "@screens/OrderDetails";
 import { EditPayment } from "@screens/EditPayment";
 
+import { Bell, House, SignOut, ShoppingCart, Tag } from "phosphor-react-native";
+import { useTheme } from "native-base";
+import { useAuth } from "@hooks/useAuth";
+import { ListingDTO } from "@dtos/ListingDTO";
+import { UserDTO } from "@dtos/UserDTO";
 
 export type AppRoutes = {
   bottomTabsRoutes: { screen: "home" | "myListing" };
