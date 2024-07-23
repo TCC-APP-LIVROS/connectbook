@@ -303,7 +303,7 @@ export function ListingDetails() {
               </Text>
             </Heading>
 
-            <Heading
+            {/* <Heading
               mt={6}
               fontFamily="heading"
               fontSize="sm"
@@ -317,7 +317,7 @@ export function ListingDetails() {
                 payment={payment.key}
                 color={colors.gray[700]}
               />
-            ))}
+            ))} */}
 
             <Heading
               mt={6}
