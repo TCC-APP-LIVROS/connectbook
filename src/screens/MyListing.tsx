@@ -73,7 +73,7 @@ export function MyListing() {
   return (
     <VStack flex={1} safeArea px="6" bg="gray.200">
       <Header
-        title="My Listing"
+        title="Meus anúncios"
         rightButtonIcon={<Plus size={24} />}
         onPressRightButton={handleGoToCreateListing}
       />

@@ -77,9 +77,8 @@ export function ProductCard({
       <Text mt="1" h={9} lineHeight={18} numberOfLines={2} ellipsizeMode={"tail"} color="gray.600" fontSize="sm">
         {title}
       </Text>
-      <Heading color="gray.700" fontFamily="heading" fontSize="xs">
-        R$ <Heading color="gray.700" fontFamily="heading" fontSize="md">{Intl.NumberFormat('pt-BR',{ minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(price)}</Heading>
-      </Heading>
+       {/* <Text color="gray.700" fontSize="xl"> R$ {Intl.NumberFormat('pt-BR',{ minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(price)}</Text> */}
+       <Text color="gray.700" fontSize="xl"> R$ 32<Text fontSize={"xs"}>90</Text> </Text>
     </Pressable>
   );
 }
