@@ -21,11 +21,6 @@ const ProfileOptions = [
     screen: "Orders",
   },
   {
-    title: "Notificações",
-    icon: <Bell />,
-    screen: "paymentMethods",
-  },
-  {
     title: "Sair",
     icon: <SignOut color="#f00" />,
     screen: "paymentMethods",

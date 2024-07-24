@@ -26,6 +26,7 @@ import { useTheme } from "native-base";
 import { useAuth } from "@hooks/useAuth";
 import { ListingDTO } from "@dtos/ListingDTO";
 import { UserDTO } from "@dtos/UserDTO";
+import { Cart } from "@screens/Cart";
 
 export type AppRoutes = {
   bottomTabsRoutes: { screen: "home" | "myListing" };
@@ -58,6 +59,7 @@ export type AppRoutes = {
   Orders: undefined;
   OrderDetails: undefined;
   EditPayment: undefined;
+  Cart: undefined;
 };
 
 export type AppNavigationRouteProps = NativeStackNavigationProp<AppRoutes>;
@@ -94,7 +96,7 @@ function BottomTabsRoutes() {
       />
       <Screen
         name="cart"
-        component={MyListing}
+        component={Cart}   
         options={{
           tabBarIcon: ({ color, size, focused }) => (
             <ShoppingCart
@@ -131,20 +133,6 @@ function BottomTabsRoutes() {
           ),
         }}
       />
-      <Screen
-        name="signOut"
-        component={DummySignOutScreen}
-        options={{
-          tabBarIcon: ({ size }) => <SignOut color={"#E07878"} size={size} />,
-        }}
-        listeners={{
-          tabPress: (e) => {
-            // Prevent default action
-            e.preventDefault();
-            signOut();
-          },
-        }}
-      />
     </Navigator>
   );
 }
@@ -166,6 +154,7 @@ export function AppRoutes() {
       <Screen name="Orders" component={Orders} />
       <Screen name="OrderDetails" component={OrderDetails} />
       <Screen name="EditPayment" component={EditPayment} />
+      <Screen name="Cart" component={Cart} />
     </Navigator>
   );
 }
