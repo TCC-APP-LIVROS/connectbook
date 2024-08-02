@@ -131,13 +131,14 @@ export function EditPayment() {
               />
             )}
           />
+          <HStack justifyContent={"space-around"}>
           <Controller
             control={control}
             name="name"
             render={({ field: { onChange, value } }) => (
               <Input
                 placeholder="Validade"
-                
+                width={"45%"}
                 onChangeText={onChange}
                 value={value}
                 mt="4"
@@ -152,6 +153,7 @@ export function EditPayment() {
             render={({ field: { onChange, value } }) => (
               <Input
                 placeholder="CCV"
+                width={"45%"}
                 onChangeText={onChange}
                 value={value}
                 mt="4"
@@ -160,6 +162,7 @@ export function EditPayment() {
               />
             )}
           />
+          </HStack>
         </VStack>
       </ScrollView>
       <HStack

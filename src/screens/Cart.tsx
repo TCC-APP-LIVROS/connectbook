@@ -10,9 +10,9 @@ export function Cart() {
       <VStack flex={1}>
         <CartCard />
       </VStack>
-      <HStack>
+      <HStack justifyContent={"flex-end"}>
         <Heading>Total</Heading>
-        <Text>R$ 0,00</Text>
+        <Text marginLeft={2}>R$ 1000,00</Text>
       </HStack>
       <Button title={"Finalizar compra"}></Button>
     </VStack>

@@ -1,4 +1,5 @@
 import { AddressCard } from "@components/AddressCard";
+import { Button } from "@components/Button";
 import { Header } from "@components/Header";
 import { PaymentOptionCard } from "@components/PaymentOptions";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
@@ -19,7 +20,7 @@ export function PaymentMethods() {
 
   const card = [{}, {}, {}];
   return (
-    <VStack safeAreaTop paddingX={4}>
+    <VStack safeAreaTop paddingX={4} flex={1} paddingBottom={4}>
       <Header title="Meus cartões" backButton />
       <FlatList
         data={card}
@@ -33,6 +34,7 @@ export function PaymentMethods() {
           />
         )}
       />
+      <Button title="Adicionar cartão" onPress={handleGoToEditPayment} />
     </VStack>
   );
 }

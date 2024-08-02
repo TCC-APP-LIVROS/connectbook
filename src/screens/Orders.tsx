@@ -1,5 +1,5 @@
 import { Header } from "@components/Header";
-import { Center, VStack, Text, HStack, Image } from "native-base";
+import { Center, VStack, Text, HStack, Image, Divider } from "native-base";
 
 import { OtherUserProductsMock } from "../mocks/products";
 import { ArrowArcRight, ArrowRight } from "phosphor-react-native";
@@ -13,8 +13,6 @@ const Card = ({ product, mock, ...rest }: any) => {
       <HStack
         rounded={"sm"}
         padding={2}
-        borderColor={"#808080"}
-        borderWidth={1}
       >
         <Image
           source={{ uri: OtherUserProductsMock[0].product_images[0].path }}
@@ -56,6 +54,9 @@ export function Orders() {
     <VStack space={4} paddingX={4} safeAreaTop>
       <Header title="Pedidos" backButton />
       <Card product={OtherUserProductsMock[0]} mock={1} onPress={() => navigation.navigate("OrderDetails")} />
+        <Divider />
+      <Card product={OtherUserProductsMock[1]} mock={2} onPress={() => navigation.navigate("OrderDetails")}/>
+      <Divider />
       <Card product={OtherUserProductsMock[1]} mock={2} onPress={() => navigation.navigate("OrderDetails")}/>
     </VStack>
   );

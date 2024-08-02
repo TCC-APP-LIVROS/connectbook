@@ -6,6 +6,11 @@ import { Bag, Bell, MapPin, SignOut, Wallet } from "phosphor-react-native";
 
 const ProfileOptions = [
   {
+    title: "Meu perfil",
+    icon: <MapPin />,
+    screen: "address",
+  },
+  {
     title: "Meus endereços",
     icon: <MapPin />,
     screen: "address",
