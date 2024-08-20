@@ -13,7 +13,7 @@ import { Pen, Trash } from "phosphor-react-native";
 interface AddressCardProps extends IBoxProps {
   onPressDelete: () => void;
   onPressEdit: () => void;
-  card: any;
+  card?: any;
 }
 
 export function PaymentOptionCard({
