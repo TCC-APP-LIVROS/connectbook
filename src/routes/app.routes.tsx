@@ -33,6 +33,8 @@ import { SelectAddress } from "@screens/Checkout/SelectAddress";
 import { Shipping } from "@screens/Checkout/Shipping";
 import { Payment } from "@screens/Checkout/Payment";
 import { FinishedOrder } from "@screens/Checkout/FinishedOrder";
+import { Sales } from "@screens/Sales";
+import { SaleDetails } from "@screens/SaleDetails";
 
 export type AppRoutes = {
   bottomTabsRoutes: { screen: "home" | "myListing" };
@@ -72,6 +74,8 @@ export type AppRoutes = {
   SelectAddress: undefined;
   Shipping: undefined;
   Payment: undefined;
+  Sales: undefined;
+  SaleDetails: undefined;
 };
 
 export type AppNavigationRouteProps = NativeStackNavigationProp<AppRoutes>;
@@ -168,6 +172,8 @@ export function AppRoutes() {
       <Screen name="ShippingMethod" component={ShippingMethod} />
       <Screen name="SelectAddress" component={SelectAddress} />
       <Screen name="Shipping" component={Shipping} />
+      <Screen name="Sales" component={Sales} />
+      <Screen name="SaleDetails" component={SaleDetails} />
       <Screen name="Payment" component={Payment} />
     </Navigator>
   );

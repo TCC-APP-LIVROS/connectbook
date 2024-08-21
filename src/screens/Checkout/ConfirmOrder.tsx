@@ -48,7 +48,7 @@ export function ConfirmOrder() {
           title="Enviar para"
           text="R. Cristóvão Barreto, 1097 - Serraria BrasilFeira de Santana - BA"
           editButtonTitle={"Editar ou escolher outro endereço"}
-          onPress={() => console.log()}
+          onEditPress={() => navigation.navigate("Shipping")}
           // onPress={handleGoToEditAddress}
         />
 
@@ -57,7 +57,7 @@ export function ConfirmOrder() {
           title="Pagar com"
           text="Pix"
           editButtonTitle={"Editar ou escolher outra forma de pagamento"}
-          onPress={() => console.log()}
+          onEditPress={() => navigation.navigate("Payment")}
         />
       </VStack>
 
