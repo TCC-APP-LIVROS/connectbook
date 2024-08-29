@@ -22,12 +22,14 @@ export function Address() {
       <Card
         text="R. Cristóvão Barreto, 1097 - Serraria BrasilFeira de Santana - BA"
         editButtonTitle={"Editar"}
-        onPress={handleGoToEditAddress}
+        onEditPress={handleGoToEditAddress}
       />
       
       <Card
         text="R. Cristóvão Barreto, 1097 - Serraria BrasilFeira de Santana - BA"
         editButtonTitle={"Editar"}
+        onEditPress={handleGoToEditAddress}
+        my={2}
         onPress={() => console.log('Editar')}
       />
     </VStack>

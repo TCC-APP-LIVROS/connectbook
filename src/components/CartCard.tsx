@@ -30,8 +30,6 @@ export function CartCard({ helper, address, shipping, ...rest }: any) {
       backgroundColor={"white"}
       padding={4}
       borderRadius={12}
-      borderWidth={1}
-      borderColor={"#0f0"}
       {...rest}
     >
       <HStack>
