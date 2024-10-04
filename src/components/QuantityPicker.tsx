@@ -21,7 +21,6 @@ export function QuantityPicker({ onChange, quantity }: QuantityPickerProps) {
   return (
     <HStack
       borderRadius={8}
-      borderWidth={1}
       borderColor="gray.200"
       width={50}
       justifyContent={"space-between"}

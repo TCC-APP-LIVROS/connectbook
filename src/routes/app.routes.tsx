@@ -14,8 +14,8 @@ import { Settings } from "@screens/Settings";
 import { Profile } from "@screens/Profile";
 import { Notifications } from "@screens/Notifications";
 import { Reply } from "@screens/Reply";
-import { Address } from "@screens/Address";
-import { EditAddress } from "@screens/EditAddress";
+import { Address } from "@screens/Address/Address";
+import { EditAddress } from "@screens/Address/EditAddress";
 import { PaymentMethods } from "@screens/PaymentMethods";
 import { Orders } from "@screens/Orders";
 import { OrderDetails } from "@screens/OrderDetails";
@@ -27,6 +27,14 @@ import { useAuth } from "@hooks/useAuth";
 import { ListingDTO } from "@dtos/ListingDTO";
 import { UserDTO } from "@dtos/UserDTO";
 import { Cart } from "@screens/Cart";
+import { ConfirmOrder } from "@screens/Checkout/ConfirmOrder";
+import { ShippingMethod } from "@screens/Checkout/ShippingMethod";
+import { SelectAddress } from "@screens/Checkout/SelectAddress";
+import { Shipping } from "@screens/Checkout/Shipping";
+import { Payment } from "@screens/Checkout/Payment";
+import { FinishedOrder } from "@screens/Checkout/FinishedOrder";
+import { Sales } from "@screens/Sales";
+import { SaleDetails } from "@screens/SaleDetails";
 
 export type AppRoutes = {
   bottomTabsRoutes: { screen: "home" | "myListing" };
@@ -60,13 +68,17 @@ export type AppRoutes = {
   OrderDetails: undefined;
   EditPayment: undefined;
   Cart: undefined;
+  ConfirmOrder: undefined;
+  FinishedOrder: undefined;
+  ShippingMethod: undefined;
+  SelectAddress: undefined;
+  Shipping: undefined;
+  Payment: undefined;
+  Sales: undefined;
+  SaleDetails: undefined;
 };
 
 export type AppNavigationRouteProps = NativeStackNavigationProp<AppRoutes>;
-
-function DummySignOutScreen() {
-  return <></>;
-}
 
 function BottomTabsRoutes() {
   const { Navigator, Screen } = createBottomTabNavigator();
@@ -155,6 +167,14 @@ export function AppRoutes() {
       <Screen name="OrderDetails" component={OrderDetails} />
       <Screen name="EditPayment" component={EditPayment} />
       <Screen name="Cart" component={Cart} />
+      <Screen name="ConfirmOrder" component={ConfirmOrder} />
+      <Screen name="FinishedOrder" component={FinishedOrder} />
+      <Screen name="ShippingMethod" component={ShippingMethod} />
+      <Screen name="SelectAddress" component={SelectAddress} />
+      <Screen name="Shipping" component={Shipping} />
+      <Screen name="Sales" component={Sales} />
+      <Screen name="SaleDetails" component={SaleDetails} />
+      <Screen name="Payment" component={Payment} />
     </Navigator>
   );
 }

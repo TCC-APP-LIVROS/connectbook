@@ -37,7 +37,7 @@ const Card = ({ product, mock, ...rest }: any) => {
             fontWeight={"bold"}
           >
             {" "}
-            {mock == 1 ? "Em separação" : "Entregue"}
+            {mock == 1 ? "Aguardando envio" : "Entregue"}
           </Text>
         </VStack>
         <Center flex={1} alignItems={"flex-end"}>
@@ -48,16 +48,16 @@ const Card = ({ product, mock, ...rest }: any) => {
   );
 };
 
-export function Orders() {
+export function Sales() {
   const navigation = useNavigation<AppNavigationRouteProps>();
   return (
     <VStack space={4} paddingX={4} safeAreaTop>
-      <Header title="Pedidos" backButton />
-      <Card product={OtherUserProductsMock[0]} mock={1} onPress={() => navigation.navigate("OrderDetails")} />
+      <Header title="Vendas" backButton />
+      <Card product={OtherUserProductsMock[0]} mock={1} onPress={() => navigation.navigate("SaleDetails")} />
         <Divider />
-      <Card product={OtherUserProductsMock[1]} mock={2} onPress={() => navigation.navigate("OrderDetails")}/>
+      <Card product={OtherUserProductsMock[1]} mock={2} onPress={() => navigation.navigate("SaleDetails")}/>
       <Divider />
-      <Card product={OtherUserProductsMock[1]} mock={2} onPress={() => navigation.navigate("OrderDetails")}/>
+      <Card product={OtherUserProductsMock[1]} mock={2} onPress={() => navigation.navigate("SaleDetails")}/>
     </VStack>
   );
 }

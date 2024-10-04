@@ -2,9 +2,14 @@ import { Header } from "@components/Header";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigationRouteProps } from "@routes/app.routes";
 import { VStack, Text, Box, Avatar, Center, FlatList, Pressable, Divider } from "native-base";
-import { Bag, Bell, MapPin, SignOut, Wallet } from "phosphor-react-native";
+import { Bag, Bell, CurrencyDollar, MapPin, SignOut, Wallet } from "phosphor-react-native";
 
 const ProfileOptions = [
+  {
+    title: "Meu perfil",
+    icon: <MapPin />,
+    screen: "address",
+  },
   {
     title: "Meus endereços",
     icon: <MapPin />,
@@ -19,6 +24,11 @@ const ProfileOptions = [
     title: "Meus pedidos",
     icon: <Bag />,
     screen: "Orders",
+  },
+  {
+    title: "Minhas vendas",
+    icon: <CurrencyDollar />,
+    screen: "Sales",
   },
   {
     title: "Sair",
