@@ -15,7 +15,7 @@ import { Profile } from "@screens/Profile";
 import { Notifications } from "@screens/Notifications";
 import { Reply } from "@screens/Reply";
 import { Address } from "@screens/Address/Address";
-import { EditAddress } from "@screens/Address/EditAddress";
+import { AddressForm } from "@screens/Address/AddressForm";
 import { PaymentMethods } from "@screens/PaymentMethods";
 import { Orders } from "@screens/Orders";
 import { OrderDetails } from "@screens/OrderDetails";
@@ -35,6 +35,7 @@ import { Payment } from "@screens/Checkout/Payment";
 import { FinishedOrder } from "@screens/Checkout/FinishedOrder";
 import { Sales } from "@screens/Sales";
 import { SaleDetails } from "@screens/SaleDetails";
+import { AddressDTO } from "@dtos/AdressDTO";
 
 export type AppRoutes = {
   bottomTabsRoutes: { screen: "home" | "myListing" };
@@ -62,7 +63,10 @@ export type AppRoutes = {
     address?: string;
     helper?: string;
   };
-  editAddress: undefined;
+  editAddress: {
+    mode: "create" | "edit";
+    address?: AddressDTO;
+  };
   paymentMethods: undefined;
   Orders: undefined;
   OrderDetails: undefined;
@@ -161,7 +165,7 @@ export function AppRoutes() {
       <Screen name="reply" component={Reply} />
       <Screen name="profile" component={Profile} />
       <Screen name="address" component={Address} />
-      <Screen name="editAddress" component={EditAddress} />
+      <Screen name="editAddress" component={AddressForm} />
       <Screen name="paymentMethods" component={PaymentMethods} />
       <Screen name="Orders" component={Orders} />
       <Screen name="OrderDetails" component={OrderDetails} />

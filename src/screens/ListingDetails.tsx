@@ -39,6 +39,7 @@ import { OtherUserProductsMock } from "../mocks/products";
 import { Qna } from "@components/QnA";
 import { Input } from "@components/Input";
 import { QuantityPicker } from "@components/QuantityPicker";
+import { ListingDTO } from "@dtos/ListingDTO";
 
 type initialRouteProps = RouteProp<AppRoutes, "listingDetails">;
 
@@ -48,25 +49,21 @@ export function ListingDetails() {
   const toast = useToast();
   const navigation = useNavigation<AppNavigationRouteProps>();
   const [isFetching, setIsFetching] = useState(true);
-  const [listing, setListing] = useState<any>({});
+  const [listing, setListing] = useState<ListingDTO>({} as ListingDTO);
   const route = useRoute<initialRouteProps>();
   const params = route.params;
   const [quantity, setQuantity] = useState(1);
 
-  const isDealer = listing?.user_id === user?.id;
+  // const isDealer = listing?.seller_id == parseInt(user?.id);
+  const isDealer = true;
 
   const carrouselImages =
-    listing.product_images?.map((image: any) => {
-      return {
-        uri: `https://cdn.mos.cms.futurecdn.net/U6NH3kQNCBP3eXcjyyMHHi.jpg`,
-      };
-    }) || [];
+    listing.product?.image;
 
   async function fetchProduct() {
     setIsFetching(true);
     try {
-      // const { data } = await api.get(`/products/${params.id}`);
-      const data = OtherUserProductsMock[0];
+      const { data } = await api.get(`/ads/announcement/${params.id}`);
 
       setListing(data);
     } catch (error) {
@@ -89,12 +86,10 @@ export function ListingDetails() {
   async function handleChangeProductStatus() {
     try {
       setIsFetching(true);
-      // await api.patch(`/products/${params.id}`, {
-      //   is_active: !listing.is_active,
-      // });
+      await api.put(`/ads/announcement/toggle/status/${params.id}`)
       setListing((oldState: any) => ({
         ...oldState,
-        is_active: !oldState.is_active,
+        status: oldState.status == "activated" ? "disabled" : "activated",
       }));
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -141,7 +136,7 @@ export function ListingDetails() {
   function handleGoToCreateListing() {
     navigation.navigate("createListing", {
       mode: "edit",
-      listingId: params.id,
+      listingId: params.id.toString(),
     });
   }
 
@@ -176,13 +171,13 @@ export function ListingDetails() {
             </Header>
 
             <Heading fontSize="xl" fontFamily="heading" color="gray.700">
-              {listing.name}
+              {listing.title}
             </Heading>
           </Box>
 
           <VStack>
-            <Carrousel images={carrouselImages} />
-            {listing.is_active ? null : (
+            <Carrousel images={[{uri: listing.product?.image ?? 'https://media.licdn.com/dms/image/C4D12AQElMcNEch38WQ/article-cover_image-shrink_720_1280/0/1645152091261?e=2147483647&v=beta&t=cBzmomM3hef1Mcpbw5O9Afs_1zABFkeoHv_OoQJPRKE'}]} />
+            {listing.status == "activated" ? null : (
               <>
                 <Box position="absolute" w="full" height="full">
                   <Box
@@ -202,7 +197,7 @@ export function ListingDetails() {
                     textTransform={"uppercase"}
                     top={"50%"}
                   >
-                    {listing?.user?.tel ? "Anúncio desativado" : ""}
+                    {/* {listing?.user?.tel ? "Anúncio desativado" : ""} */}
                   </Heading>
                 </Box>
               </>
@@ -232,8 +227,8 @@ export function ListingDetails() {
             <HStack>
               <Tag
                 mt={4}
-                title={listing.is_new ? "Novo" : "Usado"}
-                bgColor={listing.is_new ? "blue.600" : "gray.600"}
+                title={listing.condition !== "usado" ? "Novo" : "Usado"}
+                bgColor={listing.condition !== "usado" ? "blue.600" : "gray.600"}
               />
             </HStack>
 
@@ -254,7 +249,7 @@ export function ListingDetails() {
                   {Intl.NumberFormat("pt-BR", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
-                  }).format(listing.price / 100)}
+                  }).format(parseFloat(listing.price))}
                 </Heading>
               </Heading>
               <Text fontFamily="heading" color={"gray.600"}>
@@ -270,9 +265,7 @@ export function ListingDetails() {
               <Button
                 type="primary"
                 title="Comprar agora"
-                onPress={() =>
-                  listing.user.tel ? goToWhatsapp(listing.user.tel) : {}
-                }
+                onPress={() => null}
               />
               <Button
                 type="secondary"
@@ -281,17 +274,24 @@ export function ListingDetails() {
                 }
                 mt={2}
                 title="Adicionar ao carrinho"
-                onPress={() =>
-                  listing.user.tel ? goToWhatsapp(listing.user.tel) : {}
-                }
+                onPress={() => null }
               />
             </VStack>
+
+            <Heading
+              mt={6}
+              fontFamily="heading"
+              fontSize="sm"
+              color={"gray.600"}
+            >
+             Descrição:
+            </Heading>
 
             <Text fontSize="sm" color={"gray.600"}>
               {listing.description}
             </Text>
 
-            <Heading
+            {/* <Heading
               mt={6}
               fontFamily="heading"
               fontSize="sm"
@@ -301,7 +301,7 @@ export function ListingDetails() {
               <Text fontFamily="body" color={"gray.600"}>
                 {listing.accept_trade ? "Sim" : "Não"}
               </Text>
-            </Heading>
+            </Heading> */}
 
             {/* <Heading
               mt={6}
@@ -327,11 +327,11 @@ export function ListingDetails() {
             >
               Perguntas e respostas:
             </Heading>
-            <Qna question="Marca" answer={listing.brand} />
+            <Qna question="Marca" answer={""} />
 
             {isDealer && (
               <>
-                {listing.is_active ? (
+                {listing.status == "activated" ? (
                   <Button
                     title="Desativar anúncio"
                     mt="8"

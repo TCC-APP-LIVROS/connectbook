@@ -7,7 +7,7 @@ import { Loading } from "@components/Loading";
 
 export function Routes() {
   const { user, isLoadingUserData } = useAuth();
-
+ 
   if (isLoadingUserData) {
     return <Loading />;
   }

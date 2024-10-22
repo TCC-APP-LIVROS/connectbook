@@ -35,6 +35,7 @@ import { Loading } from "@components/Loading";
 import { ListingDTO } from "@dtos/ListingDTO";
 import { TouchableOpacity } from "react-native";
 import { userProductsMock, OtherUserProductsMock } from "../mocks/products";
+import { parse } from "query-string/base";
 
 type FilterOptions = {
   is_new?: boolean;
@@ -49,8 +50,7 @@ export function Home() {
   const { colors } = useTheme();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclose();
-  const [listings, setListings] = useState<any[]>([]);
-  const [userListings, setUserListings] = useState(0);
+  const [listings, setListings] = useState<ListingDTO[]>([]);
   const [search, setSearch] = useState<string>("");
   const [isFetching, setIsFetching] = useState(false);
   const [filter, setFilter] = useState<FilterOptions>({
@@ -92,32 +92,11 @@ export function Home() {
     navigation.navigate("bottomTabsRoutes", { screen: "myListing" });
   }
 
-  async function fetchUserProducts() {
-    try {
-      // const { data } = await api.get(`/users/products`);
-      const data = userProductsMock
-    
-      setUserListings(data.length);
-    } catch (error) {
-      const isAppError = error instanceof AppError;
-      const title = isAppError
-        ? error.message
-        : "Não foi possível encontrar os produtos do usuário, tente novamente mais tarde";
-
-      toast.show({
-        title,
-        placement: "top",
-        bgColor: "error.500",
-      });
-      setUserListings(0);
-    }
-  }
-
   async function fetchProducts() {
     try {
       setIsFetching(true);
-      // const { data } = await api.get(`/products`);
-      const data = OtherUserProductsMock
+      const { data } = await api.get(`/ads/announcement/list/1?show_user=false&user_id=${user.id}`);
+      // const data = OtherUserProductsMock
       setListings(data);
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -141,8 +120,8 @@ export function Home() {
       setIsFetching(true);
       setIsFetchingFilteredProducts(true);
       const stringifiedFilters = queryString.stringify(filters);
-      // const { data } = await api.get(`/products?${stringifiedFilters}`);
-      const data = OtherUserProductsMock
+      const { data } = await api.get(`ads/announcement/list/1/`);
+      // const data = OtherUserProductsMock
       setListings(data);
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -179,7 +158,6 @@ export function Home() {
   }
   useFocusEffect(
     useCallback(() => {
-      fetchUserProducts();
       fetchProducts();
     }, [])
   );
@@ -205,45 +183,8 @@ export function Home() {
           <Text>Boas vindas,</Text>
           <Text fontFamily="heading">{user.name}</Text>
         </VStack>
-        {/* <Button
-          startIcon={<Icon as={<ShoppingCart color="#fff" size="16" />} />}
-            rounded={"full"}
-          onPress={handleGoToCreateListing}
-        /> */}
         <Icon as={<ShoppingCart color="#000" size="30" />} />
       </HStack>
-
-      {/* <VStack mt="8">
-        <Text color="gray.500">Seus produtos anunciados para venda </Text>
-        <HStack
-          alignItems="center"
-          h="16"
-          mt="4"
-          py="3"
-          px="5"
-          borderRadius="sm"
-          bg="#DFE1EA"
-        >
-          <Box>
-            <Tag color={colors.blue[800]} />
-          </Box>
-          <VStack ml="4" flex={1}>
-            <Text color="gray.600" fontFamily="heading">
-              {userListings}
-            </Text>
-            <Text color="gray.600">Anúncios ativos</Text>
-          </VStack>
-          <Pressable onPress={handleGoToMyListing} _pressed={{ opacity: 0.4 }}>
-            <HStack alignItems="center">
-              <Text color="blue.800" fontFamily="heading" mr="2">
-                Meus anúncios
-              </Text>
-              <Icon as={<ArrowRight color={colors.blue[800]} size="16" />} />
-            </HStack>
-          </Pressable>
-        </HStack>
-      </VStack> */}
-
       <VStack mt="4" flex={1}>
         <Text mb="4" color="gray.500">
           Compre produtos variados
@@ -262,7 +203,7 @@ export function Home() {
         ) : (
           <FlatList
             data={listings}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
             numColumns={2}
             _contentContainerStyle={{
               paddingBottom: 100,
@@ -282,9 +223,9 @@ export function Home() {
                 avatarImage={{
                   uri: `https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg`,
                 }}
-                title={item.name}
-                price={item.price / 100}
-                isNew={item.is_new}
+                title={item.title}
+                price={parseFloat(item.price)}
+                isNew={item.condition === "usado" ? false : true}
               />
             )}
             refreshing={isFetching}

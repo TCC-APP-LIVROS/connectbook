@@ -1,5 +1,6 @@
 {
     "Common" : {
+        "Username": "Username", 
         "E-mail": "E-mail", 
         "Password": "Password",
         "Confirm-password": "Confirm password",

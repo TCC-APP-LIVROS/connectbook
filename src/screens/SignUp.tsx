@@ -30,9 +30,9 @@ import { useAuth } from "@hooks/useAuth";
 import { AppError } from "@utils/AppError";
 
 type FormData = {
-  name: string;
+  username: string;
   email: string;
-  tel: string;
+  phone: string;
   password: string;
   password_confirmation: string;
 };
@@ -44,12 +44,12 @@ type AvatarData = {
 };
 
 const signUpSchema = yup.object({
-  name: yup.string().required("Informe um nome."),
+  username: yup.string().required("Informe um nome."),
   email: yup
     .string()
     .email("Informe um e-mail válido.")
     .required("Informe um e-mail válido."),
-  tel: yup.string().required("Informe um número de telefone."),
+  phone: yup.string().required("Informe um número de telefone."),
   password: yup
     .string()
     .min(6, "Senha deve possuir no mínimo 6 caracteres")
@@ -119,19 +119,20 @@ export function SignUp() {
 
     const formData = new FormData();
 
-    avatar.name = `${form.name}${avatar.name}`.toLocaleLowerCase();
+    avatar.name = `${form.username}${avatar.name}`.toLocaleLowerCase();
     formData.append("avatar", avatar as any);
-    formData.append("name", form.name);
+    formData.append("name", form.username);
     formData.append("email", form.email);
-    formData.append("tel", form.tel);
+    formData.append("phone", form.phone);
     formData.append("password", form.password);
 
     try {
-      await api.post("/users", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      // await api.post("/auths/register/", formData, {
+      //   headers: {
+      //     "Content-Type": "multipart/form-data",
+      //   },
+      // });
+      await api.post("/auths/register/", {...form, photo: "", address: null, last_name: ""});
 
       await SignIn(form.email, form.password);
     } catch (error: any) {
@@ -175,14 +176,14 @@ export function SignUp() {
           </Pressable>
           <Controller
             control={control}
-            name="name"
+            name="username"
             render={({ field: { onChange, value } }) => (
               <Input
                 mb="4"
                 placeholder={t("Common:Name")}
                 value={value}
                 onChangeText={onChange}
-                errorMessage={errors.name?.message}
+                errorMessage={errors.username?.message}
               />
             )}
           />
@@ -201,14 +202,14 @@ export function SignUp() {
           />
           <Controller
             control={control}
-            name="tel"
+            name="phone"
             render={({ field: { onChange, value } }) => (
               <Input
                 mb="4"
                 placeholder={t("Common:Mobile-number")}
                 value={value}
                 onChangeText={onChange}
-                errorMessage={errors.tel?.message}
+                errorMessage={errors.phone?.message}
               />
             )}
           />

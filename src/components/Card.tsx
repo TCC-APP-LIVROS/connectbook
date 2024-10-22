@@ -1,12 +1,23 @@
-import { Text, Divider, Pressable, Box, IPressableProps } from "native-base";
+import {
+  Text,
+  Divider,
+  Pressable,
+  Box,
+  IPressableProps,
+  HStack,
+  useTheme,
+} from "native-base";
 import { PressableProps } from "react-native";
 import { ReactNode } from "react";
+import { Trash } from "phosphor-react-native";
 
 interface AddressCardProps extends IPressableProps {
   text?: string;
   title?: string;
-  onEditPress?: () => void;
   editButtonTitle?: string;
+  deleteButtonTitle?: string;
+  onEditPress?: () => void;
+  onDeletePress?: () => void;
   children?: ReactNode;
 }
 
@@ -14,12 +25,14 @@ export function Card({
   title,
   text,
   onEditPress,
+  onDeletePress,
   editButtonTitle,
+  deleteButtonTitle,
   children,
   ...rest
 }: AddressCardProps) {
   const showEditButton = !!editButtonTitle;
-
+  const colors = useTheme().colors;
   return (
     <Pressable
       backgroundColor={"white"}
@@ -33,22 +46,31 @@ export function Card({
         </Text>
       )}
 
-      {(!showEditButton && title) && <Divider marginY={4} />}
+      {!showEditButton && title && <Divider marginY={4} />}
 
       {text && <Text>{text}</Text>}
 
       {children}
       {showEditButton && <Divider marginY={4} />}
 
-      {editButtonTitle && <Box>
+      <HStack width={"100%"} justifyContent={"space-between"}>
         {editButtonTitle && (
-          <Pressable onPress={onEditPress}>
-            <Text color={"blue.600"} fontFamily={"heading"}>
-              {editButtonTitle}
-            </Text>
-          </Pressable>
+          <Box>
+            <Pressable onPress={onEditPress}>
+              <Text color={"blue.600"} fontFamily={"heading"}>
+                {editButtonTitle}
+              </Text>
+            </Pressable>
+          </Box>
         )}
-      </Box>}
+        {deleteButtonTitle && (
+          <Box>
+            <Pressable onPress={onDeletePress}>
+              <Trash color={colors.red[600]}  />
+            </Pressable>
+          </Box>
+        )}
+      </HStack>
     </Pressable>
   );
 }

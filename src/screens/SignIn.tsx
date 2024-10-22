@@ -15,12 +15,12 @@ import { useState } from "react";
 import { AppError } from "@utils/AppError";
 
 type FormData = {
-  email: string;
+  username: string;
   password: string;
 };
 
 const signInSchema = yup.object({
-  email: yup.string().required("Informe o e-mail."),
+  username: yup.string().required("Informe o nome de usuário."),
   password: yup.string().required("Informe a senha."),
 });
 
@@ -38,14 +38,13 @@ export function SignIn() {
     resolver: yupResolver(signInSchema),
   });
 
-  async function handleSignIn({ email, password }: FormData) {
+  async function handleSignIn({ username, password }: FormData) {
     try {
       setIsSubmitting(true);
       
-      await SignIn(email, password);
+      await SignIn(username, password);
     
     } catch (error) {
-    
       const isAppError = error instanceof AppError;
       const ErrorMessage = isAppError
         ? error.message
@@ -84,13 +83,13 @@ export function SignIn() {
           </Text>
           <Controller
             control={control}
-            name="email"
+            name="username"
             render={({ field: { onChange, value } }) => (
               <Input
                 value={value}
                 onChangeText={onChange}
-                placeholder={t("Common:E-mail")}
-                errorMessage={errors.email?.message}
+                placeholder={t("Common:Username")}
+                errorMessage={errors.username?.message}
                 mb="4"
               />
             )}

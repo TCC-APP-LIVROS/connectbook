@@ -29,68 +29,114 @@ import { api } from "@services/api";
 import { Loading } from "@components/Loading";
 
 const createListingSchema = yup.object({
-  name: yup.string().required("Informe o nome."),
-  description: yup.string().required("Informe a descrição do produto"),
-  is_new: yup.boolean().required(),
-  price: yup.number().required("Informe o valor."),
-  accept_trade: yup.boolean().required(),
-  payment_methods: yup
-    .array(yup.string().oneOf(allPaymentMethods))
-    .min(1, "Preencha ao menos um método de pagamento")
-    .required(),
+  receiver_name: yup.string().required("Informe o nome."),
+  cep: yup.string().required("Informe o CEP."),
+  street: yup.string().required("Informe a rua."),
+  neighborhood: yup.string().required("Informe o bairro."),
+  city: yup.string().required("Informe a cidade."),
+  state: yup.string().required("Informe o estado."),
+  number: yup.string().required("Informe o número."),
+  complement: yup.string(),
+  nickname: yup.string().required("Informe como deseja chamar esse endereço.")
 });
 
 type NewListingFormProps = yup.InferType<typeof createListingSchema>;
 
-type initialRouteProps = RouteProp<AppRoutes, "createListing">;
+type initialRouteProps = RouteProp<AppRoutes, "editAddress">;
 
-export function EditAddress() {
+export function AddressForm() {
   const [productImages, setProductImages] = useState([] as any[]);
   const toast = useToast();
   const navigation = useNavigation<AppNavigationRouteProps>();
   const router = useRoute<initialRouteProps>();
   const { user } = useAuth();
-  const [isLoadingListing, setIsLoadingListing] = useState(false);
-  const [photoIsLoading, setPhotoIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     control,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm<NewListingFormProps>({
-    resolver: yupResolver(createListingSchema),
-    defaultValues: {
-      is_new: true,
-      accept_trade: false,
-      payment_methods: allPaymentMethods,
-    },
+    resolver: yupResolver(createListingSchema)
   });
-
 
   function handleCancel() {
     navigation.goBack();
   }
 
   async function onSubmit(form: NewListingFormProps) {
-    if (productImages.length === 0) {
-      return toast.show({
-        title: "Selecione ao menos uma imagem",
+    if(router.params.mode === "edit") {
+      editAddress(form);
+    }
+    if(router.params.mode === "create") {
+      createAddress(form);
+    }
+  }
+
+  async function editAddress(form: NewListingFormProps) {
+    try {
+      setIsLoading(true);
+      await api.put(`/auths/user_address_update/${router.params.address?.id}/`, form);
+
+      toast.show({
+        title: "Endereço atuallizado com sucesso",
+        placement: "top",
+        bgColor: "success.500",
+      });
+
+      navigation.goBack();
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não foi possível criar o endereço, tente novamente mais tarde";
+
+      toast.show({
+        title,
         placement: "top",
         bgColor: "error.500",
       });
+    } finally {
+      setIsLoading(false);
     }
-    navigation.navigate("previewListing", {
-      mode: router.params.mode,
-      listingId: router.params.listingId,
-      seller: user,
-      product: form as ListingDTO,
-      productImages: productImages,
-    });
   }
+  
+  async function createAddress(form: NewListingFormProps) {
+    try {
+      setIsLoading(true);
+      await api.post("/auths/user_address_register/", {
+        address: form,
+        user_id: user.id,
+      });
 
-  if (isLoadingListing) {
-    return <Loading />;
+      toast.show({
+        title: "Endereço criado com sucesso",
+        placement: "top",
+        bgColor: "success.500",
+      });
+
+      navigation.goBack();
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não foi possível criar o endereço, tente novamente mais tarde";
+
+      toast.show({
+        title,
+        placement: "top",
+        bgColor: "error.500",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
+  
+  useEffect(() => {
+    if (router.params.mode === "edit" && router.params.address) {
+      reset(router.params.address);
+    }
+  }, [router.params.mode, router.params.address, reset]);
 
   return (
     <VStack flex={1} safeAreaTop bg="gray.200">
@@ -108,21 +154,21 @@ export function EditAddress() {
           </Heading>
           <Controller
             control={control}
-            name="name"
+            name="receiver_name"
             render={({ field: { onChange, value } }) => (
               <Input
                 placeholder="Nome completo"
                 onChangeText={onChange}
-                value={value}
+                value={value?.toString()}
                 mt="4"
                 mb="4"
-                errorMessage={errors.name?.message}
+                errorMessage={errors.receiver_name?.message}
               />
             )}
           />
            <Controller
             control={control}
-            name="name"
+            name="cep"
             render={({ field: { onChange, value } }) => (
               <Input
                 placeholder="CEP"
@@ -130,13 +176,13 @@ export function EditAddress() {
                 value={value}
                 mt="4"
                 mb="4"
-                errorMessage={errors.name?.message}
+                errorMessage={errors.cep?.message}
               />
             )}
           />
           <Controller
             control={control}
-            name="name"
+            name="street"
             render={({ field: { onChange, value } }) => (
               <Input
                 placeholder="Rua"
@@ -144,13 +190,13 @@ export function EditAddress() {
                 value={value}
                 mt="4"
                 mb="4"
-                errorMessage={errors.name?.message}
+                errorMessage={errors.street?.message}
               />
             )}
           />
           <Controller
             control={control}
-            name="name"
+            name="neighborhood"
             render={({ field: { onChange, value } }) => (
               <Input
                 placeholder="Bairro"
@@ -158,13 +204,13 @@ export function EditAddress() {
                 value={value}
                 mt="4"
                 mb="4"
-                errorMessage={errors.name?.message}
+                errorMessage={errors.neighborhood?.message}
               />
             )}
           />
           <Controller
             control={control}
-            name="name"
+            name="state"
             render={({ field: { onChange, value } }) => (
               <Input
                 placeholder="Estado"
@@ -172,13 +218,13 @@ export function EditAddress() {
                 value={value}
                 mt="4"
                 mb="4"
-                errorMessage={errors.name?.message}
+                errorMessage={errors.state?.message}
               />
             )}
           />
           <Controller
             control={control}
-            name="name"
+            name="city"
             render={({ field: { onChange, value } }) => (
               <Input
                 placeholder="Cidade"
@@ -186,13 +232,13 @@ export function EditAddress() {
                 value={value}
                 mt="4"
                 mb="4"
-                errorMessage={errors.name?.message}
+                errorMessage={errors.city?.message}
               />
             )}
           />
           <Controller
             control={control}
-            name="name"
+            name="number"
             render={({ field: { onChange, value } }) => (
               <Input
                 placeholder="Numero"
@@ -200,13 +246,13 @@ export function EditAddress() {
                 value={value}
                 mt="4"
                 mb="4"
-                errorMessage={errors.name?.message}
+                errorMessage={errors.number?.message}
               />
             )}
           />
           <Controller
             control={control}
-            name="name"
+            name="complement"
             render={({ field: { onChange, value } }) => (
               <Input
                 placeholder="Complemento"
@@ -214,13 +260,13 @@ export function EditAddress() {
                 value={value}
                 mt="4"
                 mb="4"
-                errorMessage={errors.name?.message}
+                errorMessage={errors.complement?.message}
               />
             )}
           />
           <Controller
             control={control}
-            name="name"
+            name="nickname"
             render={({ field: { onChange, value } }) => (
               <Input
                 placeholder="Telefone para contato"
@@ -228,7 +274,7 @@ export function EditAddress() {
                 value={value}
                 mt="4"
                 mb="4"
-                errorMessage={errors.name?.message}
+                errorMessage={errors.nickname?.message}
               />
             )}
           />

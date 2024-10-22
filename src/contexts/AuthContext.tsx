@@ -32,14 +32,25 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
   const [user, setUser] = useState<UserDTO>(userMock as any);
   const [isLoadingUserData, setIsLoadingUserData] = useState(false);
 
-  async function localUserAndAuthTokenSave(
+  // async function localUserAndAuthTokenSave(
+  //   user: UserDTO,
+  //   token: string,
+  //   refresh_token: string
+  // ) {
+  //   try {
+  //     await storageUserSave(user);
+  //     await storageAuthTokenSave(token, refresh_token);
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
+  // substituto do localUserAndAuthTokenSave. não estamos usando JWT
+  async function localUserSave(
     user: UserDTO,
-    token: string,
-    refresh_token: string
   ) {
     try {
       await storageUserSave(user);
-      await storageAuthTokenSave(token, refresh_token);
     } catch (error) {
       throw error;
     }
@@ -49,19 +60,19 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     api.defaults.headers.authorization = `Bearer ${token}`;
     setUser(userData);
   }
+  
+  // substituto do userAndTokenUpdate. não estamos usando JWT
+  async function userUpdate(userData: UserDTO,) {
+    setUser(userData);
+  }
 
-  async function SignIn(email: string, password: string) {
+  async function SignIn(username: string, password: string) {
     try {
-      // const { data } = await api.post("/sessions", { email, password });
-      const data = userMock
-      console.log(data)
-      if (data.user && data.token && data.refresh_token) {
-        await localUserAndAuthTokenSave(
-          data.user,
-          data.token,
-          data.refresh_token
-        );
-        await userAndTokenUpdate(data.user, data.token);
+      const { data } = await api.post<UserDTO>("/auths/login/", { username, password });
+      
+      if (data.id) {
+        await localUserSave(data);
+        await userUpdate(data);
       }
     } catch (error) {
       throw error;

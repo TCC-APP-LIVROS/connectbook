@@ -18,7 +18,7 @@ export function MyListing() {
   const filterOptions = ["Todos", "Ativos", "Inativos"];
   const [selectedFilter, setSelectedFilter] = useState(filterOptions[0]);
   const [isFetching, setIsFetching] = useState(false);
-  const [listings, setListings] = useState<any[]>([]);
+  const [listings, setListings] = useState<ListingDTO[]>([]);
   const { user } = useAuth();
   const toast = useToast();
   const navigation = useNavigation<AppNavigationRouteProps>();
@@ -27,9 +27,9 @@ export function MyListing() {
     if (selectedFilter === "Todos") {
       return true; // Retorna todos os produtos
     } else if (selectedFilter === "Ativos") {
-      return item.is_active === true; // Retorna apenas produtos ativos
+      return item.status === "activated"; // Retorna apenas produtos ativos
     } else if (selectedFilter === "Inativos") {
-      return item.is_active === false; // Retorna apenas produtos inativos
+      return item.status === "disabled"; // Retorna apenas produtos inativos
     }
     return false; // Filtro inválido, não retorna nenhum produto
   });
@@ -44,8 +44,8 @@ export function MyListing() {
   async function fetchProducts() {
     try {
       setIsFetching(true);
-      // const { data } = await api.get(`/users/products`);
-      const data = userProductsMock
+      const { data } = await api.get(`/ads/announcement/list/1?user=2`);
+
       setListings(data);
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -95,7 +95,7 @@ export function MyListing() {
         ) : (
           <FlatList
             data={filteredProducts}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
             numColumns={2}
             _contentContainerStyle={{
               paddingBottom: 100,
@@ -111,10 +111,10 @@ export function MyListing() {
                 avatarImage={{
                   uri: `https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg`,
                 }}
-                title={item.name}
-                price={item.price/100}
-                isNew={item.is_new}
-                isActive={item.is_active}
+                title={item.title}
+                price={parseFloat(item.price)}
+                isNew={item.condition !== "usado"}
+                isActive={item.status === "activated"}
               />
             )}
             columnWrapperStyle={{

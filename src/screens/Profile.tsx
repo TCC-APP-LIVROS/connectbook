@@ -1,4 +1,5 @@
 import { Header } from "@components/Header";
+import { useAuth } from "@hooks/useAuth";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigationRouteProps } from "@routes/app.routes";
 import { VStack, Text, Box, Avatar, Center, FlatList, Pressable, Divider } from "native-base";
@@ -39,6 +40,7 @@ const ProfileOptions = [
 
 export function Profile() {
     const navigation = useNavigation<AppNavigationRouteProps>();
+    const { signOut } = useAuth();
   return (
     <VStack space={4} paddingX={4} safeAreaTop>
       <Header title="Perfil" backButton/>
@@ -68,8 +70,14 @@ export function Profile() {
             //@ts-ignore
             gap={4}
             width={"100%"}
-            //@ts-ignore
-            onPress={() => navigation.navigate(item.screen)}
+            onPress={() => {
+              if(item.title === "Sair") {
+                signOut();
+              } else{
+                //@ts-ignore
+                navigation.navigate(item.screen)
+              }
+            }}
           >
             {item.icon}
             <Text fontSize={"lg"}>{item.title}</Text>

@@ -169,7 +169,7 @@ export function CreateListing() {
         const photos = photosSelected.assets.map((photo) => {
           const fileExtension = photo.uri.split(".").pop();
           return {
-            name: `${user.name}.${fileExtension}`.toLowerCase(),
+            name: `${user.username}.${fileExtension}`.toLowerCase(),
             uri: photo.uri,
             type: `${photo.type}/${fileExtension}`,
           };

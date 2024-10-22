@@ -1,6 +1,6 @@
 export type UserDTO = {
     id: string;
+    profile_uuid: string;
     name: string;
-    email: string;
-    avatar: string;
+    photo: string;
 };

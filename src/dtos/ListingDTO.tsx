@@ -1,11 +1,21 @@
-import { PaymentMethod } from "@dtos/PaymentMethodsDTO"; 
+import { PaymentMethod } from "@dtos/PaymentMethodsDTO";
 export type ListingDTO = {
-    id? : string;
-    user_id?: string;
+  id: number;
+  title: string;
+  description: string;
+  condition: string;
+  price: string;
+  product_id: number;
+  product?: {
+    id: 1;
     name: string;
-    description: string;
-    is_new: boolean;
-    price: number;
-    accept_trade: boolean;
-    payment_methods: PaymentMethod[];
-}
+    study_area: string;
+    published_at: number;
+    author: string;
+    image: string | null;
+  };
+  seller_id: number;
+  status: "activated" | "disabled";
+  created: Date;
+  updated: Date;
+};
