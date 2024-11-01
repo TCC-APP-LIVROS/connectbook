@@ -132,9 +132,9 @@ export function SignUp() {
       //     "Content-Type": "multipart/form-data",
       //   },
       // });
-      await api.post("/auths/register/", {...form, photo: "", address: null, last_name: ""});
-
-      await SignIn(form.email, form.password);
+      const a = await api.post("/auths/register/", {...form, photo: "", address: null, last_name: ""});
+      console.log(a)
+      await SignIn(form.username, form.password);
     } catch (error: any) {
       const isAppError = error instanceof AppError;
       const ErrorMessage = isAppError

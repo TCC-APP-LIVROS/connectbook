@@ -24,7 +24,7 @@ import { EditPayment } from "@screens/EditPayment";
 import { Bell, House, SignOut, ShoppingCart, Tag } from "phosphor-react-native";
 import { useTheme } from "native-base";
 import { useAuth } from "@hooks/useAuth";
-import { ListingDTO } from "@dtos/ListingDTO";
+import { createListingDTO, ListingDTO } from "@dtos/ListingDTO";
 import { UserDTO } from "@dtos/UserDTO";
 import { Cart } from "@screens/Cart";
 import { ConfirmOrder } from "@screens/Checkout/ConfirmOrder";
@@ -48,7 +48,7 @@ export type AppRoutes = {
     mode: "create" | "edit";
     listingId?: string;
     seller: UserDTO;
-    product: ListingDTO;
+    product: createListingDTO;
     productImages: {
       name: string;
       uri: string;

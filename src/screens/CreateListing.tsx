@@ -35,15 +35,17 @@ import { api } from "@services/api";
 import { Loading } from "@components/Loading";
 
 const createListingSchema = yup.object({
+  //livro
+  title: yup.string().required("Informe o nome."),
+  study_area: yup.string().required("Informe a área de estudo."),
+  published_at: yup.string().required("Informe a área de estudo."),
+  author: yup.string().required("Informe a área de estudo."),
+  //anuncio
   name: yup.string().required("Informe o nome."),
   description: yup.string().required("Informe a descrição do produto"),
   is_new: yup.boolean().required(),
   price: yup.number().required("Informe o valor."),
-  accept_trade: yup.boolean().required(),
-  payment_methods: yup
-    .array(yup.string().oneOf(allPaymentMethods))
-    .min(1, "Preencha ao menos um método de pagamento")
-    .required(),
+  quantity: yup.number().required("Informe a quantidade."),
 });
 
 type NewListingFormProps = yup.InferType<typeof createListingSchema>;
@@ -67,15 +69,8 @@ export function CreateListing() {
     resolver: yupResolver(createListingSchema),
     defaultValues: {
       is_new: true,
-      accept_trade: false,
-      payment_methods: allPaymentMethods,
+      quantity: 1
     },
-  });
-
-  // future use the i18n to translate the payment methods title
-  // ex { title: t(`paymentMethod:${payment}`), value: payment }
-  const PaymentOptions = allPaymentMethods.map((payment) => {
-    return { title: payment, value: payment };
   });
 
   async function fetchListingDataById() {
@@ -106,8 +101,6 @@ export function CreateListing() {
         description: data.description,
         is_new: data.is_new,
         price: data.price / 100,
-        accept_trade: data.accept_trade,
-        payment_methods,
       });
     } catch (error) {
       toast.show({
@@ -130,8 +123,8 @@ export function CreateListing() {
       const photosSelected = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 1,
-        orderedSelection: true,
-        allowsMultipleSelection: true,
+        // orderedSelection: true,
+        allowsMultipleSelection: false,
       });
 
       if (photosSelected.canceled) {
@@ -140,7 +133,7 @@ export function CreateListing() {
 
       if (photosSelected.assets.length + productImages.length > 6) {
         return toast.show({
-          title: "Selecione no máximo 6 imagens",
+          title: "Selecione no máximo 1 imagem",
           placement: "top",
           bgColor: "error.500",
         });
@@ -169,7 +162,7 @@ export function CreateListing() {
         const photos = photosSelected.assets.map((photo) => {
           const fileExtension = photo.uri.split(".").pop();
           return {
-            name: `${user.username}.${fileExtension}`.toLowerCase(),
+            name: `${user.name}.${fileExtension}`.toLowerCase(),
             uri: photo.uri,
             type: `${photo.type}/${fileExtension}`,
           };
@@ -202,11 +195,13 @@ export function CreateListing() {
         bgColor: "error.500",
       });
     }
+    console.log(form);
     navigation.navigate("previewListing", {
       mode: router.params.mode,
       listingId: router.params.listingId,
       seller: user,
-      product: form as ListingDTO,
+      // product: form as ListingDTO,
+      product: form as any,
       productImages: productImages,
     });
   }
@@ -233,10 +228,7 @@ export function CreateListing() {
           <Heading fontFamily="heading" fontSize="md" color="gray.600">
             Criar anúncio
           </Heading>
-          <Text color="gray.500">
-            Escolha até 3 imagens para mostrar o quando o seu produto é
-            incrível!
-          </Text>
+          <Text color="gray.500">Escolha a melhor imagem do seu livro!</Text>
           <HStack mt="4" space="2">
             <FlatList
               horizontal
@@ -261,7 +253,7 @@ export function CreateListing() {
         </VStack>
         <VStack mt="8">
           <Heading fontFamily="heading" fontSize="md" color="gray.600">
-            Sobre o produto
+            Detalhes do anúncio
           </Heading>
           <Controller
             control={control}
@@ -286,6 +278,68 @@ export function CreateListing() {
                 onChangeText={onChange}
                 value={value}
                 errorMessage={errors.description?.message}
+              />
+            )}
+          />
+
+          <Heading fontFamily="heading" fontSize="md" color="gray.600">
+            Detalhes do produto
+          </Heading>
+
+          <Controller
+            control={control}
+            name="title"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="Titulo do livro"
+                onChangeText={onChange}
+                value={value}
+                mt="4"
+                mb="4"
+                errorMessage={errors.name?.message}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="author"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="Autor do livro"
+                onChangeText={onChange}
+                value={value}
+                mt="4"
+                mb="4"
+                errorMessage={errors.name?.message}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="study_area"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="Área de estudo"
+                onChangeText={onChange}
+                value={value}
+                mt="4"
+                mb="4"
+                errorMessage={errors.name?.message}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="published_at"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="Ano de publicação"
+                onChangeText={onChange}
+                value={value}
+                mt="4"
+                mb="4"
+                errorMessage={errors.name?.message}
               />
             )}
           />
@@ -331,48 +385,23 @@ export function CreateListing() {
               />
             )}
           />
-        </VStack>
-
-        <VStack mt="8" alignItems="flex-start">
-          <Heading fontFamily="heading" fontSize="md" color="gray.600">
-            Aceita troca?
+           <Heading fontFamily="heading" fontSize="md" color="gray.600">
+           Quantidade
           </Heading>
           <Controller
             control={control}
-            name="accept_trade"
+            name="quantity"
             render={({ field: { onChange, value } }) => (
-              <Switch
-                justifyContent="center"
-                alignItems={"center"}
-                mt="3"
-                onToggle={() => onChange(!value)}
-                value={value}
+              <Input
+                placeholder="Quantidade do produto"
+                onChangeText={onChange}
+                value={value?.toString()}
+                mt="4"
+                mb="4"
+                errorMessage={errors.quantity?.message}
               />
             )}
           />
-        </VStack>
-
-        <VStack mt="8">
-          <Heading fontFamily="heading" fontSize="md" color="gray.600" mb="3">
-            Meios de pagamento aceitos
-          </Heading>
-          <Controller
-            name="payment_methods"
-            control={control}
-            defaultValue={[]}
-            render={({ field: { onChange, value } }) => (
-              <Checkbox
-                options={PaymentOptions}
-                value={value as PaymentMethod[]}
-                onChange={onChange}
-              />
-            )}
-          />
-          {errors.payment_methods && (
-            <Text color="#dc2626" fontSize="12">
-              {errors.payment_methods.message}
-            </Text>
-          )}
         </VStack>
         <Box h="10" />
       </ScrollView>

@@ -4,9 +4,10 @@ import { Minus, Plus } from "phosphor-react-native";
 type QuantityPickerProps = {
   onChange: (quantity: number) => void;
   quantity: number;
+  maxQuantity: number;
 };
 
-export function QuantityPicker({ onChange, quantity }: QuantityPickerProps) {
+export function QuantityPicker({ onChange, quantity, maxQuantity }: QuantityPickerProps) {
     const { colors } = useTheme();
   function onMinusPress() {
     if (quantity > 1) {
@@ -15,6 +16,7 @@ export function QuantityPicker({ onChange, quantity }: QuantityPickerProps) {
   }
 
   function onPlusPress() {
+    if(quantity >= maxQuantity) return;
     onChange(quantity + 1);
   }
 

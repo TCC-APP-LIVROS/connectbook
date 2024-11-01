@@ -22,6 +22,7 @@ import { AppNavigationRouteProps, AppRoutes } from "@routes/app.routes";
 import { api } from "@services/api";
 import { AppError } from "@utils/AppError";
 import { useState } from "react";
+import { useAuth } from "@hooks/useAuth";
 
 type initialRouteProps = RouteProp<AppRoutes, "previewListing">;
 
@@ -30,56 +31,53 @@ export function PreviewListing() {
   const navigation = useNavigation<AppNavigationRouteProps>();
   const route = useRoute<initialRouteProps>();
   const toast = useToast();
+  const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { mode, listingId, product, productImages, seller } = route.params;
 
   async function handleCreate() {
+
     try {
-      // const response = await api.post("/products", {
-      //   ...product,
-      //   price: product.price * 100,
-      // });
-      
-      
-      // const productImagesUploadForm = new FormData();
-      
+      const response = await api.post("ads/announcement/create/total/", {
+        ...product,
+        condition: product.is_new ? "Novo" : "Usado",
+        status: "activated",
+        seller_id: user.id,
+      });
+
+      const productImagesUploadForm = new FormData();
+
       // productImagesUploadForm.append("product_id", response.data.id);
       // productImages.forEach((image, index) => {
-      //   productImagesUploadForm.append('images', image as any);
+      //   productImagesUploadForm.append("images", image as any);
       // });
 
-      // await api.post(
-      //   `/products/images`,
-      //   productImagesUploadForm,
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   }
-      // );
+      // await api.post(`/products/images`, productImagesUploadForm, {
+      //   headers: {
+      //     "Content-Type": "multipart/form-data",
+      //   },
+      // });
 
-      navigation.navigate("bottomTabsRoutes", {screen: "myListing"});
+      navigation.navigate("bottomTabsRoutes", { screen: "myListing" });
       return toast.show({
         title: "Anúncio publicado com sucesso!",
         bgColor: "success.500",
         placement: "top",
       });
-
     } catch (error) {
       const isAppError = error instanceof AppError;
       const ErrorMessage = isAppError
         ? error.message
         : "Não foi possível Publicar o anúncio.\nTente novamente.";
-    
-        toast.show({
+
+      toast.show({
         title: ErrorMessage,
         bgColor: "error.500",
         placement: "top",
-    
       });
     }
   }
-  
+
   async function handleUpdate() {
     try {
       // setIsSubmitting(true);
@@ -87,10 +85,9 @@ export function PreviewListing() {
       //   ...product,
       //   price: product.price * 100,
       // });
-      
-      
+
       // const productImagesUploadForm = new FormData();
-      
+
       // productImagesUploadForm.append("product_id", listingId as string);
       // productImages.forEach((image, index) => {
       //   productImagesUploadForm.append('images', image as any);
@@ -105,24 +102,22 @@ export function PreviewListing() {
       //   }
       // );
 
-      navigation.navigate("bottomTabsRoutes", {screen: "myListing"});
+      navigation.navigate("bottomTabsRoutes", { screen: "myListing" });
       return toast.show({
         title: "Anúncio publicado com sucesso!",
         bgColor: "success.500",
         placement: "top",
       });
-
     } catch (error) {
       const isAppError = error instanceof AppError;
       const ErrorMessage = isAppError
         ? error.message
         : "Não foi possível Publicar o anúncio.\nTente novamente.";
-    
-        toast.show({
+
+      toast.show({
         title: ErrorMessage,
         bgColor: "error.500",
         placement: "top",
-    
       });
     } finally {
       setIsSubmitting(false);
@@ -130,10 +125,10 @@ export function PreviewListing() {
   }
 
   async function handlePublish() {
-    if(mode === "create")  {
-      handleCreate()
-    } else if(mode === "edit") {
-      handleUpdate()
+    if (mode === "create") {
+      handleCreate();
+    } else if (mode === "edit") {
+      handleUpdate();
     } else {
       return toast.show({
         title: "Não foi possível Publicar o anúncio.\nTente novamente.",
@@ -167,7 +162,9 @@ export function PreviewListing() {
       >
         <HStack>
           <Avatar
-            source={{ uri: `https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg` }}
+            source={{
+              uri: `https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg`,
+            }}
             size={6}
           />
           <Text fontSize="sm" color="gray.700" ml="2">
@@ -197,32 +194,42 @@ export function PreviewListing() {
           >
             R${" "}
             <Heading fontSize="xl" fontFamily="heading" color="blue.600">
-            {Intl.NumberFormat('pt-BR',{ minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(product.price)}
+              {Intl.NumberFormat("pt-BR", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(product.price)}
             </Heading>
           </Heading>
         </VStack>
 
-        <Text fontSize="sm" color={"gray.600"}>
-          {product.description}
-        </Text>
+        <Heading mt={2} fontFamily="heading" fontSize="md" color={"gray.600"}>
+          {product.title}
+        </Heading>
 
-        <Heading mt={6} fontFamily="heading" fontSize="sm" color={"gray.600"}>
-          Aceita troca?{"  "}
+        <Heading mt={4} fontFamily="heading" fontSize="sm" color={"gray.600"}>
+          Autor:{" "}
           <Text fontFamily="body" color={"gray.600"}>
-            {product.accept_trade ? "Sim" : "Não"}
+            {product.author}
+          </Text>
+        </Heading>
+        <Heading mt={2} fontFamily="heading" fontSize="sm" color={"gray.600"}>
+          Publicado:{" "}
+          <Text fontFamily="body" color={"gray.600"}>
+            {product.published_at}
+          </Text>
+        </Heading>
+        <Heading mt={2} fontFamily="heading" fontSize="sm" color={"gray.600"}>
+          Área de estudo:{" "}
+          <Text fontFamily="body" color={"gray.600"}>
+            {product.study_area}
           </Text>
         </Heading>
 
-        <Heading mt={6} fontFamily="heading" fontSize="sm" color={"gray.600"}>
-          Meios de pagamento
-        </Heading>
-        {product.payment_methods.map((payment) => (
-          <PaymentMethod
-            key={payment}
-            payment={payment}
-            color={colors.gray[700]}
-          />
-        ))}
+        <Box h="4" />
+        <Text fontFamily="body" color={"gray.600"}>
+          {product.description}
+        </Text>
+
         <Box h="10" />
       </ScrollView>
       <HStack

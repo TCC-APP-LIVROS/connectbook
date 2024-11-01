@@ -57,8 +57,7 @@ export function ListingDetails() {
   // const isDealer = listing?.seller_id == parseInt(user?.id);
   const isDealer = true;
 
-  const carrouselImages =
-    listing.product?.image;
+  const carrouselImages = listing.product?.image;
 
   async function fetchProduct() {
     setIsFetching(true);
@@ -86,7 +85,7 @@ export function ListingDetails() {
   async function handleChangeProductStatus() {
     try {
       setIsFetching(true);
-      await api.put(`/ads/announcement/toggle/status/${params.id}`)
+      await api.put(`/ads/announcement/toggle/status/${params.id}`);
       setListing((oldState: any) => ({
         ...oldState,
         status: oldState.status == "activated" ? "disabled" : "activated",
@@ -143,6 +142,34 @@ export function ListingDetails() {
   async function goToWhatsapp(tel: string) {
     await WebBrowser.openBrowserAsync(`https://wa.me/${tel}`);
   }
+
+  async function addCart(id: number) {
+    try {
+      await api.post(`/cart/add/`, {
+        client_id: user.id,
+        product_id: id,
+        quantity: quantity
+    });
+
+      toast.show({
+        title: "Produto adicionado ao carrinho",
+        placement: "top",
+        bgColor: "success.500",
+      });
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não foi possível adicionar ao carrinho, tente novamente mais tarde";
+
+      toast.show({
+        title,
+        placement: "top",
+        bgColor: "error.500",
+      });
+    }
+  }
+
   useFocusEffect(
     useCallback(() => {
       fetchProduct();
@@ -176,7 +203,15 @@ export function ListingDetails() {
           </Box>
 
           <VStack>
-            <Carrousel images={[{uri: listing.product?.image ?? 'https://media.licdn.com/dms/image/C4D12AQElMcNEch38WQ/article-cover_image-shrink_720_1280/0/1645152091261?e=2147483647&v=beta&t=cBzmomM3hef1Mcpbw5O9Afs_1zABFkeoHv_OoQJPRKE'}]} />
+            <Carrousel
+              images={[
+                {
+                  uri:
+                    listing.product?.image ??
+                    "https://media.licdn.com/dms/image/C4D12AQElMcNEch38WQ/article-cover_image-shrink_720_1280/0/1645152091261?e=2147483647&v=beta&t=cBzmomM3hef1Mcpbw5O9Afs_1zABFkeoHv_OoQJPRKE",
+                },
+              ]}
+            />
             {listing.status == "activated" ? null : (
               <>
                 <Box position="absolute" w="full" height="full">
@@ -228,7 +263,9 @@ export function ListingDetails() {
               <Tag
                 mt={4}
                 title={listing.condition !== "usado" ? "Novo" : "Usado"}
-                bgColor={listing.condition !== "usado" ? "blue.600" : "gray.600"}
+                bgColor={
+                  listing.condition !== "usado" ? "blue.600" : "gray.600"
+                }
               />
             </HStack>
 
@@ -253,12 +290,9 @@ export function ListingDetails() {
                 </Heading>
               </Heading>
               <Text fontFamily="heading" color={"gray.600"}>
-                {"99+ em estoque"}
+                {listing.quantity > 99 ? "99+" : listing.quantity} disponíveis
               </Text>
-              <QuantityPicker 
-              quantity={quantity}
-              onChange={setQuantity}
-              />
+              <QuantityPicker quantity={quantity} onChange={setQuantity} maxQuantity={listing.quantity} />
             </VStack>
 
             <VStack>
@@ -274,7 +308,7 @@ export function ListingDetails() {
                 }
                 mt={2}
                 title="Adicionar ao carrinho"
-                onPress={() => null }
+                onPress={() => listing.product && addCart(listing.product.id)}
               />
             </VStack>
 
@@ -284,7 +318,7 @@ export function ListingDetails() {
               fontSize="sm"
               color={"gray.600"}
             >
-             Descrição:
+              Descrição:
             </Heading>
 
             <Text fontSize="sm" color={"gray.600"}>
