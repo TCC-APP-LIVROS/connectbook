@@ -7,6 +7,7 @@ import {
   Bank,
 } from "phosphor-react-native";
 
+//@ts-ignore
 import { PaymentMethod as payMethod } from "@dtos/ListingDTO"
 
 type paymentMethodProps = IStackProps & {
@@ -15,7 +16,7 @@ type paymentMethodProps = IStackProps & {
 };
 
 export function PaymentMethod({ payment, color, ...rest }: paymentMethodProps) {
-  const Icon = {
+  const Icon: { [key in payMethod]: JSX.Element } = {
     boleto: <Barcode size={18} color={color} />,
     pix: <QrCode size={18} color={color} />,
     cash: <Money size={18} color={color} />,

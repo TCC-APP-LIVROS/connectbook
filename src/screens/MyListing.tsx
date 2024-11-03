@@ -45,7 +45,7 @@ export function MyListing() {
     try {
       setIsFetching(true);
       const { data } = await api.get(`/ads/announcement/list/1?show_user=true&user=${user.id}`);
-      console.log(data)
+
       setListings(data);
     } catch (error) {
       const isAppError = error instanceof AppError;

@@ -17,7 +17,7 @@ export function ShippingMethod() {
   }
 
   function handleGoToNextStep(){
-    navigation.navigate("Shipping")
+    // navigation.navigate("Shipping")
   }
   
   

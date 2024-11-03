@@ -133,7 +133,7 @@ export function SignUp() {
       //   },
       // });
       const a = await api.post("/auths/register/", {...form, photo: "", address: null, last_name: ""});
-      console.log(a)
+
       await SignIn(form.username, form.password);
     } catch (error: any) {
       const isAppError = error instanceof AppError;

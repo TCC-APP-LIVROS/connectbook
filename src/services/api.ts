@@ -28,7 +28,7 @@ api.registerInterceptTokenManager = (singOut) => {
   const interceptTokenManager = api.interceptors.response.use(
     (response) => response,
     async (requestError) => {
-      console.log(requestError.response.data);
+
       if (requestError.response?.status === 401) {
         if (
           requestError.response.data?.message === "token.expired" ||

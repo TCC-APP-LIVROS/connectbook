@@ -33,7 +33,6 @@ export function Address() {
         `/auths/user_address/${user.id}`
       );
 
-      console.log(data.addresses)
 
       setAddress(data.addresses);
     } catch (error) {

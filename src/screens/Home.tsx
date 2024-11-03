@@ -34,8 +34,6 @@ import { Checkbox } from "@components/Checkbox";
 import { Loading } from "@components/Loading";
 import { ListingDTO } from "@dtos/ListingDTO";
 import { TouchableOpacity } from "react-native";
-import { userProductsMock, OtherUserProductsMock } from "../mocks/products";
-import { parse } from "query-string/base";
 
 type FilterOptions = {
   is_new?: boolean;

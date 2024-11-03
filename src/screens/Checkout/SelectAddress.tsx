@@ -1,61 +1,86 @@
+import { Button } from "@components/Button";
 import { Card } from "@components/Card";
 import { Header } from "@components/Header";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { AddressDTO } from "@dtos/AdressDTO";
+import { useAuth } from "@hooks/useAuth";
+import { RouteProp, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { AppNavigationRouteProps, AppRoutes } from "@routes/app.routes";
-import { Pressable, VStack, Text } from "native-base";
+import { api } from "@services/api";
+import { AppError } from "@utils/AppError";
+import { Pressable, VStack, Text, HStack, ScrollView, useToast, FlatList } from "native-base";
 import { Plus } from "phosphor-react-native";
+import { useCallback, useState } from "react";
 
-type initialRouteProps = RouteProp<AppRoutes, "address">;
+type initialRouteProps = RouteProp<AppRoutes, "SelectAddress">;
 
 export function SelectAddress() {
   const route = useRoute<initialRouteProps>();
+  const { user } = useAuth();
+  const toast = useToast();
+  const [address, setAddress] = useState<any[]>([]);
   const navigation = useNavigation<AppNavigationRouteProps>();
 
   //   const { address, helper } = route.params;
+  function handleGoToNextStep(id: number) {
+    navigation.navigate("Shipping", { addressId: id, ...route.params });
+}
 
-  function handleGoToEditAddress() {
-    navigation.navigate("editAddress");
+function handleEditAddress(address: AddressDTO) {
+  navigation.navigate("editAddress", { mode: "edit", address });
+}
+
+  async function loadAddress() {
+    try {
+      const addresses = await api.get(`auths/user_address/${user.id}/`)
+
+      setAddress(addresses.data.addresses);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não foi Encontrar os endereços, tente novamente mais tarde";
+
+      toast.show({
+        title,
+        placement: "top",
+        bgColor: "error.500",
+      });
+      setAddress([]);
+    }
   }
 
-  function handleGoBackToShippingMethod() {
-    // navigation.navigate("address");
-    //ou atualizar o endereço padrão e voltar para a tela de escolha de endereço. e chamar via api 
-    // ou retornar para a tela enviando props e atualizando o endereço.
+  useFocusEffect(
+    useCallback(() => {
+      loadAddress();
+    }, [])
+  );
+
+  function handleCreateAddress() {
+    navigation.navigate("editAddress", { mode: "create" });
   }
 
   return (
-    <VStack safeAreaTop paddingX={4}>
+    <VStack flex={1} safeAreaTop paddingX={4} >
+   
       <Header title="Escolha a forma de entrega" backButton />
-      <Card
-        title="Endereço padrão"
-        text="R. Cristóvão Barreto, 1097 - Serraria BrasilFeira de Santana - BA"
-        editButtonTitle={"Editar"}
-        onEditPress={handleGoToEditAddress}
-      ></Card>
+      <FlatList
+        data={address}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item, index }) => (
+          <Card
+            title={item.nickname}
+            text={`${item.street}, ${item.number} - ${item.neighborhood} ${item.city} - ${item.state}`}
+            editButtonTitle={"Editar"}
+            onEditPress={() => handleEditAddress(item)}
+            onPress={() => handleGoToNextStep(item.id)}
+          />
+        )}
+        ItemSeparatorComponent={() => <HStack height={2} bg={"gray.200"} />}
+        style={{ marginBottom: "10%" }}
+        showsVerticalScrollIndicator={false}
+      />
 
-      <Pressable onPress={() => console.warn("go to..")}>
-        <Card
-          my={2}
-          title="Selecionar esse endereço"
-          text="R. Cristóvão Barreto, 1097 - Serraria BrasilFeira de Santana - BA"
-          onPress={() => console.warn("Press")}
-          editButtonTitle={"Editar"}
-          onEditPress={() => console.warn("Editar")}
-        />
-      </Pressable>
-
-      <Pressable onPress={() => console.warn("go to..")}>
-        <Card
-          my={2}
-          title="Selecionar esse endereço"
-          text="R. Cristóvão Barreto, 1097 - Serraria BrasilFeira de Santana - BA"
-          onPress={() => console.warn("Press")}
-          editButtonTitle={"Editar"}
-          onEditPress={() => console.warn("Editar")}
-        />
-      </Pressable>
-
-      <Card flexDirection={"row"} onPress={() => console.warn("go to..")}>
+      <Card marginBottom={5} flexDirection={"row"} onPress={handleCreateAddress}>
         <Plus size={24} />
         <Text mx={2} fontFamily={"heading"}>
           {" "}

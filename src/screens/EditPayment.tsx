@@ -83,7 +83,7 @@ export function EditPayment() {
       mode: router.params.mode,
       listingId: router.params.listingId,
       seller: user,
-      product: form as ListingDTO,
+      product: form as any,
       productImages: productImages,
     });
   }

@@ -103,6 +103,10 @@ export function AddressForm() {
   
   async function createAddress(form: NewListingFormProps) {
     try {
+      console.log({
+        address: form,
+        user_id: user.id,
+      })
       setIsLoading(true);
       await api.post("/auths/user_address_register/", {
         address: form,

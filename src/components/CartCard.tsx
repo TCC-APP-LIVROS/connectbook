@@ -45,7 +45,7 @@ export function CartCard({ helper, address, shipping, ...rest }: any) {
           {title}
         </Text>
       <HStack width={"100%"} justifyContent={"space-between"} alignItems={"center"}>
-        <QuantityPicker onChange={() => console.log("Change")} quantity={0} />
+        <QuantityPicker onChange={() => console.log("Change")} quantity={0} maxQuantity={2} />
         <Text fontFamily={"heading"} fontSize={"md"}>
           R$ 0,00
         </Text>

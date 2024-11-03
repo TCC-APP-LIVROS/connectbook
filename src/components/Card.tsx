@@ -14,6 +14,7 @@ import { Trash } from "phosphor-react-native";
 interface AddressCardProps extends IPressableProps {
   text?: string;
   title?: string;
+  radio?: any;
   editButtonTitle?: string;
   deleteButtonTitle?: string;
   onEditPress?: () => void;
@@ -24,6 +25,7 @@ interface AddressCardProps extends IPressableProps {
 export function Card({
   title,
   text,
+  radio,
   onEditPress,
   onDeletePress,
   editButtonTitle,
@@ -40,9 +42,10 @@ export function Card({
       borderRadius={12}
       {...rest}
     >
+      
       {title && (
         <Text fontFamily={"heading"} fontSize={"xl"}>
-          {title}
+          {radio && (radio)} {title}
         </Text>
       )}
 

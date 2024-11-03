@@ -195,7 +195,7 @@ export function CreateListing() {
         bgColor: "error.500",
       });
     }
-    console.log(form);
+
     navigation.navigate("previewListing", {
       mode: router.params.mode,
       listingId: router.params.listingId,

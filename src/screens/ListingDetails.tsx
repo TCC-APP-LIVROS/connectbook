@@ -21,8 +21,6 @@ import * as WebBrowser from "expo-web-browser";
 import { Avatar } from "@components/Avatar";
 import { Tag } from "@components/Tag";
 import { Button } from "@components/Button";
-import { PaymentMethod } from "@components/PaymentMethod";
-import { Platform } from "react-native";
 import {
   RouteProp,
   useFocusEffect,
@@ -170,6 +168,13 @@ export function ListingDetails() {
     }
   }
 
+  async function buy() {
+      navigation.navigate("SelectAddress", {
+        product: listing,
+        quantity: quantity,
+      });
+  }
+
   useFocusEffect(
     useCallback(() => {
       fetchProduct();
@@ -299,7 +304,7 @@ export function ListingDetails() {
               <Button
                 type="primary"
                 title="Comprar agora"
-                onPress={() => null}
+                onPress={buy}
               />
               <Button
                 type="secondary"
