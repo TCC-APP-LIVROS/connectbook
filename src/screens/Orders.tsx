@@ -1,13 +1,20 @@
 import { Header } from "@components/Header";
-import { Center, VStack, Text, HStack, Image, Divider } from "native-base";
+import { Center, VStack, Text, HStack, Image, Divider, useToast, FlatList } from "native-base";
 
 import { OtherUserProductsMock } from "../mocks/products";
 import { ArrowArcRight, ArrowRight } from "phosphor-react-native";
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigationRouteProps } from "@routes/app.routes";
+import { useEffect, useState } from "react";
+import { api } from "@services/api";
+import { AppError } from "@utils/AppError";
+import { set } from "react-native-reanimated";
+import { Loading } from "@components/Loading";
+import { useAuth } from "@hooks/useAuth";
 
-const Card = ({ product, mock, ...rest }: any) => {
+const Card = ({ product, ...rest }: any) => {
+  console.log(product);
   return (
     <Pressable {...rest}>
       <HStack
@@ -15,7 +22,7 @@ const Card = ({ product, mock, ...rest }: any) => {
         padding={2}
       >
         <Image
-          source={{ uri: OtherUserProductsMock[0].product_images[0].path }}
+          source={{ uri: product.product.image }}
           alt="Imagem do produto"
           size={24}
           resizeMode="contain"
@@ -29,15 +36,15 @@ const Card = ({ product, mock, ...rest }: any) => {
             maxWidth={200}
             numberOfLines={1}
           >
-            {OtherUserProductsMock[0].name}
+            {product.announcement.title}
           </Text>
           <Text
-            color={mock == 1 ? "gray.500" : "green.700"}
+            color={true ? "gray.500" : "green.700"}
             fontSize="md"
             fontWeight={"bold"}
           >
             {" "}
-            {mock == 1 ? "Em separação" : "Entregue"}
+            {product.status === "PENDING" ? "Em separação" : "Entregue"}
           </Text>
         </VStack>
         <Center flex={1} alignItems={"flex-end"}>
@@ -50,14 +57,53 @@ const Card = ({ product, mock, ...rest }: any) => {
 
 export function Orders() {
   const navigation = useNavigation<AppNavigationRouteProps>();
+  const [orders, setOrders] = useState<any[]>([]);
+  const { user } = useAuth();
+  
+  const [loading, setIsLoading] = useState(true);
+  const toast = useToast();
+  async function fetchOrders() {
+    
+    try {
+      setIsLoading(true);
+      const orders = await api.get(`/orders/list/${user.id}/buyer/`);
+      setOrders(orders.data.orders);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : "Não foi Encontrar os produtos, tente novamente mais tarde";
+
+      toast.show({
+        title,
+        placement: "top",
+        bgColor: "red.500",
+      });
+      setOrders([]);
+    } finally{
+      setIsLoading(false);
+    }
+  } 
+
+  useEffect(() => {
+    fetchOrders();
+  }
+  , []);
+
+  if(loading){
+    return (<Loading />)
+  }
   return (
     <VStack space={4} paddingX={4} safeAreaTop>
       <Header title="Pedidos" backButton />
-      <Card product={OtherUserProductsMock[0]} mock={1} onPress={() => navigation.navigate("OrderDetails")} />
-        <Divider />
-      <Card product={OtherUserProductsMock[1]} mock={2} onPress={() => navigation.navigate("OrderDetails")}/>
-      <Divider />
-      <Card product={OtherUserProductsMock[1]} mock={2} onPress={() => navigation.navigate("OrderDetails")}/>
+      <FlatList
+        data={orders}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <Card product={item} onPress={() => navigation.navigate("OrderDetails", { orderId: item.id})} />
+        )}
+        ItemSeparatorComponent={() => <Divider />}
+      />
     </VStack>
   );
 }

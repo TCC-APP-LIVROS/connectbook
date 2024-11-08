@@ -35,6 +35,7 @@ export function MyListing() {
   });
 
   function handleGoToListingDetails(item: ListingDTO) {
+    console.log(item);
     navigation.navigate("listingDetails", item);
   }
   function handleGoToCreateListing() {
@@ -45,7 +46,6 @@ export function MyListing() {
     try {
       setIsFetching(true);
       const { data } = await api.get(`/ads/announcement/list/1?show_user=true&user=${user.id}`);
-
       setListings(data);
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -105,11 +105,11 @@ export function MyListing() {
               <ProductCard
                 mb={3}
                 image={{
-                  uri: `https://i.zst.com.br/thumbs/12/3d/11/-1202542340.jpg`,
+                  uri: item.product_image,
                 }}
                 onPress={() => handleGoToListingDetails(item)}
                 avatarImage={{
-                  uri: `https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg`,
+                  uri: item.seller_profile.photo,
                 }}
                 title={item.title}
                 price={parseFloat(item.price)}

@@ -52,8 +52,7 @@ export function ListingDetails() {
   const params = route.params;
   const [quantity, setQuantity] = useState(1);
 
-  // const isDealer = listing?.seller_id == parseInt(user?.id);
-  const isDealer = true;
+  const isDealer = listing?.seller?.id == parseInt(user?.id);
 
   const carrouselImages = listing.product?.image;
 
@@ -107,7 +106,7 @@ export function ListingDetails() {
   async function handleDeleteProduct() {
     try {
       setIsFetching(true);
-      // await api.delete(`/products/${params.id}`);
+      await api.delete(`/ads/announcement/delete/${params.id}/`);
       toast.show({
         title: "Anuncio excluido com sucesso",
         placement: "top",
@@ -146,8 +145,8 @@ export function ListingDetails() {
       await api.post(`/cart/add/`, {
         client_id: user.id,
         product_id: id,
-        quantity: quantity
-    });
+        quantity: quantity,
+      });
 
       toast.show({
         title: "Produto adicionado ao carrinho",
@@ -169,10 +168,10 @@ export function ListingDetails() {
   }
 
   async function buy() {
-      navigation.navigate("SelectAddress", {
-        product: listing,
-        quantity: quantity,
-      });
+    navigation.navigate("SelectAddress", {
+      product: listing,
+      quantity: quantity,
+    });
   }
 
   useFocusEffect(
@@ -254,13 +253,13 @@ export function ListingDetails() {
             <HStack>
               <Avatar
                 source={{
-                  uri: `https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg`,
+                  uri: listing.seller_profile?.photo,
                 }}
                 size={6}
               />
               <Text fontSize="sm" color="gray.700" ml="2">
-                {/* {listing?.user?.name} */}
-                {"username"}
+                {listing?.seller?.username}
+                {/* {"username"} */}
               </Text>
             </HStack>
 
@@ -297,15 +296,17 @@ export function ListingDetails() {
               <Text fontFamily="heading" color={"gray.600"}>
                 {listing.quantity > 99 ? "99+" : listing.quantity} disponíveis
               </Text>
-              <QuantityPicker quantity={quantity} onChange={setQuantity} maxQuantity={listing.quantity} />
+              {!isDealer && (
+                <QuantityPicker
+                quantity={quantity}
+                onChange={setQuantity}
+                maxQuantity={listing.quantity}
+              />
+              )}
             </VStack>
 
-            <VStack>
-              <Button
-                type="primary"
-                title="Comprar agora"
-                onPress={buy}
-              />
+            {!isDealer && <VStack>
+              <Button type="primary" title="Comprar agora" onPress={buy} />
               <Button
                 type="secondary"
                 startIcon={
@@ -315,7 +316,7 @@ export function ListingDetails() {
                 title="Adicionar ao carrinho"
                 onPress={() => listing.product && addCart(listing.product.id)}
               />
-            </VStack>
+            </VStack>}
 
             <Heading
               mt={6}
@@ -358,15 +359,19 @@ export function ListingDetails() {
               />
             ))} */}
 
-            <Heading
-              mt={6}
-              fontFamily="heading"
-              fontSize="sm"
-              color={"gray.600"}
-            >
-              Perguntas e respostas:
-            </Heading>
-            <Qna question="Marca" answer={""} />
+            {!isDealer && (
+              <>
+                <Heading
+                  mt={6}
+                  fontFamily="heading"
+                  fontSize="sm"
+                  color={"gray.600"}
+                >
+                  Perguntas e respostas:
+                </Heading>
+                <Qna question="Marca" answer={""} />
+              </>
+            )}
 
             {isDealer && (
               <>

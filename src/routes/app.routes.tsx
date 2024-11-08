@@ -69,7 +69,7 @@ export type AppRoutes = {
   };
   paymentMethods: undefined;
   Orders: undefined;
-  OrderDetails: undefined;
+  OrderDetails: { orderId: number };
   EditPayment: undefined;
   Cart: undefined;
   ConfirmOrder: any;

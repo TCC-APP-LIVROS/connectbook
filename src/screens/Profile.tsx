@@ -3,12 +3,12 @@ import { useAuth } from "@hooks/useAuth";
 import { useNavigation } from "@react-navigation/native";
 import { AppNavigationRouteProps } from "@routes/app.routes";
 import { VStack, Text, Box, Avatar, Center, FlatList, Pressable, Divider } from "native-base";
-import { Bag, Bell, CurrencyDollar, MapPin, SignOut, Wallet } from "phosphor-react-native";
+import { Bag, Bell, CurrencyDollar, MapPin, SignOut, User, Wallet } from "phosphor-react-native";
 
 const ProfileOptions = [
   {
     title: "Meu perfil",
-    icon: <MapPin />,
+    icon: <User />,
     screen: "address",
   },
   {
@@ -41,13 +41,14 @@ const ProfileOptions = [
 export function Profile() {
     const navigation = useNavigation<AppNavigationRouteProps>();
     const { signOut } = useAuth();
+    const { user } = useAuth();
   return (
     <VStack space={4} paddingX={4} safeAreaTop>
       <Header title="Perfil" backButton/>
       <Center>
         <Avatar
           source={{
-            uri: `https://img.freepik.com/vetores-premium/ilustracao-de-avatar-de-estudante-icone-de-perfil-de-usuario-avatar-de-jovem_118339-4402.jpg`,
+            uri: user.photo,
           }}
           size="40"
         />

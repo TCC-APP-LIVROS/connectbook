@@ -28,6 +28,7 @@ api.registerInterceptTokenManager = (singOut) => {
   const interceptTokenManager = api.interceptors.response.use(
     (response) => response,
     async (requestError) => {
+      console.log(requestError.response);
 
       if (requestError.response?.status === 401) {
         if (

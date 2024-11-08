@@ -12,6 +12,16 @@ export type ListingDTO = {
   created: Date;
   updated: Date;
   quantity: number;
+  product_image: string;
+  seller_profile: {
+    photo: string;
+  };
+  seller: {
+    username: string;
+    first_name: string;
+    last_name: string;
+    id: number;
+  }
 };
 
 export type ProductDTO = {
@@ -28,4 +38,5 @@ export type createListingDTO = {
   description: string;
   is_new: boolean;
   price: number;
+  quantity: number;
 } & ProductDTO;

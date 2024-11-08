@@ -120,19 +120,22 @@ export function SignUp() {
     const formData = new FormData();
 
     avatar.name = `${form.username}${avatar.name}`.toLocaleLowerCase();
-    formData.append("avatar", avatar as any);
-    formData.append("name", form.username);
+    formData.append("photo", avatar as any);
+    formData.append("username", form.username);
+    formData.append("last_name", "");
     formData.append("email", form.email);
-    formData.append("phone", form.phone);
     formData.append("password", form.password);
+    formData.append("phone", form.phone);
+    formData.append("address", 'null');
 
     try {
-      // await api.post("/auths/register/", formData, {
-      //   headers: {
-      //     "Content-Type": "multipart/form-data",
-      //   },
-      // });
-      const a = await api.post("/auths/register/", {...form, photo: "", address: null, last_name: ""});
+      console.log("form", form);
+      await api.post("/auths/register/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      // const a = await api.post("/auths/register/", {...form, photo: "", address: null, last_name: ""});
 
       await SignIn(form.username, form.password);
     } catch (error: any) {

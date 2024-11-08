@@ -66,9 +66,9 @@ export function AuthContextProvider({ children }: AuthContextProviderProps) {
     setUser(userData);
   }
 
-  async function SignIn(username: string, password: string) {
+  async function SignIn(email: string, password: string) {
     try {
-      const { data } = await api.post<UserDTO>("/auths/login/", { username, password });
+      const { data } = await api.post<UserDTO>("/auths/login/", { email, password });
       
       if (data.id) {
         await localUserSave(data);

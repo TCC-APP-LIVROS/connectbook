@@ -1,4 +1,4 @@
-import { Box, HStack, Pressable, Text, useTheme } from "native-base";
+import { Box, HStack, Pressable, Text, useTheme, useToast } from "native-base";
 import { Minus, Plus } from "phosphor-react-native";
 
 type QuantityPickerProps = {
@@ -9,6 +9,7 @@ type QuantityPickerProps = {
 
 export function QuantityPicker({ onChange, quantity, maxQuantity }: QuantityPickerProps) {
     const { colors } = useTheme();
+    const toast = useToast();
   function onMinusPress() {
     if (quantity > 1) {
       onChange(quantity - 1);
@@ -16,7 +17,14 @@ export function QuantityPicker({ onChange, quantity, maxQuantity }: QuantityPick
   }
 
   function onPlusPress() {
-    if(quantity >= maxQuantity) return;
+    if(quantity >= maxQuantity){
+      toast.show({
+        title: "Quantidade máxima atingida",
+        placement: "top",
+        bgColor: "warning.500",
+      });
+      return
+      };
     onChange(quantity + 1);
   }
 

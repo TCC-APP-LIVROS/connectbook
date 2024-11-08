@@ -36,27 +36,34 @@ export function PreviewListing() {
   const { mode, listingId, product, productImages, seller } = route.params;
 
   async function handleCreate() {
-
     try {
-      const response = await api.post("ads/announcement/create/total/", {
-        ...product,
-        condition: product.is_new ? "Novo" : "Usado",
-        status: "activated",
-        seller_id: user.id,
-      });
+      // const response = await api.post("ads/announcement/create/total/", {
+      //   ...product,
+      //   condition: product.is_new ? "Novo" : "Usado",
+      //   status: "activated",
+      //   seller_id: user.id,
+      // });
 
       const productImagesUploadForm = new FormData();
 
-      // productImagesUploadForm.append("product_id", response.data.id);
-      // productImages.forEach((image, index) => {
-      //   productImagesUploadForm.append("images", image as any);
-      // });
 
-      // await api.post(`/products/images`, productImagesUploadForm, {
-      //   headers: {
-      //     "Content-Type": "multipart/form-data",
-      //   },
-      // });
+      productImagesUploadForm.append("author", product.author);
+      productImagesUploadForm.append("description", product.description);
+      productImagesUploadForm.append("condition", product.is_new ? "Novo" : "Usado");
+      productImagesUploadForm.append("name", product.name);
+      productImagesUploadForm.append("price", product.price.toString());
+      productImagesUploadForm.append("published_at", product.published_at.toString());
+      productImagesUploadForm.append("quantity", product.quantity.toString());
+      productImagesUploadForm.append("study_area", product.study_area);
+      productImagesUploadForm.append("title", product.title);
+      productImagesUploadForm.append("seller_id", user.id);
+      productImagesUploadForm.append("image", productImages[0] as any);
+
+      await api.post(`ads/announcement/create/total/`, productImagesUploadForm, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       navigation.navigate("bottomTabsRoutes", { screen: "myListing" });
       return toast.show({
@@ -163,7 +170,7 @@ export function PreviewListing() {
         <HStack>
           <Avatar
             source={{
-              uri: `https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg`,
+              uri: user.photo,
             }}
             size={6}
           />

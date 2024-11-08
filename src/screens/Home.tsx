@@ -93,7 +93,7 @@ export function Home() {
   async function fetchProducts() {
     try {
       setIsFetching(true);
-      const { data } = await api.get(`/ads/announcement/list/1?show_user=false&user_id=${user.id}`);
+      const { data } = await api.get(`/ads/announcement/list/1?show_user=false&user=${user.id}`);
       // const data = OtherUserProductsMock
       setListings(data);
     } catch (error) {
@@ -169,13 +169,9 @@ export function Home() {
       <HStack mt="16">
         <TouchableOpacity onPress={handleGoToProfile}>
           <Avatar
-            source={{ uri: `https://img.freepik.com/vetores-premium/ilustracao-de-avatar-de-estudante-icone-de-perfil-de-usuario-avatar-de-jovem_118339-4402.jpg` }}
+            source={{ uri: user.photo }}
             size="11.25"
           />
-          {/* <Avatar
-            source={{ uri: `${api.defaults.baseURL}/images/${user.avatar}` }}
-            size="11.25"
-          /> */}
         </TouchableOpacity>
         <VStack flex={1} ml="2.5">
           <Text>Boas vindas,</Text>
@@ -215,11 +211,11 @@ export function Home() {
                 mx="2"
                 mb="6"
                 image={{
-                  uri: `https://cdn.mos.cms.futurecdn.net/U6NH3kQNCBP3eXcjyyMHHi.jpg`,
+                  uri: item.product_image,
                 }}
                 onPress={() => handleGoToListingDetails(item)}
                 avatarImage={{
-                  uri: `https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg`,
+                  uri: item.seller_profile.photo,
                 }}
                 title={item.title}
                 price={parseFloat(item.price)}

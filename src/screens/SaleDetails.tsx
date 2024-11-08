@@ -1,6 +1,6 @@
 import { Button } from "@components/Button";
 import { Header } from "@components/Header";
-import { Image, VStack, Text, Divider, HStack, ScrollView } from "native-base";
+import { Image, VStack, Text, Divider, HStack, ScrollView, Box } from "native-base";
 
 const carrouselImages =
   [{}, {}, {}]?.map(() => {
@@ -38,21 +38,7 @@ export function SaleDetails() {
           <Button type="tertiary" title={"Instruções de envio"} />
           <Button title={"Imprimir etiqueta"} />
           <Divider />
-        </VStack>
-        <VStack space={4}>
-          <Text fontSize={"xl"} fontWeight={"bold"}>
-            Pedido pronto para o envio
-          </Text>
-          <Text fontSize={"md"}>
-            Siga as instruções para enviar o produto, imprima a etiqueta e cole
-            na embalagem. Você deve levar o pacote em uma agência dos correios.
-            <Text fontFamily={"heading"}> até DD/MM</Text>
-          </Text>
-          <Divider />
-        </VStack>
-        <VStack space={4}>
-          <Text fontSize={"md"}>Criar um step indicator aqui depois</Text>
-          <Divider />
+          <Box height={180}/>
         </VStack>
         <Button title={"Cancelar Pedido"} backgroundColor={"#f00"} />
       </VStack>

@@ -17,7 +17,7 @@ export function ConfirmOrder() {
   const { user } = useAuth();
   const toast = useToast();
   const [isLoadingListing, setIsLoadingListing] = useState(false);
-
+  console.log("hello", params?.product.product.image)
   async function handleGoToFinishedOrder() {
     try {
       setIsLoadingListing(true);
@@ -54,7 +54,7 @@ export function ConfirmOrder() {
         <Header title={"Confirme a sua compra"} backButton />
         <Image
           source={{
-            uri: "https://www.oficinadanet.com.br/imagens/post/27791/rtx-4090-foto_bottom-left.jpg",
+            uri: params?.product.product.image,
           }}
           alt="imagem de produto"
           height={200}

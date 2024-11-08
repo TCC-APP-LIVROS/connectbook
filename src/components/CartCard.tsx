@@ -1,30 +1,24 @@
 import {
   Text,
-  Divider,
   VStack,
-  Box,
-  IPressableProps,
   HStack,
   Image,
 } from "native-base";
-import { PressableProps } from "react-native";
 import { QuantityPicker } from "./QuantityPicker";
+import { useState } from "react";
+import { IHStackProps } from "native-base/lib/typescript/components/primitives/Stack/HStack";
 
-interface AddressCardProps extends IPressableProps {
-  address: string;
-  shipping?: boolean;
-  helper?: string;
+interface CartCardProps extends IHStackProps {
+  titleCard: string;
+  quantity: number;
+  max_quantity: number;
+  price: string;
+  image: string;
 }
 
-export function CartCard({ helper, address, shipping, ...rest }: any) {
-  const hasAddress = !!address;
-  shipping = shipping ?? true;
-  helper = helper ?? "Editar ou escolher outro endereço";
-  address = hasAddress ? address : "Combinar com o vendendor";
-  const title = shipping
-    ? "Enviar no meu endereço sadasdasdasdasdasdasdasdasdasdasdasdasdasd"
-    : "Retirar com o vendendor";
-
+export function CartCard({ titleCard, quantity, max_quantity, price, image, ...rest }: CartCardProps) {
+  console.log("CartCard", titleCard, quantity, max_quantity, price);
+  const [quantityState, setQuantityState] = useState(quantity);
   return (
     <HStack
       backgroundColor={"white"}
@@ -34,7 +28,7 @@ export function CartCard({ helper, address, shipping, ...rest }: any) {
     >
       <HStack>
         <Image
-          source={{ uri: "https://via.placeholder.com/150" }}
+          source={{ uri: image }}
           alt="Product"
           width={16}
           height={16}
@@ -42,12 +36,12 @@ export function CartCard({ helper, address, shipping, ...rest }: any) {
       </HStack>
       <VStack marginLeft={2} overflow={"hidden"} flex={1}>
         <Text fontFamily={"heading"} fontSize={"md"} numberOfLines={1}>
-          {title}
+          {titleCard}
         </Text>
       <HStack width={"100%"} justifyContent={"space-between"} alignItems={"center"}>
-        <QuantityPicker onChange={() => console.log("Change")} quantity={0} maxQuantity={2} />
+        <QuantityPicker onChange={setQuantityState} quantity={quantityState} maxQuantity={max_quantity} />
         <Text fontFamily={"heading"} fontSize={"md"}>
-          R$ 0,00
+          R$ {(parseFloat(price) * quantityState).toFixed(2)}
         </Text>
       </HStack>
       </VStack>

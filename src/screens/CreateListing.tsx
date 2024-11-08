@@ -113,6 +113,14 @@ export function CreateListing() {
     }
   }
 
+  function gerarUUID() {
+    // Gera um UUID v4 aleatório
+    return 'xxxxxxxx-xxxx-4xxx-yxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
   async function handlePickPhoto(image: any) {
     if (!!image.uri) {
       setProductImages(productImages.filter((img) => img.uri !== image.uri));
@@ -162,7 +170,7 @@ export function CreateListing() {
         const photos = photosSelected.assets.map((photo) => {
           const fileExtension = photo.uri.split(".").pop();
           return {
-            name: `${user.name}.${fileExtension}`.toLowerCase(),
+            name: `${gerarUUID()}-${user.name}.${fileExtension}`.toLowerCase(),
             uri: photo.uri,
             type: `${photo.type}/${fileExtension}`,
           };
@@ -241,11 +249,11 @@ export function CreateListing() {
                   ml={index === 0 ? 0 : 2}
                 />
               )}
-              ListFooterComponent={
-                productImages.length > 0 && productImages.length < 6 ? (
-                  <ImageBox onPress={handlePickPhoto} ml={2} />
-                ) : null
-              }
+              // ListFooterComponent={
+              //   productImages.length == 0 ? (
+              //     <ImageBox onPress={handlePickPhoto} ml={2} />
+              //   ) : null
+              // }
               ListEmptyComponent={() => <ImageBox onPress={handlePickPhoto} />}
               showsHorizontalScrollIndicator={false}
             />
@@ -274,7 +282,7 @@ export function CreateListing() {
             name="description"
             render={({ field: { onChange, value } }) => (
               <MultilineInput
-                placeholder="Título do anúncio"
+                placeholder="Descrição do anúncio"
                 onChangeText={onChange}
                 value={value}
                 errorMessage={errors.description?.message}
